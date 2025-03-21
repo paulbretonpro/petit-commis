@@ -6,7 +6,7 @@
         <nav class="flex gap-6 items-center font-medium">
           <NuxtLink to="/"><Button variant="ghost">Recettes</Button></NuxtLink>
           <NuxtLink to="/"><Button variant="ghost">Menu</Button></NuxtLink>
-          <NuxtLink to="/"><Button variant="ghost">Profile</Button></NuxtLink>
+          <NuxtLink to="/"><Profile /></NuxtLink>
           <ColorModeSwitcher />
         </nav>
       </div>
