@@ -2,12 +2,7 @@
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
-const { auth } = useSupabaseClient()
-
-const handleLogout = async () => {
-  await auth.signOut()
-  navigateTo('/login')
-}
+const { logout } = useAppSettings()
 </script>
 
 <template>
@@ -18,7 +13,7 @@ const handleLogout = async () => {
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end">
-      <DropdownMenuItem class="hover:!bg-red-500 hover:text-white text-red-500 cursor-pointer" @click="handleLogout">
+      <DropdownMenuItem class="hover:!bg-red-500 hover:text-white text-red-500 cursor-pointer" @click="logout">
         Se déconnecter
       </DropdownMenuItem>
     </DropdownMenuContent>

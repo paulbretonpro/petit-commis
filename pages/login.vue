@@ -37,6 +37,7 @@ const onSubmit = async (form: { email: string, password: string }) => {
     toast({
       title: 'Échec',
       description: 'Votre email ou votre mot de passe est incorrect',
+      variant: 'destructive'
     })
   } else {
     navigateTo('/')
