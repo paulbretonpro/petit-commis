@@ -21,6 +21,8 @@ const emit = defineEmits<{
   'has-ingredient': [value: boolean]
 }>()
 
+const loadingBtn = ref(false)
+
 const { data } = await useFetch<IIngredient[]>('/api/ingredients', {
   key: 'ingredients'
 })
@@ -42,6 +44,7 @@ const resetForm = () => {
 }
 
 const handleAddIngredientInRecipe = async () => {
+  loadingBtn.value = true
   try {
     await $fetch(`/api/recipes/${props.recipe?.id}/ingredients`, {
       method: 'POST',
@@ -61,6 +64,8 @@ const handleAddIngredientInRecipe = async () => {
       description: 'Une erreur est survenue durant l\'ajout de l\'ingredient à la recette',
       variant: 'destructive'
     })
+  } finally {
+    loadingBtn.value = false
   }
 }
 
@@ -139,7 +144,7 @@ watchEffect(() => {
         <RecipesDesktopCreateIngredientsUnity v-model="newIngredient.unit" />
       </div>
       <div class="flex justify-end" @click="handleAddIngredientInRecipe">
-        <Button>
+        <Button :loading="loadingBtn">
           <Icon icon="radix-icons:plus" />
           Ajouter
         </Button>
