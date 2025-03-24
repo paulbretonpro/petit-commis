@@ -1,130 +1,105 @@
-<script setup lang='ts'>
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { NumberField } from '~/components/ui/number-field'
-import { toTypedSchema } from '@vee-validate/zod'
-import { useForm } from 'vee-validate'
-import { useToast } from '~/components/ui/toast'
+<script setup lang="ts">
+import { Check, BookOpenText, Carrot, List } from 'lucide-vue-next'
+import type { IRecipe } from '~/server/api/recipes/type'
 
-const { toast } = useToast()
+const stepIndex = ref(1)
+const steps = [{
+  step: 1,
+  title: 'Recette',
+  description: 'Ajouter les détails de votre recette',
+  icon: BookOpenText,
+},
+{
+  step: 2,
+  title: 'Ingrédients',
+  description: 'Sélectionner vos ingrédients',
+  icon: Carrot,
+},
+{
+  step: 3,
+  title: 'Étapes',
+  description: 'Ajouter les étapes de votre recette ',
+  icon: List,
+}]
 
-const { categories } = await useCategories()
-const { schema } = useRecipesCreateForm()
+const recipe = ref<IRecipe>()
+const hasIngredient = ref(false)
 
-const formSchema = toTypedSchema(schema)
-
-const { handleReset, handleSubmit } = useForm({
-  validationSchema: formSchema,
-})
-
-const onSubmit = handleSubmit(async (values) => {
-  try {
-    await $fetch('/api/recipes', { method: 'POST', body: values })
-  } catch {
-    toast({
-      title: 'Échec',
-      description: 'la création de votre recette a échoué',
-      variant: 'destructive'
-    })
+const isActive = (step: number) => {
+  if (step === 1) {
+    return true
+  } else if (step === 2) {
+    return !!recipe.value
+  } else if (step === 3) {
+    return hasIngredient.value
   }
-})
+}
+
+const handleRecipeIsCreated = (newRecipe: IRecipe) => {
+  recipe.value = newRecipe
+  stepIndex.value++
+}
+
+const handleHasIngredient = (value: boolean) => hasIngredient.value = value
 </script>
 
 <template>
-  <Card class="w-[350px] mx-auto">
-    <CardHeader>
-      <CardTitle>Créer votre recette</CardTitle>
-      <CardDescription>Décrivez votre recette pas à pas.</CardDescription>
-    </CardHeader>
-    <CardContent>
-      <form
-        class="space-y-4"
-        @submit="onSubmit"
+  <Stepper v-model="stepIndex" class="block w-full">
+    <div class="flex w-full flex-start gap-2">
+      <StepperItem
+        v-for="item in steps"
+        :key="item.step"
+        v-slot="{ state }"
+        class="relative flex w-full flex-col items-center justify-center"
+        :step="item.step"
       >
-        <FormField v-slot="{ componentField }"  name="name">
-          <FormItem>
-            <FormLabel>Nom</FormLabel>
-            <FormControl>
-              <Input type="text" required placeholder="Ex: Pâte pesto" v-bind="componentField" />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        </FormField>
+        <StepperSeparator
+          v-if="item.step !== steps[steps.length - 1].step"
+          class="absolute left-[calc(50%+20px)] right-[calc(-50%+10px)] top-5 block h-0.5 shrink-0 rounded-full bg-muted group-data-[state=completed]:bg-primary"
+        />
 
-        <FormField v-slot="{ componentField }" name="description">
-          <FormItem>
-            <FormLabel>Description</FormLabel>
-            <FormControl>
-              <Input type="text" placeholder="Ex: Pâte pesto" v-bind="componentField" />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        </FormField>
-
-        <FormField v-slot="{ componentField }" name="categorie">
-          <FormItem>
-            <FormLabel>Catégorie</FormLabel>
-            <FormControl>
-              <Select v-bind="componentField">
-                <SelectTrigger>
-                  <SelectValue placeholder="Ex: petit-déjeuner" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem v-for="category in categories" :key="category.id" :value="category.id">
-                    {{ category.name }}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        </FormField>
-
-        <FormField v-slot="{ componentField }" name="nbPersons">
-          <FormItem>
-            <FormLabel>Nombre de personnes</FormLabel>
-              <NumberField 
-                v-bind="componentField"
-                :model-value="parseInt(componentField.modelValue)"
-                required
-                placeholder="Ex: Pâte pesto"
-                :min="0"
-              >
-                <NumberFieldContent>
-                  <NumberFieldDecrement />
-                  <FormControl>
-                    <NumberFieldInput />
-                  </FormControl>
-                  <NumberFieldIncrement />
-                </NumberFieldContent>
-              </NumberField>
-            <FormMessage />
-          </FormItem>
-        </FormField>
-
-        <FormField v-slot="{ componentField }" type="checkbox" name="mobile">
-          <FormItem class="flex gap-2 items-center">
-            <FormControl>
-              <Checkbox v-bind="componentField" />
-            </FormControl>
-            <FormLabel>Voulez-vous partager votre recette à la communauté ?</FormLabel>
-            <FormMessage />
-          </FormItem>
-        </FormField>
-
-        <div class="flex justify-between gap-4 pt-4">
-          <Button variant="outline" class="w-full" @click="handleReset">
-            Annuler
+        <StepperTrigger as-child>
+          <Button
+            :variant="state === 'completed' || state === 'active' ? 'default' : 'outline'"
+            size="icon"
+            class="z-10 rounded-full shrink-0"
+            :class="[state === 'active' && 'ring-2 ring-ring ring-offset-2 ring-offset-background']"
+            :disabled="state !== 'completed' && !isActive(item.step)"
+          >
+            <Check v-if="state === 'completed'" class="size-5" />
+            <component :is="item.icon" v-else class="w-4 h-4" />
           </Button>
-          <Button class="w-full" type="submit">Ajouter</Button>
+        </StepperTrigger>
+
+        <div class="mt-5 flex flex-col items-center text-center">
+          <StepperTitle
+            :class="[state === 'active' && 'text-primary']"
+            class="text-sm font-semibold transition lg:text-base"
+          >
+            {{ item.title }}
+          </StepperTitle>
+          <StepperDescription
+            :class="[state === 'active' && 'text-primary']"
+            class="sr-only text-xs text-muted-foreground transition md:not-sr-only lg:text-sm"
+          >
+            {{ item.description }}
+          </StepperDescription>
         </div>
-      </form>
-    </CardContent>
-  </Card>
+      </StepperItem>
+    </div>
+
+    <div class="flex flex-col gap-4 mt-4">
+      <template v-if="stepIndex === 1">
+        <RecipesDesktopCreateDetails :recipe @recipe-is-created="handleRecipeIsCreated" />
+      </template>
+
+      <template v-if="stepIndex === 2">
+        <RecipesDesktopCreateIngredients :recipe @has-ingredient="handleHasIngredient" />
+      </template>
+
+      <template v-if="stepIndex === 3">
+        <RecipesDesktopCreateSteps :recipe />
+      </template>
+    </div>
+  </Stepper>
 </template>

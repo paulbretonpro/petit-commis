@@ -1,19 +1,18 @@
-import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
+import { serverSupabaseClient } from '#supabase/server'
+import type { Database } from '~/database.types'
+import { getUser } from '~/server/functions/check-params'
+import { TableEnum } from '~/server/type'
 
 export default defineEventHandler(async (event) => {
-  const client = await serverSupabaseClient(event)
+  const client = await serverSupabaseClient<Database>(event)
 
-  const user = await serverSupabaseUser(event)
+  const user = await getUser(event)
 
-  if (!user) {
-    throw new Error('user unauthorized')
-  }
-
-  const data = (await client
-    .from('recipes')
+  const { data } = await client
+    .from(TableEnum.RECIPES)
     .select('*')
     .eq('owner_id', user.id)
-  ).data
+    .order('created_at', { ascending: false })
   
   return data
 })
