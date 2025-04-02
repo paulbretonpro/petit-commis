@@ -11,3 +11,17 @@ export interface IRecipe {
 
   category?: ICategory
 }
+
+
+interface IngredientQuantity {
+  id: number
+  name: string
+  quantity: string
+  unit: string
+}
+
+interface IStep {
+  step: string
+}
+
+export type TRecipeWithIngredientSteps = IRecipe & { ingredients: IngredientQuantity[] } & { steps: IStep[] }
