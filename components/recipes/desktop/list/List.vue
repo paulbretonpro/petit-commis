@@ -21,13 +21,20 @@ const { data, status } = await useLazyFetch<IRecipe[]>(
 )
 
 const pending = computed(() => status.value === 'pending')
+
+const handleClickOnRecipe = (id: number) => navigateTo(`/recipes/${id}`)
 </script>
 
 <template>
   <div>
     <LazyRecipesDesktopListSkeleton v-if="pending" />
-    <div class="grid grid-cols-3 gap-6">
-      <RecipesDesktopListCard v-for="recipe in data" :key="recipe.id" :recipe />
+    <div class="grid grid-cols-2 gap-6">
+      <RecipesDesktopListCard 
+        v-for="recipe in data"
+        :key="recipe.id"
+        :recipe 
+        @click="handleClickOnRecipe(recipe.id)"
+      />
     </div>
   </div>
 </template>
