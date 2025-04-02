@@ -23,9 +23,11 @@ const emit = defineEmits<{
 
 const loadingBtn = ref(false)
 
-const { data } = await useFetch<IIngredient[]>('/api/ingredients', {
+const { data, status } = await useLazyFetch<IIngredient[]>('/api/ingredients', {
   key: 'ingredients'
 })
+
+const pending = computed(() => status.value === 'pending')
 
 const newIngredient = ref<IIngredientRecipe>({
   ingredient: undefined,
@@ -99,43 +101,12 @@ watchEffect(() => {
     <CardContent>
       <div class="grid grid-cols-3 gap-4 mb-4">
         <!-- Ingrédient -->
-        <Combobox v-model="newIngredient.ingredient" by="name">
-          <ComboboxAnchor as-child>
-            <ComboboxTrigger as-child>
-              <Button variant="outline" class="w-full justify-between">
-                {{ newIngredient.ingredient?.name ?? 'Sélectionner un ingrédient' }}
-                <Icon icon="radix-icons:caret-sort" width="15" height="15" />
-              </Button>
-            </ComboboxTrigger>
-          </ComboboxAnchor>
-
-          <ComboboxList>
-            <div class="relative w-full max-w-sm items-center">
-              <ComboboxInput class="pl-9 focus-visible:ring-0 border-0 border-b rounded-none h-10" placeholder="Sélectionner un ingrédient..." />
-              <span class="absolute start-0 inset-y-0 flex items-center justify-center px-3">
-                <Search class="size-4 text-muted-foreground" />
-              </span>
-            </div>
-
-            <ComboboxEmpty>
-              No framework found.
-            </ComboboxEmpty>
-
-            <ComboboxGroup>
-              <ComboboxItem
-                v-for="ingredient in data"
-                :key="ingredient.id"
-                :value="ingredient"
-              >
-                {{ ingredient.name }}
-
-                <ComboboxItemIndicator>
-                  <Check :class="cn('ml-auto h-4 w-4')" />
-                </ComboboxItemIndicator>
-              </ComboboxItem>
-            </ComboboxGroup>
-          </ComboboxList>
-        </Combobox>
+         <Suspense>
+          <RecipesDesktopCreateIngredientsSelectIndegrient v-model="newIngredient.ingredient" />
+          <template #fallback>
+            <SkeletonComboBox />
+          </template>
+         </Suspense>
 
         <!-- Quantité -->
          <RecipesDesktopCreateIngredientsQuantity v-model="newIngredient.quantity" />
@@ -143,8 +114,8 @@ watchEffect(() => {
         <!-- Unité -->
         <RecipesDesktopCreateIngredientsUnity v-model="newIngredient.unit" />
       </div>
-      <div class="flex justify-end" @click="handleAddIngredientInRecipe">
-        <Button :loading="loadingBtn">
+      <div class="flex justify-end">
+        <Button :loading="loadingBtn" :disabled="loadingBtn" @click="handleAddIngredientInRecipe">
           <Icon icon="radix-icons:plus" />
           Ajouter
         </Button>
@@ -160,6 +131,5 @@ watchEffect(() => {
       </div>
       <Button variant="ghost" class="text-red-500" @click="handleRemoveIngredient(index, ingredient.ingredient?.id ?? 0)"><Icon icon="radix-icons:trash" width="15" height="15" /></Button>
     </div>
-  </div>
-  
+  </div>  
 </template>
