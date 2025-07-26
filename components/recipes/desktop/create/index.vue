@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { ICategory } from '~/server/api/categories/type'
 import type { IIngredient } from '~/server/api/ingredients/type'
-import type { TRecipeFormCreate } from '~/server/api/recipes/type'
+import type { IIngredientQuatityForm, TRecipeFormCreate } from '~/utils/types/recipes'
 
 const form = defineModel<TRecipeFormCreate>('form', { required: true })
 
@@ -20,12 +20,43 @@ const UNITS = [
   'cl',
   'sachet',
 ]
+const DEFAULT_INGREDIENT_QUANTITY = {
+  ingredient: undefined,
+  quantity: undefined,
+  unit: undefined
+}
+
+const newStep = ref<string>()
+const newIngredient = ref<IIngredientQuatityForm>({ ...DEFAULT_INGREDIENT_QUANTITY })
 
 const { data: categories, pending: pendingCategories } = await useFetch<ICategory[]>('/api/categories', {
   key: 'categories',
   default: () => []
 })
 const { data: ingredients, pending: pendingIngredients } = useAsyncData<IIngredient[]>('ingredients', async () => $fetch('/api/ingredients'), { server: false, default: () => [] })
+
+const handleAddNewIngredient = () => {
+  if (newIngredient.value.ingredient?.id && newIngredient.value.quantity && newIngredient.value.unit) {
+    form.value.ingredients.push(newIngredient.value)
+    // Reset du formulaire
+    newIngredient.value = { ... DEFAULT_INGREDIENT_QUANTITY }
+  }
+}
+
+const handleDeleteIngredient = (index: number) => {
+  form.value.ingredients.splice(index, 1)
+}
+
+const handleAddNewStep = () => {
+  if (newStep.value?.trim().length) {
+    form.value.steps.push(newStep.value)
+    newStep.value = undefined
+  }
+}
+
+const handleDeleteStep = (index: number) => {
+  form.value.steps.splice(index, 1)
+}
 
 const handleSubmit = () => emit('submit')
 </script>
@@ -41,47 +72,66 @@ const handleSubmit = () => emit('submit')
       </div>
     </div>
 
+    <!-- Liste des informations -->
     <div class="flex gap-6">
-      <UFileUpload class="grow" />
+      <UFileUpload v-model="form.image" accept="image/*" class="grow" />
       <UCard class="grow" variant="outline">
         <template #header>Informations générales</template>
         <div class="flex flex-col gap-4">
           <UInput v-model="form.name" placeholder="Nom de la recette" />
           <USelectMenu v-model="form.category" placeholder="Catégorie" :items="categories" :loading="pendingCategories" value-key="id" label-key="name" />
-          <UInputNumber v-model="form.nbPersons" :default-value="DEFAULT_RECIPE_NB_PERSON" :min="0" :max="100" />
+          <UInputNumber v-model="form.nbPersons" :default-value="DEFAULT_RECIPE_NB_PERSON" :min="1" :max="100" />
           <UTextarea v-model="form.description" placeholder="Une note à ajouter ?" />
         </div>
       </UCard>
     </div>
 
+    <!-- Liste des ingrédients -->
     <UCard>
       <template #header>Ingrédients</template>
       <template #default>
         <div class="flex flex-col gap-4">
           <div class="grid grid-cols-[1fr_1fr_1fr_0.5fr] gap-4">
-            <USelectMenu placeholder="Ingrédient" :items="ingredients" :loading="pendingIngredients" label-key="name" search-input />
-            <UInputNumber placeholder="Quantité" />
-            <USelect placeholder="Unité" :items="UNITS" />
-            <UButton block variant="subtle" size="sm" icon="fa6-solid:plus">Ajouter</UButton>
+            <USelectMenu v-model="newIngredient.ingredient" placeholder="Ingrédient" :items="ingredients" :loading="pendingIngredients" label-key="name" search-input />
+            <UInputNumber v-model="newIngredient.quantity" placeholder="Quantité" :min="1" />
+            <USelect v-model="newIngredient.unit" placeholder="Unité" :items="UNITS" />
+
+            <UButton block variant="subtle" size="sm" icon="fa6-solid:plus" @click="handleAddNewIngredient">Ajouter</UButton>
           </div>
           <div class="flex gap-2 flex-wrap">
-            <UBadge class="cursor-pointer" label="2 carottes" trailing-icon="fa6-solid:xmark" />
-            <UBadge class="cursor-pointer" label="3kg poireaux" trailing-icon="fa6-solid:xmark" />
+            <UBadge 
+              v-for="(item, index) in form.ingredients"
+              :key="item.ingredient?.id"
+              :label="`${item.quantity} ${item.ingredient?.name} ${item.unit}`"
+              trailing-icon="fa6-solid:xmark"
+              class="cursor-pointer"
+              @click="handleDeleteIngredient(index)"
+            />
           </div>
         </div>
       </template>
     </UCard>
 
+    <!-- Liste des etapes -->
     <UCard>
       <template #header>Étapes</template>
       <template #default>
         <div class="flex flex-col gap-4">
-          <div class="flex gap-2">
-            <UBadge variant="subtle" label="Etape 1" class="h-fit" />
-            <div class="text-gray-500">Signification utilisée à titre provisoire pour calibrer une mise en page, le texte définitif venant remplacer le faux-texte dès qu'il est prêt ou que la mise en page est achevée. Généralement, on utilise un texte en faux latin, le Lorem ipsum ou Lipsum.</div>
+          <div v-for="(step, index) in form.steps" :key="index" class="flex items-center gap-4">
+            <UIcon name="material-symbols:drag-indicator" />
+            <div class="flex flex-col gap-2 grow">
+              <UBadge variant="subtle" :label="`Etape ${index + 1}`" class="h-fit w-fit" />
+              <div class="text-gray-500">{{ step }}</div>
+            </div>
+            <UButton icon="material-symbols:delete-outline-rounded" color="error" variant="subtle" @click="handleDeleteStep(index)" />
           </div>
 
-          <UButton size="sm" variant="subtle" icon="fa6-solid:plus" class="w-fit mx-auto">Ajouter une étape</UButton>
+          <div class="flex gap-2">
+            <UBadge variant="subtle" :label="`Etape ${form.steps.length + 1}`" class="h-fit" />
+            <UTextarea v-model="newStep" class="grow" @keydown.enter.prevent="handleAddNewStep" />
+          </div>
+
+          <UButton size="sm" variant="subtle" icon="fa6-solid:plus" class="w-fit mx-auto" @click="handleAddNewStep">Ajouter une étape</UButton>
         </div>
       </template>
     </UCard>

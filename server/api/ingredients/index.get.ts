@@ -3,7 +3,6 @@ import type { Database } from '~/database.types'
 import { TableEnum } from '~/server/type'
 
 export default defineEventHandler(async (event) => {
-  await new Promise(res => setTimeout(res, 4000))
   const client = await serverSupabaseClient<Database>(event)
 
   const { data } = await client
