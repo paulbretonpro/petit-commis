@@ -6,7 +6,8 @@ export default function () {
     description: z.string(),
     nbPersons: z.number().min(0).default(2),
     isPublic: z.boolean().default(false),
-    categorie: z.number()
+    categorie: z.number(),
+    imageId: z.string()
   })
 
   return {

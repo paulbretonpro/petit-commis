@@ -12,6 +12,8 @@ const emit = defineEmits<{
   recipeIsCreated: [recipe: IRecipe]
 }>()
 
+const supabase = useSupabaseClient()
+const user = useSupabaseUser()
 const { toast } = useToast()
 
 const { categories } = await useCategories()
@@ -19,7 +21,7 @@ const { schema } = useRecipesCreateForm()
 
 const formSchema = toTypedSchema(schema)
 
-const { handleReset, handleSubmit, } = useForm({
+const { handleReset, handleSubmit, values } = useForm({
   validationSchema: formSchema,
   initialValues: {
     ...props.recipe,
@@ -39,24 +41,33 @@ const handleCanceled = () => {
 
 const onSubmit = handleSubmit(async (values) => {
   try {
-    if (props.recipe) {
-      // TODO: mettre à jour la recette créée
-      toast({
-        title: 'update recipe'
-      })
-    } else {
-      const { data } = await $fetch<{ data: IRecipe }>('/api/recipes', { method: 'POST', body: values })
+    // uploader l’image si fichier sélectionné
+    const { data } = await $fetch<{ data: IRecipe }>('/api/recipes', {
+      method: 'POST',
+      body: values
+    })
 
-      emit('recipeIsCreated', data)
-    }
+    emit('recipeIsCreated', data)
   } catch {
     toast({
       title: 'Échec',
-      description: 'la création de votre recette a échoué',
+      description: 'La création de votre recette a échoué',
       variant: 'destructive'
     })
   }
 })
+
+const postImage = async (image: File, setValue: (value: string) => void) => {
+  const { data } = await supabase.storage
+    .from('recipe-images')
+    .upload(`${user.value?.id}/${values.name}`, image, {
+      upsert: true
+    })
+
+  if(data) {
+    setValue(data.id)
+  }
+}
 </script>
 
 <template>
@@ -127,6 +138,16 @@ const onSubmit = handleSubmit(async (values) => {
                   <NumberFieldIncrement />
                 </NumberFieldContent>
               </NumberField>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+
+        <FormField v-slot="{ setValue, field, componentField }" name="imageId">
+          <FormItem>
+            <FormLabel>Image</FormLabel>
+            <FormControl>
+              <Input type="file" accept="image/*" @change="async (e) => postImage(e.target.files[0], setValue)" />
+            </FormControl>
             <FormMessage />
           </FormItem>
         </FormField>
