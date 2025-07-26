@@ -1,105 +1,89 @@
-<script setup lang="ts">
-import { Check, BookOpenText, Carrot, List } from 'lucide-vue-next'
-import type { IRecipe } from '~/server/api/recipes/type'
+<script lang="ts" setup>
+import type { ICategory } from '~/server/api/categories/type'
+import type { IIngredient } from '~/server/api/ingredients/type'
+import type { TRecipeFormCreate } from '~/server/api/recipes/type'
 
-const stepIndex = ref(1)
-const steps = [{
-  step: 1,
-  title: 'Recette',
-  description: 'Ajouter les détails de votre recette',
-  icon: BookOpenText,
-},
-{
-  step: 2,
-  title: 'Ingrédients',
-  description: 'Sélectionner vos ingrédients',
-  icon: Carrot,
-},
-{
-  step: 3,
-  title: 'Étapes',
-  description: 'Ajouter les étapes de votre recette ',
-  icon: List,
-}]
+const form = defineModel<TRecipeFormCreate>('form', { required: true })
 
-const recipe = ref<IRecipe>()
-const hasIngredient = ref(false)
+const emit = defineEmits<{
+  'submit': [void]
+}>()
 
-const isActive = (step: number) => {
-  if (step === 1) {
-    return true
-  } else if (step === 2) {
-    return !!recipe.value
-  } else if (step === 3) {
-    return hasIngredient.value
-  }
-}
+const DEFAULT_RECIPE_NB_PERSON = 2
+const UNITS = [
+  'g',
+  'kg',
+  'c.a.s',
+  'c.a.c',
+  'l',
+  'ml',
+  'cl',
+  'sachet',
+]
 
-const handleRecipeIsCreated = (newRecipe: IRecipe) => {
-  recipe.value = newRecipe
-  stepIndex.value++
-}
+const { data: categories, pending: pendingCategories } = await useFetch<ICategory[]>('/api/categories', {
+  key: 'categories',
+  default: () => []
+})
+const { data: ingredients, pending: pendingIngredients } = useAsyncData<IIngredient[]>('ingredients', async () => $fetch('/api/ingredients'), { server: false, default: () => [] })
 
-const handleHasIngredient = (value: boolean) => hasIngredient.value = value
+const handleSubmit = () => emit('submit')
 </script>
 
 <template>
-  <Stepper v-model="stepIndex" class="block w-full">
-    <div class="flex w-full flex-start gap-2">
-      <StepperItem
-        v-for="item in steps"
-        :key="item.step"
-        v-slot="{ state }"
-        class="relative flex w-full flex-col items-center justify-center"
-        :step="item.step"
-      >
-        <StepperSeparator
-          v-if="item.step !== steps[steps.length - 1].step"
-          class="absolute left-[calc(50%+20px)] right-[calc(-50%+10px)] top-5 block h-0.5 shrink-0 rounded-full bg-muted group-data-[state=completed]:bg-primary"
-        />
+  <div class="flex flex-col gap-6">
+    <div class="flex justify-between items-center">
+      <div class="text-2xl font-semibold">{{ form.name ?? 'Nouvelle recette' }}</div>
 
-        <StepperTrigger as-child>
-          <Button
-            :variant="state === 'completed' || state === 'active' ? 'default' : 'outline'"
-            size="icon"
-            class="z-10 rounded-full shrink-0"
-            :class="[state === 'active' && 'ring-2 ring-ring ring-offset-2 ring-offset-background']"
-            :disabled="state !== 'completed' && !isActive(item.step)"
-          >
-            <Check v-if="state === 'completed'" class="size-5" />
-            <component :is="item.icon" v-else class="w-4 h-4" />
-          </Button>
-        </StepperTrigger>
+      <div class="flex gap-2">
+        <UButton size="xl" variant="outline" >Annuler</UButton>
+        <UButton size="xl" @click="handleSubmit">Terminer</UButton>
+      </div>
+    </div>
 
-        <div class="mt-5 flex flex-col items-center text-center">
-          <StepperTitle
-            :class="[state === 'active' && 'text-primary']"
-            class="text-sm font-semibold transition lg:text-base"
-          >
-            {{ item.title }}
-          </StepperTitle>
-          <StepperDescription
-            :class="[state === 'active' && 'text-primary']"
-            class="sr-only text-xs text-muted-foreground transition md:not-sr-only lg:text-sm"
-          >
-            {{ item.description }}
-          </StepperDescription>
+    <div class="flex gap-6">
+      <UFileUpload class="grow" />
+      <UCard class="grow" variant="outline">
+        <template #header>Informations générales</template>
+        <div class="flex flex-col gap-4">
+          <UInput v-model="form.name" placeholder="Nom de la recette" />
+          <USelectMenu v-model="form.category" placeholder="Catégorie" :items="categories" :loading="pendingCategories" value-key="id" label-key="name" />
+          <UInputNumber v-model="form.nbPersons" :default-value="DEFAULT_RECIPE_NB_PERSON" :min="0" :max="100" />
+          <UTextarea v-model="form.description" placeholder="Une note à ajouter ?" />
         </div>
-      </StepperItem>
+      </UCard>
     </div>
 
-    <div class="flex flex-col gap-4 mt-4">
-      <template v-if="stepIndex === 1">
-        <RecipesDesktopCreateDetails :recipe @recipe-is-created="handleRecipeIsCreated" />
+    <UCard>
+      <template #header>Ingrédients</template>
+      <template #default>
+        <div class="flex flex-col gap-4">
+          <div class="grid grid-cols-[1fr_1fr_1fr_0.5fr] gap-4">
+            <USelectMenu placeholder="Ingrédient" :items="ingredients" :loading="pendingIngredients" label-key="name" search-input />
+            <UInputNumber placeholder="Quantité" />
+            <USelect placeholder="Unité" :items="UNITS" />
+            <UButton block variant="subtle" size="sm" icon="fa6-solid:plus">Ajouter</UButton>
+          </div>
+          <div class="flex gap-2 flex-wrap">
+            <UBadge class="cursor-pointer" label="2 carottes" trailing-icon="fa6-solid:xmark" />
+            <UBadge class="cursor-pointer" label="3kg poireaux" trailing-icon="fa6-solid:xmark" />
+          </div>
+        </div>
       </template>
+    </UCard>
 
-      <template v-if="stepIndex === 2">
-        <RecipesDesktopCreateIngredients :recipe @has-ingredient="handleHasIngredient" />
-      </template>
+    <UCard>
+      <template #header>Étapes</template>
+      <template #default>
+        <div class="flex flex-col gap-4">
+          <div class="flex gap-2">
+            <UBadge variant="subtle" label="Etape 1" class="h-fit" />
+            <div class="text-gray-500">Signification utilisée à titre provisoire pour calibrer une mise en page, le texte définitif venant remplacer le faux-texte dès qu'il est prêt ou que la mise en page est achevée. Généralement, on utilise un texte en faux latin, le Lorem ipsum ou Lipsum.</div>
+          </div>
 
-      <template v-if="stepIndex === 3">
-        <RecipesDesktopCreateSteps :recipe />
+          <UButton size="sm" variant="subtle" icon="fa6-solid:plus" class="w-fit mx-auto">Ajouter une étape</UButton>
+        </div>
       </template>
-    </div>
-  </Stepper>
+    </UCard>
+  </div>
 </template>
