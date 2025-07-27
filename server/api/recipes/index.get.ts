@@ -6,7 +6,6 @@ import { TableEnum } from '~/server/type'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient<Database>(event)
-
   const user = await getUser(event)
 
   const { data } = await client

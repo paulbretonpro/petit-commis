@@ -9,10 +9,9 @@ defineProps<{
 
 <template>
   <div class="flex flex-col gap-6">
-    <div class="flex justify-between items-center">
-      <div class="text-2xl font-semibold">{{ recipe.name }}</div>
+    <PageHeader :title="recipe.name">
       <UButton>Modifier</UButton>
-    </div>
+    </PageHeader>
 
     <div class="flex gap-4">
       <UBadge :label="recipe.category?.name" />

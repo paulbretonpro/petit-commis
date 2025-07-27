@@ -22,5 +22,8 @@ const imageUrl = computed(() => props.recipe.hasImage && getImage(props.recipe.i
         <UIcon :name="ICON_RECIPE_WITHOUT_IMAGE" class="w-10 h-10" />
       </div>
     </template>
+    <template #footer>
+      <ButtonAddToPlanning :recipe-id="recipe.id" />
+    </template>
   </UCard>
 </template>

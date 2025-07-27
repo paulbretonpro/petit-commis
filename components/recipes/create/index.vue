@@ -66,14 +66,12 @@ const handleCancel = () => navigateTo('/')
 
 <template>
   <div class="flex flex-col gap-6">
-    <div class="flex gap-2 justify-between items-center">
-      <div class="text-2xl font-semibold truncate">{{ form.name ?? 'Nouvelle recette' }}</div>
-
+    <PageHeader :title="form.name ?? 'Nouvelle recette'">
       <div v-if="!isMobile" class="flex gap-2">
         <UButton size="xl" variant="outline" @click="handleCancel()">Annuler</UButton>
         <UButton size="xl" @click="handleSubmit">Terminer</UButton>
       </div>
-    </div>
+    </PageHeader>
 
     <!-- Liste des informations -->
     <div class="flex flex-col md:flex-row gap-6">
