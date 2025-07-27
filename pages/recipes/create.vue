@@ -4,7 +4,6 @@ import { BucketStorage } from '~/server/type'
 import { RecipeFormCreateSchema, type TRecipeFormCreate } from '~/utils/types/recipes'
 
 const toast = useToast()
-const { isMobile } = useDevice()
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 
@@ -75,6 +74,5 @@ const onSubmit = async () => {
 </script>
 
 <template>
-  <LazyRecipesMobileCreate v-if="isMobile" v-model:form="formCreateRecipe" />
-  <LazyRecipesDesktopCreate v-else v-model:form="formCreateRecipe" @submit="onSubmit" />
+  <LazyRecipesCreate v-model:form="formCreateRecipe" @submit="onSubmit" />
 </template>

@@ -7,6 +7,9 @@ const { data: recipes } = useAsyncData<IRecipe[]>('recipes', () => $fetch('/api/
 </script>
 
 <template>
-  <LazyRecipesMobileList v-if="isMobile" :recipes />
-  <LazyRecipesDesktopList v-else :recipes />
+  <div class="flex flex-col gap-4">
+    <UButton label="Créer une recette" class="self-end" @click="() => navigateTo('/recipes/create')" />
+    <LazyRecipesMobileList v-if="isMobile" :recipes />
+    <LazyRecipesDesktopList v-else :recipes />
+  </div>
 </template>

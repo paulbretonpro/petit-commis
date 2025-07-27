@@ -29,6 +29,8 @@ const DEFAULT_INGREDIENT_QUANTITY = {
 const newStep = ref<string>()
 const newIngredient = ref<IIngredientQuatityForm>({ ...DEFAULT_INGREDIENT_QUANTITY })
 
+const { isMobile } = useDevice()
+
 const { data: categories, pending: pendingCategories } = await useFetch<ICategory[]>('/api/categories', {
   key: 'categories',
   default: () => []
@@ -59,22 +61,24 @@ const handleDeleteStep = (index: number) => {
 }
 
 const handleSubmit = () => emit('submit')
+const handleCancel = () => navigateTo('/')
 </script>
 
 <template>
   <div class="flex flex-col gap-6">
-    <div class="flex justify-between items-center">
-      <div class="text-2xl font-semibold">{{ form.name ?? 'Nouvelle recette' }}</div>
+    <div class="flex gap-2 justify-between items-center">
+      <div class="text-2xl font-semibold truncate">{{ form.name ?? 'Nouvelle recette' }}</div>
 
-      <div class="flex gap-2">
-        <UButton size="xl" variant="outline" >Annuler</UButton>
+      <div v-if="!isMobile" class="flex gap-2">
+        <UButton size="xl" variant="outline" @click="handleCancel()">Annuler</UButton>
         <UButton size="xl" @click="handleSubmit">Terminer</UButton>
       </div>
     </div>
 
     <!-- Liste des informations -->
-    <div class="flex gap-6">
+    <div class="flex flex-col md:flex-row gap-6">
       <UFileUpload v-model="form.image" accept="image/*" class="grow" />
+
       <UCard class="grow" variant="outline">
         <template #header>Informations générales</template>
         <div class="flex flex-col gap-4">
@@ -91,7 +95,7 @@ const handleSubmit = () => emit('submit')
       <template #header>Ingrédients</template>
       <template #default>
         <div class="flex flex-col gap-4">
-          <div class="grid grid-cols-[1fr_1fr_1fr_0.5fr] gap-4">
+          <div class="grid md:grid-cols-[1fr_1fr_1fr_0.5fr] gap-4">
             <USelectMenu v-model="newIngredient.ingredient" placeholder="Ingrédient" :items="ingredients" :loading="pendingIngredients" label-key="name" search-input />
             <UInputNumber v-model="newIngredient.quantity" placeholder="Quantité" :min="1" />
             <USelect v-model="newIngredient.unit" placeholder="Unité" :items="UNITS" />
@@ -135,5 +139,10 @@ const handleSubmit = () => emit('submit')
         </div>
       </template>
     </UCard>
+
+    <div v-if="isMobile" class="grid grid-cols-2 gap-2">
+      <UButton block variant="outline" @click="handleCancel()">Annuler</UButton>
+      <UButton block @click="handleSubmit">Terminer</UButton>
+    </div>
   </div>
 </template>
