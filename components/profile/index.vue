@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-
 const { logout } = useAppSettings()
 </script>
 
 <template>
-  <DropdownMenu>
+  <!-- <DropdownMenu>
     <DropdownMenuTrigger as-child>
       <Button variant="ghost">
         Profile
@@ -17,5 +14,5 @@ const { logout } = useAppSettings()
         Se déconnecter
       </DropdownMenuItem>
     </DropdownMenuContent>
-  </DropdownMenu>
+  </DropdownMenu> -->
 </template>

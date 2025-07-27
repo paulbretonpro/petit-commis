@@ -1,0 +1,1 @@
+export const ICON_RECIPE_WITHOUT_IMAGE = 'ph:bowl-food'

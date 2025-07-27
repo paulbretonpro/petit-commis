@@ -5,3 +5,7 @@ export enum TableEnum {
   RECIPES = 'recipes',
   STEPS_RECIPES = 'steps_recipes'
 }
+
+export enum BucketStorage {
+  RECIPE_IMAGE = 'recipe-images'
+}

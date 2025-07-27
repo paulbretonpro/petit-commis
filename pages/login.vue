@@ -1,18 +1,20 @@
 <script setup lang="ts">
-import { AutoForm } from '@/components/ui/auto-form'
-import { Button } from '@/components/ui/button'
 import * as z from 'zod'
-import { useToast } from '~/components/ui/toast'
 import { Icon } from '@iconify/vue'
+import type { FormSubmitEvent } from '@nuxt/ui'
 
 definePageMeta({
   layout: 'login'
 })
 
-const { toast } = useToast()
+const toast = useToast()
 const { auth } = useSupabaseClient()
 
 const loading = ref(false)
+const userCredentials = ref({
+  email: undefined,
+  password: undefined
+})
 
 const schema = z.object({
   email: z
@@ -25,19 +27,20 @@ const schema = z.object({
     })
 })
 
-const onSubmit = async (form: { email: string, password: string }) => {
+
+const onSubmit = async (event: FormSubmitEvent<z.output<typeof schema>>) => {
   loading.value = true
   
   const user = await auth.signInWithPassword({
-    ...form,
+    ...event.data,
   })
   loading.value = false
 
   if (user.error) {
-    toast({
+    toast.add({
       title: 'Échec',
       description: 'Votre email ou votre mot de passe est incorrect',
-      variant: 'destructive'
+      color: 'error'
     })
   } else {
     navigateTo('/')
@@ -48,28 +51,14 @@ const onSubmit = async (form: { email: string, password: string }) => {
 <template>
   <div class="flex flex-col gap-16 grow">
     <div class="text-center text-4xl font-extrabold">PETIT COMMIS</div>
-    <AutoForm
-      class="space-y-6"
-      :schema="schema"
-      :field-config="{
-        email: {
-          label: 'Email',
-          inputProps: {
-            type: 'email',
-            placeholder: 'jean.dupont@gmail.com'
-          }
-        },
-        password: {
-          label: 'Mot de passe',
-          inputProps: {
-            type: 'password',
-            placeholder: '••••••••',
-          },
-        },
-      }"
-      @submit="onSubmit"
-    >
-      <Button :disabled="loading" :loading type="submit" size="icon" class="w-full">
+    <UForm :schema :state="userCredentials" class="space-y-4" @submit="onSubmit">
+      <UFormField label="Email" name="email">
+        <UInput v-model="userCredentials.email" type="email" placeholder="jean.dupont@gmail.com" class="w-full" />
+      </UFormField>
+      <UFormField label="Password" name="password">
+        <UInput v-model="userCredentials.password" type="password" placeholder="••••••••" class="w-full" />
+      </UFormField>
+      <UButton :disabled="loading" :loading type="submit" block>
         <template v-if="loading">
           Connexion ...
         </template>
@@ -77,7 +66,7 @@ const onSubmit = async (form: { email: string, password: string }) => {
           <Icon icon="radix-icons:lock-open-1" />
           Se connecter
         </template>
-      </Button>
-    </AutoForm>
+      </UButton>
+    </UForm>
   </div>
 </template>

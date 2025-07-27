@@ -4,17 +4,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     '@nuxt/eslint',
-    '@nuxtjs/tailwindcss',
     '@nuxt/test-utils',
-    'shadcn-nuxt',
-    '@nuxtjs/color-mode',
-    '@nuxtjs/supabase'
+    '@nuxtjs/supabase',
+    '@nuxt/image',
+    '@nuxt/ui',
+    '@nuxtjs/color-mode'
   ],
-  colorMode: {
-    classSuffix: ''
-  },
-  shadcn: {
-    prefix: '',
-    componentDir: './components/ui'
-  }
+  css: ['~/assets/css/main.css']
 })
