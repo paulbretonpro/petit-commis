@@ -1,14 +1,14 @@
 import type { ICategory } from "../categories/type"
-import { z } from "zod"
 
 export interface IRecipe {
   id: number
-  name: string
-  description: string
   categoryId: number
-  nbPersons: number
-  isPublic: boolean
   createdAt: string
+  description: string
+  hasImage: boolean
+  isPublic: boolean
+  name: string
+  nbPersons: number
 
   category?: ICategory
 }

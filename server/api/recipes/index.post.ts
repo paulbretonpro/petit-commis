@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
 
   const user = await getUser(event)
 
-  const body = await readValidatedBody(event, RecipeFormCreateSchema.parse);
+  const body = await readValidatedBody(event, RecipeFormCreateSchema.parse)
 
   if (!body) {
     throw new Error('payload invalid')
@@ -26,6 +26,7 @@ export default defineEventHandler(async (event) => {
       name: body.name,
       nb_persons: body.nbPersons,
       owner_id: user.id,
+      has_image: body.hasImage
     })
     .select('*')
     .single()

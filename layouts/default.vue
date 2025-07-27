@@ -14,12 +14,17 @@ const isDark = computed({
 </script>
 
 <template>
-  <div v-if="isMobile" class="border py-2 fixed bottom-0 w-full bg-white dark:bg-neutral-950">
-    <nav class="grid grid-cols-3 gap-6 font-medium">
-      <NuxtLink class="mx-auto" to="/"><UButton variant="ghost">Recettes</UButton></NuxtLink>
-      <NuxtLink class="mx-auto" to="/menu"><UButton variant="ghost">Menu</UButton></NuxtLink>
-      <NuxtLink class="mx-auto" to="/profile"><UButton variant="ghost">Profile</UButton></NuxtLink>
-    </nav>
+  <div v-if="isMobile">
+    <UContainer class="pt-4 pb-16">
+      <slot />
+    </UContainer>
+    <div class="border border-gray-200 dark:border-neutral-800 py-2 fixed bottom-0 w-full bg-white dark:bg-neutral-950">
+      <nav class="grid grid-cols-3 gap-6 font-medium">
+        <NuxtLink class="mx-auto" to="/"><UButton variant="ghost">Recettes</UButton></NuxtLink>
+        <NuxtLink class="mx-auto" to="/menu"><UButton variant="ghost">Menu</UButton></NuxtLink>
+        <NuxtLink class="mx-auto" to="/profile"><UButton variant="ghost">Profile</UButton></NuxtLink>
+      </nav>
+    </div>
   </div>
 
   <div v-else class="h-screen">

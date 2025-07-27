@@ -102,7 +102,7 @@ const handleSubmit = () => emit('submit')
             <UBadge 
               v-for="(item, index) in form.ingredients"
               :key="item.ingredient?.id"
-              :label="`${item.quantity} ${item.ingredient?.name} ${item.unit}`"
+              :label="`${item.quantity} ${item.unit} ${item.ingredient?.name}`"
               trailing-icon="fa6-solid:xmark"
               class="cursor-pointer"
               @click="handleDeleteIngredient(index)"

@@ -41,7 +41,10 @@ const onSubmit = async () => {
   try {
     const { data: recipe } = await $fetch<{ data: IRecipe }>('/api/recipes', { 
       method: 'POST',
-      body: state.data
+      body: {
+        ...state.data,
+        hasImage: !!formCreateRecipe.value.image 
+      }
     })
 
     if (formCreateRecipe.value.image) {
@@ -60,7 +63,7 @@ const onSubmit = async () => {
       color: 'success',
     })
 
-    navigateTo('/recipes')
+    navigateTo('/')
   } catch {
     toast.add({
       title: 'Echec',
