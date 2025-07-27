@@ -4,6 +4,7 @@ import type { IIngredient } from "~/server/api/ingredients/type"
 export const RecipeFormCreateSchema = z.object({
   category: z.number(),
   description: z.string(),
+  hasImage: z.boolean(),
   ingredients: z.array(
     z.object({
       ingredientId: z.number(),

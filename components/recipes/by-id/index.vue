@@ -21,7 +21,7 @@ defineProps<{
 
     <div class="flex flex-col sm:grid sm:grid-cols-2 gap-6 sm:h-96">
       <div class="border border-gray-200 dark:border-neutral-800 rounded-lg overflow-hidden h-full">
-        <img  v-if="recipe.hasImage" :src="imageUrl" class="w-full object-cover">
+        <img  v-if="recipe.hasImage" :src="imageUrl" class="w-full h-full object-cover">
         <div v-else class="flex items-center justify-center h-full">
           <UIcon :name="ICON_RECIPE_WITHOUT_IMAGE" class="w-10 h-10" />
         </div>

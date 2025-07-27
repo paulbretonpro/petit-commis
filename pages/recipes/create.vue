@@ -24,7 +24,8 @@ const onSubmit = async () => {
     ingredients: formCreateRecipe.value.ingredients.map(ingredient => ({
       ...ingredient,
       ingredientId: ingredient.ingredient?.id
-    }))
+    })),
+    hasImage: !!formCreateRecipe.value.image 
   })
 
   if (state.error) {      
@@ -42,7 +43,6 @@ const onSubmit = async () => {
       method: 'POST',
       body: {
         ...state.data,
-        hasImage: !!formCreateRecipe.value.image 
       }
     })
 
