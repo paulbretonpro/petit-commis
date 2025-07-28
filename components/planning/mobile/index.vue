@@ -56,7 +56,7 @@ const nextWeek = () => {
     </div>
 
     <!-- Chargement -->
-    <PlanningSkeleton v-if="pending" />
+    <PlanningMobileSkeleton v-if="pending" />
 
     <!-- Planning jour par jour -->
     <div v-else class="flex flex-col gap-3">
@@ -78,20 +78,10 @@ const nextWeek = () => {
         </div>
 
         <div v-if="lunch || dinner" class="flex flex-col gap-2 mt-2">
-          <span
-            v-if="lunch"
-            class="text-xs max-w-fit font-medium bg-blue-500 text-white rounded px-2 py-0.5 truncate"
-          >
-            {{ lunch.recipe?.name }}
-          </span>
-          <span
-            v-if="dinner"
-            class="text-xs max-w-fit font-medium bg-primary-500 text-white rounded px-2 py-0.5 truncate"
-          >
-            {{ dinner.recipe?.name }}
-          </span>
+          <UBadge v-if="lunch" :label="lunch?.recipe?.name" icon="mdi:weather-sunny" class="max-w-fit truncate"/>
+          <UBadge v-if="dinner" color="info" :label="dinner?.recipe?.name" icon="mdi:weather-night" class="max-w-fit truncate"/>
         </div>
-        <div v-else class="text-sm text-gray-200 dark:text-neutral-700 text-center">Pas de recette</div>
+        <div v-else class="text-sm text-gray-500 dark:text-neutral-700 text-center">Pas de recette</div>
       </div>
     </div>
   </div>

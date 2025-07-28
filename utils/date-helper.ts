@@ -2,7 +2,7 @@ import { CalendarDate, getDayOfWeek } from '@internationalized/date'
 
 export function startOfWeek(date: CalendarDate) {
   const weekday = getDayOfWeek(date, 'fr') // 1 = lundi, 7 = dimanche
-  return date.subtract({ days: weekday - 1 }) // ramène à lundi
+  return date.subtract({ days: weekday }) // ramène à lundi
 }
 
 export function endOfWeek(date: CalendarDate) {
@@ -13,7 +13,7 @@ export function endOfWeek(date: CalendarDate) {
 export function eachDay(start: CalendarDate, end: CalendarDate) {
   const days: CalendarDate[] = []
   let current = start
-  while (current.compare(end) <= 0) {
+  while (current.compare(end) < 0) {
     days.push(current)
     current = current.add({ days: 1 })
   }

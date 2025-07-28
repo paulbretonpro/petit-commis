@@ -74,7 +74,7 @@ const nextMonth = () => {
       <div v-for="(day, index) in WEEK_DAYS_LABELS" :key="index">{{ day }}</div>
     </div>
 
-    <PlanningSkeleton v-if="pending" />
+    <PlanningDesktopSkeleton v-if="pending" />
 
     <div v-else class="grid grid-cols-7 gap-2 mt-2">
       <div
