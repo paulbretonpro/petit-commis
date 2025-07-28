@@ -11,7 +11,7 @@ export default function () {
   const allUnavailableDate = ref<IPlanning[]>([])
 
   const selectDay = ref<{ date: DateValue | undefined, type: number | undefined }>({
-    date: undefined,
+    date: today(getLocalTimeZone()),
     type: undefined
   })
 
@@ -63,7 +63,7 @@ export default function () {
         method: 'POST',
         body: {
           date: selectDay.value.date?.toString(),
-          recipeId: props.recipeId,
+          recipeId: recipeId,
           type: selectDay.value.type,
         }
       })
@@ -87,7 +87,7 @@ export default function () {
   }
 
   const handleReset = () => {
-    selectDay.value.date = undefined
+    selectDay.value.date = today(getLocalTimeZone())
     selectDay.value.type = undefined
   }
 

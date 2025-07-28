@@ -8,14 +8,17 @@ export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient<Database>(event)
   const user = await getUser(event)
 
-  const params = getQuery<{ date_start: string, date_end: string }>(event)
+  const params = getQuery<{ date_start: string, date_end: string, with_resources?: boolean }>(event)
 
   if (!params.date_end || !params.date_end) {
     throw new Error('Missing params date start or date end')
   }
   const { data } = await client
     .from(TableEnum.PLANNING)
-    .select('*')
+    .select(params.with_resources 
+      ? '*, recipe:recipes(*)'
+      : '*'
+    )
     .eq('user_id', user.id)
     .gte('date', params.date_start)
     .lte('date', params.date_end)

@@ -27,6 +27,7 @@ watch(() => selectDay.value.date, () => selectDay.value.type = undefined)
         <UCalendar
           v-model="selectDay.date"
           :min-value="today(getLocalTimeZone())"
+          :default-value="today(getLocalTimeZone())"
           :year-controls="false"
           :is-date-unavailable="getUnvailableDate"
         />
