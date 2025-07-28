@@ -3,6 +3,17 @@ import { CalendarDate } from '@internationalized/date'
 import type { IPlanning } from '~/server/api/planning/type'
 
 const currentMonthDate = ref<CalendarDate>(today())
+const openEditDay = ref(false)
+const selectedDay = ref<CalendarDate>()
+
+const recipeByDay = computed(() => {
+  if (selectedDay.value === undefined) { return }
+
+  return {
+    lunch: recipesPlanned.value.find(planning => planning.date === selectedDay.value?.toString() && planning.type === 0),
+    dinner: recipesPlanned.value.find(planning => planning.date === selectedDay.value?.toString() && planning.type === 1)
+  }
+})
 
 const formattedMonth = computed(() => {
   const date = new Date(
@@ -32,7 +43,7 @@ const visibleDays = computed(() => {
   }))
 })
 
-const { data: recipesPlanned, pending } = useAsyncData('planning', () => {
+const { data: recipesPlanned, pending, refresh } = useAsyncData('planning', () => {
   const firstOfMonth = new CalendarDate(currentMonthDate.value.year, currentMonthDate.value.month, 1)
   const lastOfMonth = new CalendarDate(currentMonthDate.value.year, currentMonthDate.value.month, firstOfMonth.calendar.getDaysInMonth(firstOfMonth))
 
@@ -58,6 +69,12 @@ const prevMonth = () => {
 const nextMonth = () => {
   currentMonthDate.value = addMonths(currentMonthDate.value, 1)
 }
+
+const setRecipeDay = (day: CalendarDate) => {
+  selectedDay.value = day
+
+  openEditDay.value = true
+} 
 </script>
 
 <template>
@@ -80,14 +97,19 @@ const nextMonth = () => {
       <div
         v-for="({ day, lunch, dinner }, index) in visibleDays"
         :key="index"
-        class="border border-gray-200 dark:border-neutral-800 rounded-lg h-28 p-4"
+        class="border border-gray-200 dark:border-neutral-800 rounded-lg h-28 p-4 cursor-pointer"
         :class="{ 'bg-gray-100 dark:bg-neutral-800': !isSameMonth(day, currentMonthDate) }"
+        @click="() => setRecipeDay(day)"
       >
-        <div 
-          class="text-xs font-semibold text-gray-700"
-          :class="{ 'text-primary font-bold': !day.compare(today()) }"
-        >
-          {{ day.day }}
+        <div class="flex justify-between items-center">
+          <div 
+            class="text-xs font-semibold text-gray-700"
+            :class="{ 'text-primary font-bold': !day.compare(today()) }"
+          >
+            {{ day.day }}
+          </div>
+
+          <UButton v-if="lunch || dinner" icon="fa6-solid:pen" size="xs" variant="ghost" color="secondary" />
         </div>
         
         <div class="flex flex-col gap-2 mt-1">
@@ -97,4 +119,6 @@ const nextMonth = () => {
       </div>
     </div>
   </div>
+
+  <PlanningDesktopModalEditPlanning v-model="openEditDay" :recipes="recipeByDay" @planned-recipe-has-deleted="refresh" />
 </template>
