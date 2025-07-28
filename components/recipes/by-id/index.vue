@@ -10,7 +10,10 @@ defineProps<{
 <template>
   <div class="flex flex-col gap-6">
     <PageHeader :title="recipe.name">
-      <UButton>Modifier</UButton>
+      <div class="flex gap-4">
+        <ButtonAddToPlanning :recipe-id="recipe.id" />
+        <UButton>Modifier</UButton>
+      </div>
     </PageHeader>
 
     <div class="flex gap-4">

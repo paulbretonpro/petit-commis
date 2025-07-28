@@ -1,7 +1,4 @@
 <script setup lang="ts">
-const weekDays = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
-
-// Exemple de structure de jours pour un mois fictif
 const days = [
   // Semaine 1
   { date: 29, isOtherMonth: true, isHighlighted: true },
@@ -52,7 +49,7 @@ const days = [
       v-for="(day, index) in days"
       :key="index"
       :class="[
-        'h-24 flex p-4 text-sm rounded-md animate-pulse',
+        'h-28 flex p-4 text-sm rounded-md animate-pulse',
         day.isOtherMonth
           ? 'border border-gray-200 dark:border-neutral-800 text-gray-500'
           : 'border border-gray-200 dark:border-neutral-800 text-gray-300',

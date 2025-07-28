@@ -80,7 +80,7 @@ const nextMonth = () => {
       <div
         v-for="({ day, lunch, dinner }, index) in visibleDays"
         :key="index"
-        class="border border-gray-200 dark:border-neutral-800 rounded-lg h-24 p-4"
+        class="border border-gray-200 dark:border-neutral-800 rounded-lg h-28 p-4"
         :class="{ 'bg-gray-100 dark:bg-neutral-800': !isSameMonth(day, currentMonthDate) }"
       >
         <div 
@@ -91,12 +91,8 @@ const nextMonth = () => {
         </div>
         
         <div class="flex flex-col gap-2 mt-1">
-          <span v-if="lunch" class="max-w-fit truncate bg-blue-500 text-xs font-medium text-white rounded px-2 py-0.5">
-            {{ lunch?.recipe?.name }}
-          </span>
-          <span v-if="dinner" class="max-w-fit truncate bg-primary-500 text-xs font-medium text-white rounded px-2 py-0.5">
-            {{ dinner?.recipe?.name }}
-          </span>
+          <UBadge v-if="lunch" :label="lunch?.recipe?.name" icon="mdi:weather-sunny" class="max-w-fit truncate"/>
+          <UBadge v-if="dinner" color="info" :label="dinner?.recipe?.name" icon="mdi:weather-night" class="max-w-fit truncate"/>
         </div>
       </div>
     </div>
