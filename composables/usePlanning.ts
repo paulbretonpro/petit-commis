@@ -1,6 +1,4 @@
-import { endOfMonth, getLocalTimeZone, today, type DateValue } from "@internationalized/date"
-import type { RadioGroupItem } from "@nuxt/ui"
-import type { IPlanning } from "~/server/api/planning/type"
+import { getLocalTimeZone, today, type DateValue } from "@internationalized/date"
 
 export default function () {
   const toast = useToast()
@@ -8,52 +6,10 @@ export default function () {
   const loading = ref(true)
   const btnLoading = ref(false)
 
-  const allUnavailableDate = ref<IPlanning[]>([])
-
-  const selectDay = ref<{ date: DateValue | undefined, type: number | undefined }>({
-    date: undefined,
+  const selectDay = ref<{ date: DateValue, type: number | undefined }>({
+    date: today(getLocalTimeZone()),
     type: undefined
   })
-
-  const radioGroupItems = computed<RadioGroupItem[]>(() => {
-    const options: RadioGroupItem[] = [
-      {
-        disabled: false,
-        label: 'Midi',
-        value: 0,
-      },
-      {
-        disabled: false,
-        label: 'Soir',
-        value: 1,
-      }
-    ]
-
-    if (!selectDay.value) return options
-
-    const index = allUnavailableDate.value.findIndex(planning => planning.date === selectDay.value.date?.toString())
-
-    if (index > -1) {
-      options[allUnavailableDate.value[index].type].disabled = true
-      options[allUnavailableDate.value[index].type].class = 'radio-disabled'
-    }
-
-    return options
-  })
-
-  const handleGetUnavailableDate = async () => {
-    loading.value = true
-
-    allUnavailableDate.value = await $fetch<IPlanning[]>('/api/planning', {
-      method: 'GET',
-      params: {
-        date_start: today(getLocalTimeZone()).toString(),
-        date_end: endOfMonth(today(getLocalTimeZone())).toString(),
-      }
-    })
-
-    loading.value = false
-  }
 
   const handleAddRecipeToPlanning = async (recipeId: number, close: () => void) => {
     btnLoading.value = true
@@ -63,7 +19,7 @@ export default function () {
         method: 'POST',
         body: {
           date: selectDay.value.date?.toString(),
-          recipeId: props.recipeId,
+          recipeId: recipeId,
           type: selectDay.value.type,
         }
       })
@@ -87,21 +43,25 @@ export default function () {
   }
 
   const handleReset = () => {
-    selectDay.value.date = undefined
+    selectDay.value.date = today(getLocalTimeZone())
     selectDay.value.type = undefined
   }
 
-  const getUnvailableDate = (date: DateValue) => {
-    return allUnavailableDate.value.filter(planning => planning.date === date.toString()).length === 2
+  const handleNextMonth = () => {
+    selectDay.value.date = (selectDay.value.date ?? today(getLocalTimeZone())).add({ months: 1 })
   }
+
+  const handlePrevMonth = () => {
+    selectDay.value.date = (selectDay.value.date ?? today(getLocalTimeZone())).subtract({ months: 1 })
+  }
+  
   return {
     btnLoading,
-    getUnvailableDate,
     handleAddRecipeToPlanning,
-    handleGetUnavailableDate,
+    handleNextMonth,
+    handlePrevMonth,
     handleReset,
     loading,
-    radioGroupItems,
-    selectDay
+    selectDay,
   }
 }
