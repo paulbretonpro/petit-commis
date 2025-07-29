@@ -97,11 +97,11 @@ const setRecipeDay = (day: CalendarDate) => {
       <div
         v-for="({ day, lunch, dinner }, index) in visibleDays"
         :key="index"
-        class="border border-gray-200 dark:border-neutral-800 rounded-lg h-28 p-4 cursor-pointer"
+        class="border border-gray-200 dark:border-neutral-800 rounded-lg h-30 p-4 cursor-pointer"
         :class="{ 'bg-gray-100 dark:bg-neutral-800': !isSameMonth(day, currentMonthDate) }"
         @click="() => setRecipeDay(day)"
       >
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center h-6">
           <div 
             class="text-xs font-semibold text-gray-700"
             :class="{ 'text-primary font-bold': !day.compare(today()) }"
@@ -109,16 +109,28 @@ const setRecipeDay = (day: CalendarDate) => {
             {{ day.day }}
           </div>
 
-          <UButton v-if="lunch || dinner" icon="fa6-solid:pen" size="xs" variant="ghost" color="secondary" />
+          <UButton v-if="(lunch || dinner) && isBeforeToday(day)" icon="fa6-solid:pen" size="xs" variant="ghost" color="secondary" />
         </div>
         
-        <div class="flex flex-col gap-2 mt-1">
-          <UBadge v-if="lunch" :label="lunch?.recipe?.name" icon="mdi:weather-sunny" class="max-w-fit truncate"/>
-          <UBadge v-if="dinner" color="info" :label="dinner?.recipe?.name" icon="mdi:weather-night" class="max-w-fit truncate"/>
+        <div class="grid grid-rows-2 gap-2 mt-1">
+          <div :class="{ 'grid grid-cols-2 gap-2': lunch?.recipe && lunch.note }">
+            <UBadge v-if="lunch && lunch.recipe" :label="lunch.recipe?.name" icon="mdi:weather-sunny" class="max-w-fit truncate"/>
+            <UBadge v-if="lunch && lunch.note" :label="lunch.note" icon="material-symbols:sticky-note-2-outline-rounded" variant="subtle" class="max-w-fit truncate"/>
+          </div>
+          <div :class="{ 'grid grid-cols-2 gap-2': dinner?.recipe && dinner.note }">
+            <UBadge v-if="dinner && dinner.recipe" color="info" :label="dinner.recipe?.name" icon="mdi:weather-night" class="max-w-fit truncate"/>
+            <UBadge v-if="dinner && dinner.note" color="info" :label="dinner.note" variant="subtle" icon="material-symbols:sticky-note-2-outline-rounded" class="max-w-fit truncate"/>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <PlanningDesktopModalEditPlanning v-model="openEditDay" :recipes="recipeByDay" @planned-recipe-has-deleted="refresh" />
+  <LazyPlanningModalEditPlanning 
+    v-if="selectedDay"
+    v-model="openEditDay"
+    :day="selectedDay"
+    :recipes="recipeByDay"
+    @planning-has-updated="refresh"
+  />
 </template>

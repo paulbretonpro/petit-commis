@@ -6,7 +6,7 @@ import { TableEnum } from '~/server/type'
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient<Database>(event)
 
-  // Récupération de l'id de la recette dans le planning
+  // Récupération de l'id du planning
   const planningId = getRequiredUrlParams(event)
 
   // Récupération de l'utilisateur connecté

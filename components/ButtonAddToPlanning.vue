@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { today, getLocalTimeZone, endOfMonth, startOfMonth, type DateValue } from '@internationalized/date'
+import { endOfMonth, startOfMonth, type DateValue } from '@internationalized/date'
 import type { RadioGroupItem } from '@nuxt/ui'
 import type { IPlanning } from '~/server/api/planning/type'
 
@@ -93,7 +93,7 @@ watch(() => selectDay.value.date, (newDate, oldDate) => {
         <div class="flex flex-col gap-4">
           <UCalendar
             v-model="selectDay.date"
-            :min-value="today(getLocalTimeZone())"
+            :min-value="today()"
             :year-controls="false"
             :month-controls="false"
             initial-focus

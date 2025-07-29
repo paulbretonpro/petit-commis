@@ -49,7 +49,7 @@ const days = [
       v-for="(day, index) in days"
       :key="index"
       :class="[
-        'h-28 flex p-4 text-sm rounded-md animate-pulse',
+        'h-30 flex p-4 text-sm rounded-md animate-pulse',
         day.isOtherMonth
           ? 'border border-gray-200 dark:border-neutral-800 text-gray-500'
           : 'border border-gray-200 dark:border-neutral-800 text-gray-300',
