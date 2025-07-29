@@ -1,4 +1,4 @@
-import { getLocalTimeZone, today, type DateValue } from "@internationalized/date"
+import type { DateValue } from "@internationalized/date"
 
 export default function () {
   const toast = useToast()
@@ -7,7 +7,7 @@ export default function () {
   const btnLoading = ref(false)
 
   const selectDay = ref<{ date: DateValue, type: number | undefined }>({
-    date: today(getLocalTimeZone()),
+    date: today(),
     type: undefined
   })
 
@@ -15,7 +15,7 @@ export default function () {
     btnLoading.value = true
     
     try {
-      await $fetch('/api/planning/recipe', {
+      await $fetch('/api/planning', {
         method: 'POST',
         body: {
           date: selectDay.value.date?.toString(),
@@ -43,16 +43,16 @@ export default function () {
   }
 
   const handleReset = () => {
-    selectDay.value.date = today(getLocalTimeZone())
+    selectDay.value.date = today()
     selectDay.value.type = undefined
   }
 
   const handleNextMonth = () => {
-    selectDay.value.date = (selectDay.value.date ?? today(getLocalTimeZone())).add({ months: 1 })
+    selectDay.value.date = (selectDay.value.date ?? today()).add({ months: 1 })
   }
 
   const handlePrevMonth = () => {
-    selectDay.value.date = (selectDay.value.date ?? today(getLocalTimeZone())).subtract({ months: 1 })
+    selectDay.value.date = (selectDay.value.date ?? today()).subtract({ months: 1 })
   }
   
   return {

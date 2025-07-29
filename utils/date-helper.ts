@@ -44,3 +44,7 @@ export function subtractDays(date: CalendarDate, count: number) {
 export function isSameMonth(dateA: CalendarDate, dateB: CalendarDate) {
   return dateA.year === dateB.year && dateA.month === dateB.month
 }
+
+export function isBeforeToday (date: CalendarDate) {
+  return date.compare(today()) >= 0
+}

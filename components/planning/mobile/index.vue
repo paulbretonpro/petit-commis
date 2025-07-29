@@ -4,6 +4,17 @@ import type { IPlanning } from '~/server/api/planning/type'
 import { subtractDays, addDays } from '~/utils/date-helper'
 
 const currentWeekDate = ref<CalendarDate>(startOfWeek(today()))
+const openEditDay = ref(false)
+const selectedDay = ref<CalendarDate>()
+
+const recipeByDay = computed(() => {
+  if (selectedDay.value === undefined) { return }
+
+  return {
+    lunch: recipesPlanned.value.find(planning => planning.date === selectedDay.value?.toString() && planning.type === 0),
+    dinner: recipesPlanned.value.find(planning => planning.date === selectedDay.value?.toString() && planning.type === 1)
+  }
+})
 
 const visibleWeekDays = computed(() => {
   const start = startOfWeek(currentWeekDate.value)
@@ -17,7 +28,7 @@ const visibleWeekDays = computed(() => {
   }))
 })
 
-const { data: recipesPlanned, pending } = useAsyncData('planning-week', () => {
+const { data: recipesPlanned, pending, refresh } = useAsyncData('planning-week', () => {
   const start = startOfWeek(currentWeekDate.value)
   const end = endOfWeek(currentWeekDate.value)
 
@@ -39,9 +50,16 @@ const { data: recipesPlanned, pending } = useAsyncData('planning-week', () => {
 const prevWeek = () => {
   currentWeekDate.value = subtractDays(currentWeekDate.value, 7)
 }
+
 const nextWeek = () => {
   currentWeekDate.value = addDays(currentWeekDate.value, 7)
 }
+
+const setRecipeDay = (day: CalendarDate) => {
+  selectedDay.value = day
+
+  openEditDay.value = true
+} 
 </script>
 
 <template>
@@ -64,6 +82,7 @@ const nextWeek = () => {
         v-for="({ day, lunch, dinner }, index) in visibleWeekDays"
         :key="index"
         class="border border-gray-200 dark:border-neutral-800 rounded-lg p-4"
+        @click="() => setRecipeDay(day)"
       >
         <div class="text-sm font-semibold text-gray-700 flex justify-between">
           <span>
@@ -77,12 +96,26 @@ const nextWeek = () => {
           </span>
         </div>
 
-        <div v-if="lunch || dinner" class="flex flex-col gap-2 mt-2">
-          <UBadge v-if="lunch" :label="lunch?.recipe?.name" icon="mdi:weather-sunny" class="max-w-fit truncate"/>
-          <UBadge v-if="dinner" color="info" :label="dinner?.recipe?.name" icon="mdi:weather-night" class="max-w-fit truncate"/>
+        <div v-if="lunch || dinner" class="grid grid-rows-2 gap-2 mt-1">
+          <div :class="{ 'grid grid-cols-[auto_auto] gap-2': lunch?.recipe && lunch.note }">
+            <UBadge v-if="lunch && lunch.recipe" :label="lunch.recipe?.name" icon="mdi:weather-sunny" class="max-w-fit truncate"/>
+            <UBadge v-if="lunch && lunch.note" :label="lunch.note" icon="material-symbols:sticky-note-2-outline-rounded" variant="subtle" class="max-w-fit truncate"/>
+          </div>
+          <div :class="{ 'grid grid-cols-[auto_auto] gap-2': dinner?.recipe && dinner.note }">
+            <UBadge v-if="dinner && dinner.recipe" color="info" :label="dinner.recipe?.name" icon="mdi:weather-night" class="max-w-fit truncate"/>
+            <UBadge v-if="dinner && dinner.note" color="info" :label="dinner.note" variant="subtle" icon="material-symbols:sticky-note-2-outline-rounded" class="max-w-fit truncate"/>
+          </div>
         </div>
         <div v-else class="text-sm text-gray-500 dark:text-neutral-700 text-center">Pas de recette</div>
       </div>
     </div>
+
+    <LazyPlanningModalEditPlanning 
+      v-if="selectedDay"
+      v-model="openEditDay"
+      :day="selectedDay"
+      :recipes="recipeByDay"
+      @planning-has-updated="refresh"
+    />
   </div>
 </template>

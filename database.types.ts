@@ -87,23 +87,26 @@ export type Database = {
         Row: {
           date: string
           id: number
+          note: string | null
           recipe_id: number
           type: number
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           date: string
           id?: number
+          note?: string | null
           recipe_id: number
           type: number
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           date?: string
           id?: number
+          note?: string | null
           recipe_id?: number
           type?: number
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {
