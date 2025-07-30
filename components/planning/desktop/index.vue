@@ -5,6 +5,8 @@ import type { IPlanning } from '~/server/api/planning/type'
 const currentMonthDate = ref<CalendarDate>(today())
 const openEditDay = ref(false)
 const selectedDay = ref<CalendarDate>()
+const loading = ref(true)
+const recipesPlanned = ref<IPlanning[]>([])
 
 const recipeByDay = computed(() => {
   if (selectedDay.value === undefined) { return }
@@ -27,7 +29,11 @@ const formattedMonth = computed(() => {
   })
 })
 
-const visibleDays = computed(() => {
+const visibleDays = computed<{
+  day: CalendarDate,
+  lunch: IPlanning | undefined,
+  dinner: IPlanning | undefined
+}[]>(() => {
   const firstOfMonth = new CalendarDate(currentMonthDate.value.year, currentMonthDate.value.month, 1)
   const lastOfMonth = new CalendarDate(currentMonthDate.value.year, currentMonthDate.value.month, firstOfMonth.calendar.getDaysInMonth(firstOfMonth))
 
@@ -43,38 +49,42 @@ const visibleDays = computed(() => {
   }))
 })
 
-const { data: recipesPlanned, pending, refresh } = useAsyncData('planning', () => {
-  const firstOfMonth = new CalendarDate(currentMonthDate.value.year, currentMonthDate.value.month, 1)
-  const lastOfMonth = new CalendarDate(currentMonthDate.value.year, currentMonthDate.value.month, firstOfMonth.calendar.getDaysInMonth(firstOfMonth))
+const fetchPlannedDays = async () => {
+  loading.value = true
 
-  return $fetch<IPlanning[]>('/api/planning', {
+  try {
+    recipesPlanned.value = await $fetch<IPlanning[]>('/api/planning', {
     method: 'GET',
     params: {
-      date_start: firstOfMonth.toString(),
-      date_end: lastOfMonth.toString(),
+      date_start: visibleDays.value[0].day.toString(),
+      date_end: visibleDays.value[visibleDays.value.length  - 1].day.toString(),
       with_resources: true
     }
   })
-}, {
-  default: () => [],
-  server: false,
-  immediate: true,
-  watch: [currentMonthDate]
-})
+  } catch {
+    loading.value = false
+  }
+}
 
 const prevMonth = () => {
   currentMonthDate.value = subtractMonths(currentMonthDate.value, 1)
+
+  fetchPlannedDays()
 }
 
 const nextMonth = () => {
   currentMonthDate.value = addMonths(currentMonthDate.value, 1)
+  
+  fetchPlannedDays()
 }
 
 const setRecipeDay = (day: CalendarDate) => {
   selectedDay.value = day
 
   openEditDay.value = true
-} 
+}
+
+onMounted(fetchPlannedDays)
 </script>
 
 <template>
@@ -91,7 +101,7 @@ const setRecipeDay = (day: CalendarDate) => {
       <div v-for="(day, index) in WEEK_DAYS_LABELS" :key="index">{{ day }}</div>
     </div>
 
-    <PlanningDesktopSkeleton v-if="pending" />
+    <PlanningDesktopSkeleton v-if="loading" />
 
     <div v-else class="grid grid-cols-7 gap-2 mt-2">
       <div
@@ -131,6 +141,6 @@ const setRecipeDay = (day: CalendarDate) => {
     v-model="openEditDay"
     :day="selectedDay"
     :recipes="recipeByDay"
-    @planning-has-updated="refresh"
+    @planning-has-updated="fetchPlannedDays"
   />
 </template>
