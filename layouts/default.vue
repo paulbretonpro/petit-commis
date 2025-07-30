@@ -27,7 +27,7 @@ const isDark = computed({
     </div>
   </div>
 
-  <div v-else class="h-screen">
+  <div v-else>
     <div class="border-b border-gray-200 dark:border-neutral-800 py-4 sticky top-0 z-50 bg-white dark:bg-neutral-900">
       <UContainer class="flex justify-between items-center">
         <div class="text-lg font-semibold">Petit Commis</div>
@@ -50,7 +50,7 @@ const isDark = computed({
         </nav>
       </UContainer>
     </div>
-    <UContainer class="py-6">
+    <UContainer class="py-6 min-h-[calc(100vh-100px))] relative">
       <slot />
     </UContainer>
   </div>

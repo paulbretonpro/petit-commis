@@ -8,7 +8,9 @@ export default defineNuxtConfig({
     '@nuxtjs/supabase',
     '@nuxt/image',
     '@nuxt/ui',
-    '@nuxtjs/color-mode'
+    '@nuxtjs/color-mode',
+    '@formkit/auto-animate/nuxt',
+    '@pinia/nuxt'
   ],
   css: ['~/assets/css/main.css']
 })

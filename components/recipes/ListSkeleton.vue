@@ -9,7 +9,7 @@
         <div class="h-3 bg-gray-100 dark:bg-neutral-700 rounded w-1/3" />
       </div>
       <div class="px-4 pb-4">
-        <div class="h-8 w-full bg-green-100 text-green-600 text-sm font-medium flex items-center justify-center rounded hover:bg-green-200 cursor-pointer">
+        <div class="h-8 w-full border border-green-800 text-green-600 text-sm font-medium flex items-center justify-center rounded cursor-pointer">
           + Ajouter au menu
         </div>
       </div>

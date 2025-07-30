@@ -1,18 +1,40 @@
 <script setup lang="ts">
+import { useDebounceFn } from '@vueuse/core'
 import type { IRecipe } from '~/server/api/recipes/type'
 
 const { isMobile } = useDevice()
+const { filters } = storeToRefs(useRecipesStore())
 
-const { data: recipes, pending } = useAsyncData<IRecipe[]>('recipes', () => $fetch('/api/recipes'), { server: false, default: () => [] })
+const recipes = ref<IRecipe[]>([])
+const loading = ref(true)
+
+const fetchRecipes = useDebounceFn(async () => {
+  try {
+    recipes.value = await $fetch('/api/recipes', {
+      method: 'GET',
+      params: {
+        ...filters.value
+      }
+    })
+  } catch {
+    return []
+  }
+}, 300)
+
+watch(filters, fetchRecipes, { deep: true })
+
+onMounted(async () => {
+  loading.value = true
+  await fetchRecipes()
+  loading.value = false
+})
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="relative flex flex-col gap-4">
     <UButton label="Créer une recette" class="self-end" @click="() => navigateTo('/recipes/create')" />
-      <RecipesListSkeleton v-if="pending" />
-      <template v-else>
-        <LazyRecipesMobileList v-if="isMobile" :recipes />
-        <LazyRecipesDesktopList v-else :recipes />
-      </template>
+        
+    <LazyRecipesMobileList v-if="isMobile" :recipes />
+    <LazyRecipesDesktopList v-else :recipes :loading />
   </div>
 </template>
