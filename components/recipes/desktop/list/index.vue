@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-  <RecipesDesktopListSkeleton v-if="loading" />
+  <RecipesListSkeleton v-if="loading" />
 
   <div v-else class="grid grid-cols-3 gap-6">
     <NuxtLink v-for="recipe in recipes" :key="recipe.id" :to="`/recipes/${recipe.id}`">

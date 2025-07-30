@@ -21,7 +21,7 @@ const imageUrl = computed(() => props.recipe.hasImage && getImage(props.recipe.i
     </template>
     <template #footer>
       <div class="flex flex-col gap-4">
-        <div class="font-semibold">{{ recipe.name }}</div>
+        <div class="font-semibold truncate">{{ recipe.name }}</div>
         <ButtonAddToPlanning :recipe-id="recipe.id" />
       </div>
     </template>
