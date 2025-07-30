@@ -11,10 +11,7 @@ const imageUrl = computed(() => props.recipe.hasImage && getImage(props.recipe.i
 </script>
 
 <template>
-  <UCard variant="subtle" :ui="{ body: '!p-0 h-52' }">
-    <template #header>
-      {{ recipe.name }}
-    </template>
+  <UCard :ui="{ body: '!p-0 h-52' }">
     <template #default>
       <img v-if="imageUrl" :src="imageUrl" class="object-cover h-full w-full">
 
@@ -23,7 +20,10 @@ const imageUrl = computed(() => props.recipe.hasImage && getImage(props.recipe.i
       </div>
     </template>
     <template #footer>
-      <ButtonAddToPlanning :recipe-id="recipe.id" />
+      <div class="flex flex-col gap-4">
+        <div class="font-semibold">{{ recipe.name }}</div>
+        <ButtonAddToPlanning :recipe-id="recipe.id" />
+      </div>
     </template>
   </UCard>
 </template>

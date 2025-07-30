@@ -86,7 +86,7 @@ watch(() => selectDay.value.date, (newDate, oldDate) => {
 <template>
   <UModal title="Ajouter au planning" @update:open="handleReset">
     <ClientOnly>
-      <UButton variant="ghost" icon="fa6-solid:plus" block @click.prevent="() => fetchPlanning(today())">Ajouter au menu</UButton>
+      <UButton variant="subtle" icon="fa6-solid:plus" block @click.prevent="() => fetchPlanning(today())">Ajouter au menu</UButton>
     </ClientOnly>
     <template #body>
       <div class="flex flex-col gap-4">
