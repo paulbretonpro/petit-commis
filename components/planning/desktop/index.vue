@@ -61,7 +61,7 @@ const fetchPlannedDays = async () => {
       with_resources: true
     }
   })
-  } catch {
+  } finally {
     loading.value = false
   }
 }
