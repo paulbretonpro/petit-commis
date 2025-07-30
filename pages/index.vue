@@ -9,7 +9,10 @@ const { data: recipes, pending } = useAsyncData<IRecipe[]>('recipes', () => $fet
 <template>
   <div class="flex flex-col gap-4">
     <UButton label="Créer une recette" class="self-end" @click="() => navigateTo('/recipes/create')" />
-    <LazyRecipesMobileList v-if="isMobile" :recipes :loading="pending" />
-    <LazyRecipesDesktopList v-else :recipes :loading="pending" />
+      <RecipesListSkeleton v-if="pending" />
+      <template v-else>
+        <LazyRecipesMobileList v-if="isMobile" :recipes />
+        <LazyRecipesDesktopList v-else :recipes />
+      </template>
   </div>
 </template>
