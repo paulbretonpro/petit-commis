@@ -1,4 +1,4 @@
-import type { ICategory } from "../categories/type"
+import type { ICategory } from '../categories/type'
 
 export interface IRecipe {
   id: number
@@ -13,7 +13,6 @@ export interface IRecipe {
   category?: ICategory
 }
 
-
 interface IngredientQuantity {
   id: number
   name: string
@@ -25,4 +24,6 @@ interface IStep {
   step: string
 }
 
-export type TRecipeWithIngredientSteps = IRecipe & { ingredients: IngredientQuantity[] } & { steps: IStep[] }
+export type TRecipeWithIngredientSteps = IRecipe & {
+  ingredients: IngredientQuantity[]
+} & { steps: IStep[] }

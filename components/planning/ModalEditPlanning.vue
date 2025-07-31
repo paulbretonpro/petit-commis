@@ -5,7 +5,9 @@ import type { IPlanning } from '~/server/api/planning/type'
 const open = defineModel<boolean>({ required: true })
 
 defineProps<{
-  recipes: { lunch: IPlanning | undefined, dinner: IPlanning | undefined } | undefined
+  recipes:
+    | { lunch: IPlanning | undefined; dinner: IPlanning | undefined }
+    | undefined
   day: CalendarDate
 }>()
 
@@ -15,7 +17,7 @@ const emit = defineEmits<{
 
 enum PlanningTypeEnum {
   LUNCH,
-  DINNER
+  DINNER,
 }
 </script>
 
@@ -23,9 +25,19 @@ enum PlanningTypeEnum {
   <UModal v-model:open="open" title="Modifier">
     <template #body>
       <div class="flex flex-col gap-4">
-        <PlanningCardRecipeDay :type="PlanningTypeEnum.LUNCH" :day :planning="recipes?.lunch" @planning-has-updated="emit('planning-has-updated')" />
+        <PlanningCardRecipeDay
+          :type="PlanningTypeEnum.LUNCH"
+          :day
+          :planning="recipes?.lunch"
+          @planning-has-updated="emit('planning-has-updated')"
+        />
 
-        <PlanningCardRecipeDay :type="PlanningTypeEnum.DINNER" :day :planning="recipes?.dinner" @planning-has-updated="emit('planning-has-updated')" />
+        <PlanningCardRecipeDay
+          :type="PlanningTypeEnum.DINNER"
+          :day
+          :planning="recipes?.dinner"
+          @planning-has-updated="emit('planning-has-updated')"
+        />
       </div>
     </template>
   </UModal>

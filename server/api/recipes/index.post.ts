@@ -17,7 +17,11 @@ export default defineEventHandler(async (event) => {
   }
 
   // Création de la recette
-  const { data: recipe, status, error } = await client
+  const {
+    data: recipe,
+    status,
+    error,
+  } = await client
     .from(TableEnum.RECIPES)
     .insert({
       category_id: body.category,
@@ -26,7 +30,7 @@ export default defineEventHandler(async (event) => {
       name: body.name,
       nb_persons: body.nbPersons,
       owner_id: user.id,
-      has_image: body.hasImage
+      has_image: body.hasImage,
     })
     .select('*')
     .single()
@@ -39,12 +43,14 @@ export default defineEventHandler(async (event) => {
   if (body.steps.length) {
     const { error: errorSteps } = await client
       .from(TableEnum.STEPS_RECIPES)
-      .insert(body.steps.map(step => ({
-        recipe_id: recipe.id,
-        step
-      })))
+      .insert(
+        body.steps.map((step) => ({
+          recipe_id: recipe.id,
+          step,
+        }))
+      )
 
-    if(errorSteps) {
+    if (errorSteps) {
       throw errorSteps
     }
   }
@@ -53,20 +59,22 @@ export default defineEventHandler(async (event) => {
   if (body.ingredients.length) {
     const { error: errorIngredients } = await client
       .from(TableEnum.INGREDIENTS_RECIPES)
-      .insert(body.ingredients.map(ingredient => ({
-        recipe_id: recipe.id,
-        ingredient_id: ingredient.ingredientId,
-        quantity: String(ingredient.quantity),
-        unit: ingredient.unit
-      })))
+      .insert(
+        body.ingredients.map((ingredient) => ({
+          recipe_id: recipe.id,
+          ingredient_id: ingredient.ingredientId,
+          quantity: String(ingredient.quantity),
+          unit: ingredient.unit,
+        }))
+      )
 
-    if(errorIngredients) {
+    if (errorIngredients) {
       throw errorIngredients
     }
   }
 
   return {
     status,
-    data: useChangeCaseObject(recipe)
+    data: useChangeCaseObject(recipe),
   }
 })

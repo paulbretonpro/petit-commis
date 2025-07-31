@@ -1,3 +1,1 @@
-<template>
-  Page création d'une recette mobile
-</template>
+<template>Page création d'une recette mobile</template>

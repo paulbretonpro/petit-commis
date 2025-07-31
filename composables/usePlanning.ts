@@ -1,4 +1,4 @@
-import type { DateValue } from "@internationalized/date"
+import type { DateValue } from '@internationalized/date'
 
 export default function () {
   const toast = useToast()
@@ -6,14 +6,17 @@ export default function () {
   const loading = ref(true)
   const btnLoading = ref(false)
 
-  const selectDay = ref<{ date: DateValue, type: number | undefined }>({
+  const selectDay = ref<{ date: DateValue; type: number | undefined }>({
     date: today(),
-    type: undefined
+    type: undefined,
   })
 
-  const handleAddRecipeToPlanning = async (recipeId: number, close: () => void) => {
+  const handleAddRecipeToPlanning = async (
+    recipeId: number,
+    close: () => void
+  ) => {
     btnLoading.value = true
-    
+
     try {
       await $fetch('/api/planning', {
         method: 'POST',
@@ -21,21 +24,21 @@ export default function () {
           date: selectDay.value.date?.toString(),
           recipeId: recipeId,
           type: selectDay.value.type,
-        }
+        },
       })
 
       toast.add({
         title: 'Succès',
         description: 'Recette ajoutée au planning',
-        color: 'success'
+        color: 'success',
       })
 
       close()
     } catch {
       toast.add({
         title: 'Echec',
-        description: 'Impossible d\'ajoute la recette au planning',
-        color: 'error'
+        description: "Impossible d'ajoute la recette au planning",
+        color: 'error',
       })
     } finally {
       btnLoading.value = false
@@ -52,9 +55,11 @@ export default function () {
   }
 
   const handlePrevMonth = () => {
-    selectDay.value.date = (selectDay.value.date ?? today()).subtract({ months: 1 })
+    selectDay.value.date = (selectDay.value.date ?? today()).subtract({
+      months: 1,
+    })
   }
-  
+
   return {
     btnLoading,
     handleAddRecipeToPlanning,

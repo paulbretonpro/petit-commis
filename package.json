@@ -4,10 +4,13 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "rm -rf /tmp/nitro && nuxt dev --port 9000",
     "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "lint": "eslint . --ext .js,.ts,.vue",
+    "lint:fix": "eslint . --ext .js,.ts,.vue --fix",
+    "format": "prettier --write .",
+    "postinstall": "nuxt prepare",
+    "preview": "nuxt preview"
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.2",
@@ -33,6 +36,9 @@
   },
   "devDependencies": {
     "@nuxtjs/color-mode": "^3.5.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.3",
+    "prettier": "^3.6.2",
     "typescript": "^5.8.2"
   }
 }

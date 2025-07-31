@@ -10,7 +10,10 @@ export default defineEventHandler(async (event) => {
   const recipeId = getRequiredUrlParams(event)
 
   // Récupération de l'id de l'ingrédient dans l'url
-  const ingredientId = getRequiredUrlParams(event, { search: 'ingredientId', name: 'ingredient' })
+  const ingredientId = getRequiredUrlParams(event, {
+    search: 'ingredientId',
+    name: 'ingredient',
+  })
 
   // Récupération de l'utilisateur connecté
   const user = await getUser(event)
@@ -39,6 +42,6 @@ export default defineEventHandler(async (event) => {
   }
 
   return {
-    status
+    status,
   }
 })

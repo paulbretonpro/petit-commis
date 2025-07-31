@@ -39,7 +39,7 @@ const days = [
   { date: 30, isOtherMonth: false },
   { date: 31, isOtherMonth: false },
   { date: 1, isOtherMonth: true, isHighlighted: true },
-  { date: 2, isOtherMonth: true, isHighlighted: true }
+  { date: 2, isOtherMonth: true, isHighlighted: true },
 ]
 </script>
 
@@ -53,7 +53,7 @@ const days = [
         day.isOtherMonth
           ? 'border border-gray-200 dark:border-neutral-800 text-gray-500'
           : 'border border-gray-200 dark:border-neutral-800 text-gray-300',
-        day.isHighlighted ? 'bg-gray-200 dark:bg-neutral-800' : ''
+        day.isHighlighted ? 'bg-gray-200 dark:bg-neutral-800' : '',
       ]"
     >
       {{ day.date }}

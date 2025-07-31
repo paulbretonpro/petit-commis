@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxtjs/color-mode',
     '@formkit/auto-animate/nuxt',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
   ],
-  css: ['~/assets/css/main.css']
+  css: ['~/assets/css/main.css'],
 })

@@ -11,7 +11,11 @@ defineProps<{
   <RecipesListSkeleton v-if="loading" />
   <template v-else>
     <div class="grid grid-cols-2 gap-4">
-      <NuxtLink v-for="recipe in recipes" :key="recipe.id" :to="`/recipes/${recipe.id}`">
+      <NuxtLink
+        v-for="recipe in recipes"
+        :key="recipe.id"
+        :to="`/recipes/${recipe.id}`"
+      >
         <RecipesCard :recipe />
       </NuxtLink>
     </div>

@@ -8,7 +8,7 @@ import { TableEnum } from '~/server/type'
 const schema = z.object({
   ingredientId: z.number().positive(),
   quantity: z.number().min(1),
-  unit: z.string()
+  unit: z.string(),
 })
 
 export default defineEventHandler(async (event) => {
@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // Récupération du body
-  const body = await readValidatedBody(event, schema.parse);
+  const body = await readValidatedBody(event, schema.parse)
   if (!body) {
     throw new Error('payload invalid')
   }
@@ -45,7 +45,7 @@ export default defineEventHandler(async (event) => {
       recipe_id: recipeId,
       ingredient_id: body.ingredientId,
       quantity: String(body.quantity),
-      unit: body.unit as Database['public']['Enums']['IngredientUnit']
+      unit: body.unit as Database['public']['Enums']['IngredientUnit'],
     })
     .select('*')
     .single()
@@ -56,6 +56,6 @@ export default defineEventHandler(async (event) => {
 
   return {
     data: useChangeCaseObject(data),
-    status
+    status,
   }
 })

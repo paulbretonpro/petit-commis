@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { endOfMonth, startOfMonth, type DateValue } from '@internationalized/date'
+import {
+  endOfMonth,
+  startOfMonth,
+  type DateValue,
+} from '@internationalized/date'
 import type { RadioGroupItem } from '@nuxt/ui'
 import type { IPlanning } from '~/server/api/planning/type'
 
@@ -9,7 +13,7 @@ withDefaults(
     withoutLabel?: boolean
   }>(),
   {
-    withoutLabel: false
+    withoutLabel: false,
   }
 )
 
@@ -19,15 +23,17 @@ const {
   handleNextMonth,
   handlePrevMonth,
   handleReset,
-  selectDay
+  selectDay,
 } = usePlanning()
 
 const allUnavailableDate = ref<IPlanning[]>([])
 
-const isUnAvailableDate = computed(() => getUnvailableDate(selectDay.value.date))
+const isUnAvailableDate = computed(() =>
+  getUnvailableDate(selectDay.value.date)
+)
 
 const disabledOption = (option: RadioGroupItem) => {
-  if (!option) return 
+  if (!option) return
   option.disabled = true
   option.class = 'radio-disabled'
 }
@@ -43,7 +49,7 @@ const radioGroupItems = computed<RadioGroupItem[]>(() => {
       disabled: false,
       label: 'Soir',
       value: 1,
-    }
+    },
   ]
 
   if (!selectDay.value.date) return options
@@ -53,7 +59,9 @@ const radioGroupItems = computed<RadioGroupItem[]>(() => {
     disabledOption(options[1])
   }
 
-  const index = allUnavailableDate.value.findIndex(planning => planning.date === selectDay.value.date?.toString())
+  const index = allUnavailableDate.value.findIndex(
+    (planning) => planning.date === selectDay.value.date?.toString()
+  )
 
   if (index > -1) {
     disabledOption(options[allUnavailableDate.value[index].type])
@@ -77,22 +85,29 @@ const fetchPlanning = async (newDate: DateValue) => {
 }
 
 const getUnvailableDate = (date: DateValue) => {
-  return allUnavailableDate.value.filter(planning => planning.date === date.toString()).length === 2
+  return (
+    allUnavailableDate.value.filter(
+      (planning) => planning.date === date.toString()
+    ).length === 2
+  )
 }
 
-watch(() => selectDay.value.date, (newDate, oldDate) => {
-  selectDay.value.type = undefined
-  
-  if(!isSameMonth(oldDate, newDate)) {
-    fetchPlanning(newDate)
+watch(
+  () => selectDay.value.date,
+  (newDate, oldDate) => {
+    selectDay.value.type = undefined
+
+    if (!isSameMonth(oldDate, newDate)) {
+      fetchPlanning(newDate)
+    }
   }
-})
+)
 </script>
 
 <template>
   <UModal title="Ajouter au planning" @update:open="handleReset">
     <ClientOnly>
-      <UButton 
+      <UButton
         :label="withoutLabel ? undefined : 'Ajouter au menu'"
         variant="subtle"
         icon="material-symbols:calendar-add-on-outline-rounded"
@@ -112,24 +127,46 @@ watch(() => selectDay.value.date, (newDate, oldDate) => {
             :is-date-unavailable="getUnvailableDate"
           />
           <div class="flex justify-between gap-4">
-            <UButton color="neutral" variant="outline" icon="material-symbols:arrow-left-alt-rounded" @click="handlePrevMonth">
+            <UButton
+              color="neutral"
+              variant="outline"
+              icon="material-symbols:arrow-left-alt-rounded"
+              @click="handlePrevMonth"
+            >
               Précédent
             </UButton>
 
-            <UButton color="neutral" variant="outline" trailing-icon="material-symbols:arrow-right-alt-rounded" @click="handleNextMonth">
+            <UButton
+              color="neutral"
+              variant="outline"
+              trailing-icon="material-symbols:arrow-right-alt-rounded"
+              @click="handleNextMonth"
+            >
               Suivant
             </UButton>
           </div>
         </div>
 
-        <URadioGroup v-model="selectDay.type" label indicator="start" variant="card" :items="radioGroupItems" />
+        <URadioGroup
+          v-model="selectDay.type"
+          label
+          indicator="start"
+          variant="card"
+          :items="radioGroupItems"
+        />
       </div>
     </template>
 
     <template #footer="{ close }">
       <div class="grid grid-cols-2 gap-4 w-full">
         <UButton variant="ghost" block @click="close">Annuler</UButton>
-        <UButton :disabled="isUnAvailableDate" block :loading="btnLoading" @click="handleAddRecipeToPlanning(recipeId, close)">Confirmer</UButton>
+        <UButton
+          :disabled="isUnAvailableDate"
+          block
+          :loading="btnLoading"
+          @click="handleAddRecipeToPlanning(recipeId, close)"
+          >Confirmer</UButton
+        >
       </div>
     </template>
   </UModal>

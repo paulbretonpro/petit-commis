@@ -4,7 +4,7 @@ const { logout } = useAppSettings()
 
 <template>
   <div class="flex flex-col gap-6">
-    <PageHeader title="Mes préférences"/>
+    <PageHeader title="Mes préférences" />
 
     <ProfileButtonTheme />
 

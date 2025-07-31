@@ -1,4 +1,4 @@
-import type { IRecipe } from "../recipes/type"
+import type { IRecipe } from '../recipes/type'
 
 export interface IPlanning {
   id: number

@@ -8,17 +8,22 @@ const user = useSupabaseUser()
 
 const imageUrl = ref<string>()
 
-const { data: recipe, pending } = useAsyncData<TRecipeWithIngredientSteps>(`recipe-${route.params.id}`, async () => {
-  const recipe = await $fetch<TRecipeWithIngredientSteps>(`/api/recipes/${route.params.id}`)
-  const { data } = supabase
-    .storage
-    .from(BucketStorage.RECIPE_IMAGE)
-    .getPublicUrl(`${user.value?.id}/${recipe.id}`)
-  
-  imageUrl.value = data.publicUrl
+const { data: recipe, pending } = useAsyncData<TRecipeWithIngredientSteps>(
+  `recipe-${route.params.id}`,
+  async () => {
+    const recipe = await $fetch<TRecipeWithIngredientSteps>(
+      `/api/recipes/${route.params.id}`
+    )
+    const { data } = supabase.storage
+      .from(BucketStorage.RECIPE_IMAGE)
+      .getPublicUrl(`${user.value?.id}/${recipe.id}`)
 
-  return recipe
-}, { server: false })
+    imageUrl.value = data.publicUrl
+
+    return recipe
+  },
+  { server: false }
+)
 </script>
 
 <template>

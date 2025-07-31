@@ -4,9 +4,11 @@ import type { ICategory } from '~/server/api/categories/type'
 const { filters, loading } = storeToRefs(useRecipesStore())
 const { handleResetFilter } = useRecipesStore()
 
-const { data: categories, pending: pendingCategories } = await useFetch<ICategory[]>('/api/categories', {
+const { data: categories, pending: pendingCategories } = await useFetch<
+  ICategory[]
+>('/api/categories', {
   key: 'categories',
-  default: () => []
+  default: () => [],
 })
 </script>
 
@@ -16,7 +18,14 @@ const { data: categories, pending: pendingCategories } = await useFetch<ICategor
       <div class="flex items-center justify-between h-8">
         <div>Filtres</div>
 
-        <UButton v-if="loading" :loading outline label="Chargement ..." variant="ghost" color="neutral" />
+        <UButton
+          v-if="loading"
+          :loading
+          outline
+          label="Chargement ..."
+          variant="ghost"
+          color="neutral"
+        />
       </div>
     </template>
 
@@ -37,10 +46,24 @@ const { data: categories, pending: pendingCategories } = await useFetch<ICategor
       </UFormField>
 
       <UFormField label="Catégorie">
-        <USelectMenu v-model="filters.categoryId" :items="categories" :loading="pendingCategories" placeholder="Ex : Plat" class="w-full" label-key="name" value-key="id" />
+        <USelectMenu
+          v-model="filters.categoryId"
+          :items="categories"
+          :loading="pendingCategories"
+          placeholder="Ex : Plat"
+          class="w-full"
+          label-key="name"
+          value-key="id"
+        />
       </UFormField>
 
-      <UButton label="Réinitialiser" variant="outline" color="neutral" block @click="handleResetFilter" />
+      <UButton
+        label="Réinitialiser"
+        variant="outline"
+        color="neutral"
+        block
+        @click="handleResetFilter"
+      />
     </div>
   </UCard>
 </template>

@@ -1,5 +1,5 @@
-import z from "zod"
-import type { IIngredient } from "~/server/api/ingredients/type"
+import z from 'zod'
+import type { IIngredient } from '~/server/api/ingredients/type'
 
 export const RecipeFormCreateSchema = z.object({
   category: z.number(),

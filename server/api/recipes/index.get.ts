@@ -8,7 +8,7 @@ import { TableEnum } from '~/server/type'
 const ParamsSchema = z.object({
   search: z.string().nullish(),
   ingredientIds: z.array(z.number()).default([]),
-  categoryId: z.string().nullish()
+  categoryId: z.string().nullish(),
 })
 
 export default defineEventHandler(async (event) => {
@@ -19,13 +19,15 @@ export default defineEventHandler(async (event) => {
 
   const query = client
     .from(TableEnum.RECIPES)
-    .select(`
+    .select(
+      `
       *,
       category:categories(
         id,
         name
       )
-    `)
+    `
+    )
     .eq('owner_id', user.id)
     .order('created_at', { ascending: false })
 
@@ -36,8 +38,8 @@ export default defineEventHandler(async (event) => {
   if (params.categoryId) {
     query.eq('category_id', Number(params.categoryId))
   }
-  
+
   const { data } = await query
-  
+
   return useChangeCaseObject(data)
 })

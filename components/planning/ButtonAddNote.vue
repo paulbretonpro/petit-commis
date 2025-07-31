@@ -24,8 +24,8 @@ const handleAddNote = async (close: () => void) => {
       await $fetch(`/api/planning/${props.planning.id}`, {
         method: 'PUT',
         body: {
-          note: newNote.value
-        }
+          note: newNote.value,
+        },
       })
     } else {
       await $fetch('/api/planning', {
@@ -34,7 +34,7 @@ const handleAddNote = async (close: () => void) => {
           date: props.day.toString(),
           type: props.type,
           note: newNote.value,
-        }
+        },
       })
     }
 
@@ -43,7 +43,7 @@ const handleAddNote = async (close: () => void) => {
   } catch {
     toast.add({
       title: 'Echec',
-      description: 'Impossible de supprimer cette recipe du planning'
+      description: 'Impossible de supprimer cette recipe du planning',
     })
   } finally {
     loading.value = false
@@ -53,7 +53,10 @@ const handleAddNote = async (close: () => void) => {
 
 <template>
   <UModal title="Ajouter une note">
-    <UButton icon="material-symbols-light:add-notes-outline-rounded" variant="ghost" />
+    <UButton
+      icon="material-symbols-light:add-notes-outline-rounded"
+      variant="ghost"
+    />
 
     <template #body>
       <UTextarea v-model="newNote" placeholder="Note" class="w-full" />
@@ -61,7 +64,13 @@ const handleAddNote = async (close: () => void) => {
     <template #footer="{ close }">
       <div class="grid grid-cols-2 gap-4 w-full">
         <UButton variant="ghost" block @click="close">Annuler</UButton>
-        <UButton :disabled="!newNote" block :loading @click="handleAddNote(close)">Confirmer</UButton>
+        <UButton
+          :disabled="!newNote"
+          block
+          :loading
+          @click="handleAddNote(close)"
+          >Confirmer</UButton
+        >
       </div>
     </template>
   </UModal>

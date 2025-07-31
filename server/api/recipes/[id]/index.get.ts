@@ -16,7 +16,8 @@ export default defineEventHandler(async (event) => {
   // Vérification si la recette appartient à l'utilisateur connecté
   const { data: recipe, error } = await client
     .from(TableEnum.RECIPES)
-    .select(`
+    .select(
+      `
       *,
       category:categories(id, name),
       ingredients:ingredients_recipes(
@@ -26,7 +27,8 @@ export default defineEventHandler(async (event) => {
         ...ingredients(name)
       ),
       steps:steps_recipes(step)
-    `)
+    `
+    )
     .eq('owner_id', user.id)
     .eq('id', recipeId)
     .single()
@@ -34,7 +36,6 @@ export default defineEventHandler(async (event) => {
   if (recipe === null) {
     throw new Error('user unauthorized')
   }
-
 
   if (error) {
     throw error

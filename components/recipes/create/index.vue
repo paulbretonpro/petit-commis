@@ -1,47 +1,54 @@
 <script lang="ts" setup>
 import type { ICategory } from '~/server/api/categories/type'
 import type { IIngredient } from '~/server/api/ingredients/type'
-import type { IIngredientQuatityForm, TRecipeFormCreate } from '~/utils/types/recipes'
+import type {
+  IIngredientQuatityForm,
+  TRecipeFormCreate,
+} from '~/utils/types/recipes'
 
 const form = defineModel<TRecipeFormCreate>('form', { required: true })
 
 const emit = defineEmits<{
-  'submit': [void]
+  submit: []
 }>()
 
 const DEFAULT_RECIPE_NB_PERSON = 2
-const UNITS = [
-  'g',
-  'kg',
-  'c.a.s',
-  'c.a.c',
-  'l',
-  'ml',
-  'cl',
-  'sachet',
-]
+const UNITS = ['g', 'kg', 'c.a.s', 'c.a.c', 'l', 'ml', 'cl', 'sachet']
 const DEFAULT_INGREDIENT_QUANTITY = {
   ingredient: undefined,
   quantity: undefined,
-  unit: undefined
+  unit: undefined,
 }
 
 const newStep = ref<string>()
-const newIngredient = ref<IIngredientQuatityForm>({ ...DEFAULT_INGREDIENT_QUANTITY })
+const newIngredient = ref<IIngredientQuatityForm>({
+  ...DEFAULT_INGREDIENT_QUANTITY,
+})
 
 const { isMobile } = useDevice()
 
-const { data: categories, pending: pendingCategories } = await useFetch<ICategory[]>('/api/categories', {
+const { data: categories, pending: pendingCategories } = await useFetch<
+  ICategory[]
+>('/api/categories', {
   key: 'categories',
-  default: () => []
+  default: () => [],
 })
-const { data: ingredients, pending: pendingIngredients } = useAsyncData<IIngredient[]>('ingredients', async () => $fetch('/api/ingredients'), { server: false, default: () => [] })
+const { data: ingredients, pending: pendingIngredients } = useAsyncData<
+  IIngredient[]
+>('ingredients', async () => $fetch('/api/ingredients'), {
+  server: false,
+  default: () => [],
+})
 
 const handleAddNewIngredient = () => {
-  if (newIngredient.value.ingredient?.id && newIngredient.value.quantity && newIngredient.value.unit) {
+  if (
+    newIngredient.value.ingredient?.id &&
+    newIngredient.value.quantity &&
+    newIngredient.value.unit
+  ) {
     form.value.ingredients.push(newIngredient.value)
     // Reset du formulaire
-    newIngredient.value = { ... DEFAULT_INGREDIENT_QUANTITY }
+    newIngredient.value = { ...DEFAULT_INGREDIENT_QUANTITY }
   }
 }
 
@@ -68,7 +75,9 @@ const handleCancel = () => navigateTo('/')
   <div class="flex flex-col gap-6">
     <PageHeader :title="form.name ?? 'Nouvelle recette'">
       <div v-if="!isMobile" class="flex gap-2">
-        <UButton size="xl" variant="outline" @click="handleCancel()">Annuler</UButton>
+        <UButton size="xl" variant="outline" @click="handleCancel()"
+          >Annuler</UButton
+        >
         <UButton size="xl" @click="handleSubmit">Terminer</UButton>
       </div>
     </PageHeader>
@@ -81,9 +90,24 @@ const handleCancel = () => navigateTo('/')
         <template #header>Informations générales</template>
         <div class="flex flex-col gap-4">
           <UInput v-model="form.name" placeholder="Nom de la recette" />
-          <USelectMenu v-model="form.category" placeholder="Catégorie" :items="categories" :loading="pendingCategories" value-key="id" label-key="name" />
-          <UInputNumber v-model="form.nbPersons" :default-value="DEFAULT_RECIPE_NB_PERSON" :min="1" :max="100" />
-          <UTextarea v-model="form.description" placeholder="Une note à ajouter ?" />
+          <USelectMenu
+            v-model="form.category"
+            placeholder="Catégorie"
+            :items="categories"
+            :loading="pendingCategories"
+            value-key="id"
+            label-key="name"
+          />
+          <UInputNumber
+            v-model="form.nbPersons"
+            :default-value="DEFAULT_RECIPE_NB_PERSON"
+            :min="1"
+            :max="100"
+          />
+          <UTextarea
+            v-model="form.description"
+            placeholder="Une note à ajouter ?"
+          />
         </div>
       </UCard>
     </div>
@@ -94,14 +118,36 @@ const handleCancel = () => navigateTo('/')
       <template #default>
         <div class="flex flex-col gap-4">
           <div class="grid md:grid-cols-[1fr_1fr_1fr_0.5fr] gap-4">
-            <USelectMenu v-model="newIngredient.ingredient" placeholder="Ingrédient" :items="ingredients" :loading="pendingIngredients" label-key="name" search-input />
-            <UInputNumber v-model="newIngredient.quantity" placeholder="Quantité" :min="1" />
-            <USelect v-model="newIngredient.unit" placeholder="Unité" :items="UNITS" />
+            <USelectMenu
+              v-model="newIngredient.ingredient"
+              placeholder="Ingrédient"
+              :items="ingredients"
+              :loading="pendingIngredients"
+              label-key="name"
+              search-input
+            />
+            <UInputNumber
+              v-model="newIngredient.quantity"
+              placeholder="Quantité"
+              :min="1"
+            />
+            <USelect
+              v-model="newIngredient.unit"
+              placeholder="Unité"
+              :items="UNITS"
+            />
 
-            <UButton block variant="subtle" size="sm" icon="fa6-solid:plus" @click="handleAddNewIngredient">Ajouter</UButton>
+            <UButton
+              block
+              variant="subtle"
+              size="sm"
+              icon="fa6-solid:plus"
+              @click="handleAddNewIngredient"
+              >Ajouter</UButton
+            >
           </div>
           <div class="flex gap-2 flex-wrap">
-            <UBadge 
+            <UBadge
               v-for="(item, index) in form.ingredients"
               :key="item.ingredient?.id"
               :label="`${item.quantity} ${item.unit} ${item.ingredient?.name}`"
@@ -119,21 +165,49 @@ const handleCancel = () => navigateTo('/')
       <template #header>Étapes</template>
       <template #default>
         <div class="flex flex-col gap-4">
-          <div v-for="(step, index) in form.steps" :key="index" class="flex items-center gap-4">
+          <div
+            v-for="(step, index) in form.steps"
+            :key="index"
+            class="flex items-center gap-4"
+          >
             <UIcon name="material-symbols:drag-indicator" />
             <div class="flex flex-col gap-2 grow">
-              <UBadge variant="subtle" :label="`Etape ${index + 1}`" class="h-fit w-fit" />
+              <UBadge
+                variant="subtle"
+                :label="`Etape ${index + 1}`"
+                class="h-fit w-fit"
+              />
               <div class="text-gray-500">{{ step }}</div>
             </div>
-            <UButton icon="material-symbols:delete-outline-rounded" color="error" variant="subtle" @click="handleDeleteStep(index)" />
+            <UButton
+              icon="material-symbols:delete-outline-rounded"
+              color="error"
+              variant="subtle"
+              @click="handleDeleteStep(index)"
+            />
           </div>
 
           <div class="flex gap-2">
-            <UBadge variant="subtle" :label="`Etape ${form.steps.length + 1}`" class="h-fit" />
-            <UTextarea v-model="newStep" class="grow" @keydown.enter.prevent="handleAddNewStep" />
+            <UBadge
+              variant="subtle"
+              :label="`Etape ${form.steps.length + 1}`"
+              class="h-fit"
+            />
+            <UTextarea
+              v-model="newStep"
+              class="grow"
+              @keydown.enter.prevent="handleAddNewStep"
+            />
           </div>
 
-          <UButton size="sm" variant="subtle" icon="fa6-solid:plus" class="w-fit mx-auto" @click="handleAddNewStep">Ajouter une étape</UButton>
+          <UButton
+            size="sm"
+            variant="subtle"
+            icon="fa6-solid:plus"
+            class="w-fit mx-auto"
+            @click="handleAddNewStep"
+            >Ajouter une étape</UButton
+          >
         </div>
       </template>
     </UCard>

@@ -8,7 +8,7 @@ export default defineAppConfig({
     selectMenu: {
       slots: {
         base: 'cursor-pointer',
-      }
-    }
-  }
+      },
+    },
+  },
 })

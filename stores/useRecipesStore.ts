@@ -5,9 +5,9 @@ export const useRecipesStore = defineStore('recipes', () => {
 
   const filters = ref({
     search: undefined,
-    categoryId: undefined
+    categoryId: undefined,
   })
-  
+
   const handleResetFilter = () => {
     filters.value.categoryId = undefined
     filters.value.search = undefined
@@ -16,6 +16,6 @@ export const useRecipesStore = defineStore('recipes', () => {
   return {
     filters,
     handleResetFilter,
-    loading
+    loading,
   }
 })

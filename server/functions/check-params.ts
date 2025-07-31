@@ -11,7 +11,10 @@ export const getUser = async (event: H3Event) => {
   return user
 }
 
-export const getRequiredUrlParams = (event: H3Event, params?: { search: string, name?: string }) => {
+export const getRequiredUrlParams = (
+  event: H3Event,
+  params?: { search: string; name?: string }
+) => {
   // Récupération de l'id de la recette dans l'url
   const id = getRouterParam(event, params?.search ?? 'id')
   if (!id) {

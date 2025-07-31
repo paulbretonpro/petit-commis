@@ -14,12 +14,12 @@ const fetchRecipes = useDebounceFn(async () => {
     recipes.value = await $fetch('/api/recipes', {
       method: 'GET',
       params: {
-        ...filters.value
-      }
+        ...filters.value,
+      },
     })
   } catch {
     return []
-  } finally{
+  } finally {
     loading.value = false
   }
 }, 300)
@@ -35,9 +35,17 @@ onMounted(async () => {
 
 <template>
   <div class="relative flex flex-col gap-4">
-    <UButton label="Créer une recette" class="self-end" @click="() => navigateTo('/recipes/create')" />
-        
-    <LazyRecipesMobileList v-if="isMobile" :recipes :loading="loadingSkeleton" />
+    <UButton
+      label="Créer une recette"
+      class="self-end"
+      @click="() => navigateTo('/recipes/create')"
+    />
+
+    <LazyRecipesMobileList
+      v-if="isMobile"
+      :recipes
+      :loading="loadingSkeleton"
+    />
     <LazyRecipesDesktopList v-else :recipes :loading="loadingSkeleton" />
 
     <RecipesMobileListFilters v-if="isMobile" />

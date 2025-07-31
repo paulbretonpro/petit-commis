@@ -8,7 +8,7 @@ const BodySchema = z.object({
   date: z.string(),
   recipeId: z.number().optional(),
   note: z.string().optional(),
-  type: z.number().min(0).max(1)
+  type: z.number().min(0).max(1),
 })
 
 export default defineEventHandler(async (event) => {
@@ -22,15 +22,13 @@ export default defineEventHandler(async (event) => {
     throw new Error('payload invalid')
   }
 
-  const { status, error } = await client
-    .from(TableEnum.PLANNING)
-    .insert({
-      date: body.date,
-      recipe_id: body.recipeId,
-      type: body.type,
-      user_id: user.id,
-      note: body.note
-    })
+  const { status, error } = await client.from(TableEnum.PLANNING).insert({
+    date: body.date,
+    recipe_id: body.recipeId,
+    type: body.type,
+    user_id: user.id,
+    note: body.note,
+  })
 
   if (error) {
     throw error

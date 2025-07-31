@@ -9,6 +9,6 @@ export default defineEventHandler(async (event) => {
     .from(TableEnum.INGREDIENTS)
     .select('*')
     .order('name', { ascending: true })
-  
+
   return data
 })

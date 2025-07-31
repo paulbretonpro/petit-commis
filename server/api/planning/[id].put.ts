@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
   const { error } = await client
     .from(TableEnum.PLANNING)
     .update({
-      note: body.note
+      note: body.note,
     })
     .eq('id', planningId)
     .eq('user_id', user.id)
@@ -33,6 +33,6 @@ export default defineEventHandler(async (event) => {
   }
 
   return {
-    status: 'success'
+    status: 'success',
   }
 })
