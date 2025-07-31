@@ -15,6 +15,41 @@ const emit = defineEmits<{
 const toast = useToast()
 
 const loading = ref(false)
+const searchRecipe = ref<string>()
+
+const { fetchRecipes, recipes } = useSearchRecipes({
+  search: searchRecipe.value,
+})
+
+watch(searchRecipe, async () => {
+  loading.value = true
+  await fetchRecipes()
+  loading.value = false
+})
+
+const handleAddRecipeToPlanning = async (recipeId: number) => {
+  loading.value = true
+  try {
+    await $fetch('/api/planning', {
+      method: 'POST',
+      body: {
+        date: props.day.toString(),
+        type: props.type,
+        recipeId,
+      },
+    })
+
+    emit('planning-has-updated')
+  } catch {
+    toast.add({
+      title: 'Echec',
+      description: "Impossible d'ajouter cette recette au planning",
+      color: 'error',
+    })
+  } finally {
+    loading.value = false
+  }
+}
 
 const handleDeletePlannedRecipe = async () => {
   loading.value = true
@@ -62,7 +97,16 @@ const handleDeletePlannedRecipe = async () => {
 
       <!-- Sélection d'un repas ou d'une note -->
       <div v-else class="flex gap-4 items-center">
-        <USelectMenu placeholder="Ajouter une recette" class="h-fit flex-2" />
+        <USelectMenu
+          v-model:search-term="searchRecipe"
+          :loading
+          :items="recipes"
+          value-key="id"
+          label-key="name"
+          placeholder="Ajouter une recette"
+          class="h-fit flex-2"
+          @update:model-value="handleAddRecipeToPlanning"
+        />
         <USeparator orientation="vertical" class="h-8" />
         <PlanningButtonAddNote
           :planning

@@ -1,28 +1,10 @@
 <script setup lang="ts">
-import { useDebounceFn } from '@vueuse/core'
-import type { IRecipe } from '~/server/api/recipes/type'
-
 const { isMobile } = useDevice()
-const { filters, loading } = storeToRefs(useRecipesStore())
+const { filters } = storeToRefs(useRecipesStore())
 
-const recipes = ref<IRecipe[]>([])
+const { fetchRecipes, recipes } = useSearchRecipes(filters.value)
+
 const loadingSkeleton = ref(true)
-
-const fetchRecipes = useDebounceFn(async () => {
-  loading.value = true
-  try {
-    recipes.value = await $fetch('/api/recipes', {
-      method: 'GET',
-      params: {
-        ...filters.value,
-      },
-    })
-  } catch {
-    return []
-  } finally {
-    loading.value = false
-  }
-}, 300)
 
 watch(filters, fetchRecipes, { deep: true })
 

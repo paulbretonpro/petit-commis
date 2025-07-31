@@ -5,10 +5,10 @@ import type { IPlanning } from '~/server/api/planning/type'
 const open = defineModel<boolean>({ required: true })
 
 defineProps<{
+  day: CalendarDate
   recipes:
     | { lunch: IPlanning | undefined; dinner: IPlanning | undefined }
     | undefined
-  day: CalendarDate
 }>()
 
 const emit = defineEmits<{
