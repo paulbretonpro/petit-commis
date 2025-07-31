@@ -3,8 +3,10 @@ const { logout } = useAppSettings()
 </script>
 
 <template>
-  <div class="space-y-4">
+  <div class="flex flex-col gap-6">
     <PageHeader title="Mes préférences"/>
+
+    <ProfileButtonTheme />
 
     <UButton @click="logout">Se déconnecter</UButton>
   </div>

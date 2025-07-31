@@ -3,9 +3,15 @@ import { endOfMonth, startOfMonth, type DateValue } from '@internationalized/dat
 import type { RadioGroupItem } from '@nuxt/ui'
 import type { IPlanning } from '~/server/api/planning/type'
 
-defineProps<{
-  recipeId: number
-}>()
+withDefaults(
+  defineProps<{
+    recipeId: number
+    withoutLabel?: boolean
+  }>(),
+  {
+    withoutLabel: false
+  }
+)
 
 const {
   btnLoading,
@@ -86,7 +92,13 @@ watch(() => selectDay.value.date, (newDate, oldDate) => {
 <template>
   <UModal title="Ajouter au planning" @update:open="handleReset">
     <ClientOnly>
-      <UButton variant="subtle" icon="material-symbols:calendar-add-on-outline-rounded" block @click.prevent="() => fetchPlanning(today())">Ajouter au menu</UButton>
+      <UButton 
+        :label="withoutLabel ? undefined : 'Ajouter au menu'"
+        variant="subtle"
+        icon="material-symbols:calendar-add-on-outline-rounded"
+        block
+        @click.prevent="() => fetchPlanning(today())"
+      />
     </ClientOnly>
     <template #body>
       <div class="flex flex-col gap-4">

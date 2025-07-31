@@ -1,16 +1,5 @@
 <script setup lang="ts">
 const { isMobile } = useDevice()
-
-const colorMode = useColorMode()
-
-const isDark = computed({
-  get() {
-    return colorMode.value === 'dark'
-  },
-  set(_isDark) {
-    colorMode.preference = _isDark ? 'dark' : 'light'
-  }
-})
 </script>
 
 <template>
@@ -35,18 +24,7 @@ const isDark = computed({
           <NuxtLink to="/"><UButton variant="ghost">Recettes</UButton></NuxtLink>
           <NuxtLink to="/planning"><UButton variant="ghost">Planning</UButton></NuxtLink>
           <NuxtLink to="/profile"><UButton variant="ghost">Profile</UButton></NuxtLink>
-          <ClientOnly v-if="!colorMode?.forced">
-            <UButton
-              :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'"
-              color="neutral"
-              variant="ghost"
-              @click="isDark = !isDark"
-            />
-
-            <template #fallback>
-              <div class="size-8" />
-            </template>
-          </ClientOnly>
+          <ProfileButtonTheme />
         </nav>
       </UContainer>
     </div>
