@@ -13,7 +13,6 @@ const emit = defineEmits<{
 }>()
 
 const DEFAULT_RECIPE_NB_PERSON = 2
-const UNITS = ['g', 'kg', 'c.a.s', 'c.a.c', 'l', 'ml', 'cl', 'sachet']
 const DEFAULT_INGREDIENT_QUANTITY = {
   ingredient: undefined,
   quantity: undefined,
