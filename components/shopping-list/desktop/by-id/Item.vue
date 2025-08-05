@@ -6,10 +6,30 @@ const props = defineProps<{
   ingredient: IShoppingListItem
 }>()
 
+const { fetchShoppingListItem } = useShoppingListItemStore()
+
 const route = useRoute()
 
 const open = ref(false)
 const isCheck = ref(false)
+const pending = ref(false)
+
+const handleDelete = async () => {
+  pending.value = true
+
+  try {
+    await $fetch(
+      `/api/shopping-list/${route.params.id}/item/${props.ingredient.id}`,
+      {
+        method: 'DELETE',
+      }
+    )
+
+    await fetchShoppingListItem(props.ingredient.shoppingListId)
+  } finally {
+    pending.value = false
+  }
+}
 
 const options = ref<DropdownMenuItem[]>([
   {
@@ -21,13 +41,7 @@ const options = ref<DropdownMenuItem[]>([
     label: 'Supprimer',
     color: 'error',
     icon: 'material-symbols:delete-outline-rounded',
-    onSelect: () =>
-      $fetch(
-        `/api/shopping-list/${route.params.id}/item/${props.ingredient.id}`,
-        {
-          method: 'DELETE',
-        }
-      ),
+    onSelect: handleDelete,
   },
 ])
 </script>
@@ -63,5 +77,8 @@ const options = ref<DropdownMenuItem[]>([
     </UDropdownMenu>
   </div>
 
-  <LazyShoppingListDesktopByIdModalEdit v-model="open" :ingredient="ingredient" />
+  <LazyShoppingListDesktopByIdModalEdit
+    v-model="open"
+    :ingredient="ingredient"
+  />
 </template>

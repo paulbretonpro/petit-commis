@@ -14,15 +14,21 @@ defineProps<{
     >
       <LazyShoppingListDesktopByIdSkeleton v-if="pending" />
 
-      <template v-else>
+      <template v-else-if="ingredients.length">
         <ShoppingListDesktopByIdItem
           v-for="item in ingredients"
           :key="item.id"
           :ingredient="item"
         />
       </template>
-    </div>
 
+      <div
+        v-else
+        class="text-sm font-medium p-4 text-center text-gray-200 dark:text-neutral-500"
+      >
+        Aucun item
+      </div>
+    </div>
     <ShoppingListDesktopByIdButtonAddIngredient />
   </div>
 </template>
