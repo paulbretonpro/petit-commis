@@ -183,6 +183,69 @@ export type Database = {
           id: number
           ingredient_id: number | null
           ingredient_name: string | null
+          quantity: string
+          shopping_list_id: number
+          unit: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          ingredient_id?: number | null
+          ingredient_name?: string | null
+          quantity: string
+          shopping_list_id: number
+          unit?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          ingredient_id?: number | null
+          ingredient_name?: string | null
+          quantity?: string
+          shopping_list_id?: number
+          unit?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'shopping_list_recipe_ingredient_id_fkey'
+            columns: ['ingredient_id']
+            isOneToOne: false
+            referencedRelation: 'ingredients'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'shopping_list_recipe_shopping_list_id_fkey'
+            columns: ['shopping_list_id']
+            isOneToOne: false
+            referencedRelation: 'shopping_list'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      shopping_list: {
+        Row: {
+          created_at: string
+          id: number
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      shopping_list_recipe: {
+        Row: {
+          created_at: string
+          id: number
+          ingredient_id: number | null
+          ingredient_name: string | null
           quantity: string | null
           shopping_list_id: number
           unit: string | null
@@ -281,7 +344,7 @@ export type Database = {
     }
     Functions: {
       generate_and_insert_shopping_list: {
-        Args: { p_dates: string[]; p_user_id: string }
+        Args: { p_user_id: string; p_dates: string[] }
         Returns: number
       }
     }

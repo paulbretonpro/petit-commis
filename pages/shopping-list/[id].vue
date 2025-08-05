@@ -2,8 +2,9 @@
 import type { IShoppingListItem } from '~/utils/types/shoppingList'
 
 const route = useRoute()
+const { isMobile } = useDevice()
 
-const { data } = useFetch<IShoppingListItem[]>(
+const { data, pending } = useFetch<IShoppingListItem[]>(
   `/api/shopping-list/${route.params.id}`,
   {
     key: 'shopping-list-id',
@@ -14,5 +15,6 @@ const { data } = useFetch<IShoppingListItem[]>(
 </script>
 
 <template>
-  <ShoppingListDesktop :ingredients="data" />
+  <div v-if="isMobile">A venir</div>
+  <LazyShoppingListDesktopById v-else :ingredients="data" :pending />
 </template>

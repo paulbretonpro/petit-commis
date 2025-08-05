@@ -63,5 +63,5 @@ const options = ref<DropdownMenuItem[]>([
     </UDropdownMenu>
   </div>
 
-  <LazyShoppingListDesktopModalEdit v-model="open" :ingredient="ingredient" />
+  <LazyShoppingListDesktopByIdModalEdit v-model="open" :ingredient="ingredient" />
 </template>
