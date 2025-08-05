@@ -14,7 +14,7 @@ const { data, pending } = useFetch<{ id: number; createdAt: string }[]>(
   >
     <LazyShoppingListDesktopListSkeleton v-if="pending" />
 
-    <template v-else>
+    <template v-else-if="data.length">
       <NuxtLink
         v-for="(list, index) in data"
         :key="list.id"
@@ -33,5 +33,11 @@ const { data, pending } = useFetch<{ id: number; createdAt: string }[]>(
         />
       </NuxtLink>
     </template>
+    <div
+      v-else
+      class="text-sm font-medium p-4 text-center text-gray-200 dark:text-neutral-500"
+    >
+      Aucune liste de course
+    </div>
   </div>
 </template>

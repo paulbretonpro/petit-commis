@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import type { IShoppingListItem } from '~/utils/types/shoppingList'
-
 const route = useRoute()
 const { isMobile } = useDevice()
 
-const { data, pending } = useFetch<IShoppingListItem[]>(
-  `/api/shopping-list/${route.params.id}`,
-  {
-    key: 'shopping-list-id',
-    server: false,
-    default: () => [],
-  }
-)
+const { fetchShoppingListItem } = useShoppingListItemStore()
+const { items } = storeToRefs(useShoppingListItemStore())
+
+const pending = ref(true)
+
+onMounted(async () => {
+  pending.value = true
+  await fetchShoppingListItem(Number(route.params.id as string))
+  pending.value = false
+})
 </script>
 
 <template>
   <div v-if="isMobile">A venir</div>
-  <LazyShoppingListDesktopById v-else :ingredients="data" :pending />
+  <LazyShoppingListDesktopById v-else :ingredients="items" :pending />
 </template>

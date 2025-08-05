@@ -7,6 +7,9 @@ const props = defineProps<{
   ingredient: IShoppingListItem
 }>()
 
+const { fetchShoppingListItem } = useShoppingListItemStore()
+
+const pending = ref(false)
 const form = ref<{
   quantity: number
   unit: string
@@ -14,6 +17,28 @@ const form = ref<{
   quantity: Number(props.ingredient.quantity),
   unit: props.ingredient.unit,
 })
+
+const handleUpdateItem = async () => {
+  pending.value = true
+
+  try {
+    await $fetch(
+      `/api/shopping-list/${props.ingredient.shoppingListId}/item/${props.ingredient.id}`,
+      {
+        method: 'PUT',
+        body: {
+          ...form.value,
+          quantity: String(form.value.quantity),
+        },
+      }
+    )
+
+    await fetchShoppingListItem(props.ingredient.shoppingListId)
+    open.value = false
+  } finally {
+    pending.value = false
+  }
+}
 </script>
 
 <template>
@@ -28,10 +53,14 @@ const form = ref<{
     </template>
 
     <template #footer>
-      <UButton variant="outline" block @click="() => (open = false)"
-        >Annuler</UButton
-      >
-      <UButton block>Confirmer</UButton>
+      <div class="flex gap-4 w-full">
+        <UButton variant="outline" block @click="() => (open = false)"
+          >Annuler</UButton
+        >
+        <UButton block :loading="pending" @click="handleUpdateItem"
+          >Confirmer</UButton
+        >
+      </div>
     </template>
   </UModal>
 </template>
