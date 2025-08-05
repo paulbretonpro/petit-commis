@@ -3,6 +3,7 @@ import type { IShoppingListItem } from '~/utils/types/shoppingList'
 
 defineProps<{
   ingredients: IShoppingListItem[]
+  pending: boolean
 }>()
 </script>
 
@@ -11,13 +12,17 @@ defineProps<{
     <div
       class="flex flex-col border border-gray-200 dark:border-neutral-800 rounded-lg divide-y divide-gray-200 dark:divide-neutral-800"
     >
-      <ShoppingListDesktopItem
-        v-for="item in ingredients"
-        :key="item.id"
-        :ingredient="item"
-      />
+      <LazyShoppingListDesktopByIdSkeleton v-if="pending" />
+
+      <template v-else>
+        <ShoppingListDesktopByIdItem
+          v-for="item in ingredients"
+          :key="item.id"
+          :ingredient="item"
+        />
+      </template>
     </div>
 
-    <ShoppingListDesktopButtonAddIngredient />
+    <ShoppingListDesktopByIdButtonAddIngredient />
   </div>
 </template>
