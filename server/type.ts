@@ -5,6 +5,8 @@ export enum TableEnum {
   PLANNING = 'planning',
   RECIPES = 'recipes',
   STEPS_RECIPES = 'steps_recipes',
+  SHOPPING_LIST = 'shopping_list',
+  SHOPPING_LIST_INGREDIENTS = 'shopping_list_recipe',
 }
 
 export enum BucketStorage {

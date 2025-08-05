@@ -9,3 +9,5 @@ export const WEEK_DAYS_LABELS = [
   'Sam',
   'Dim',
 ]
+
+export const UNITS = ['g', 'kg', 'c.a.s', 'c.a.c', 'l', 'ml', 'cl', 'sachet']

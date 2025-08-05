@@ -1,4 +1,9 @@
-import { CalendarDate, getDayOfWeek } from '@internationalized/date'
+import {
+  CalendarDate,
+  getDayOfWeek,
+  getLocalTimeZone,
+  parseDate,
+} from '@internationalized/date'
 
 export function startOfWeek(date: CalendarDate) {
   const weekday = getDayOfWeek(date, 'fr') // 1 = lundi, 7 = dimanche
@@ -47,4 +52,17 @@ export function isSameMonth(dateA: CalendarDate, dateB: CalendarDate) {
 
 export function isBeforeToday(date: CalendarDate) {
   return date.compare(today()) >= 0
+}
+
+export function isSameDay(dateA: CalendarDate, dateB: CalendarDate) {
+  return dateA.compare(dateB) === 0
+}
+
+export function formatToDDMMYYYY(date: string): string {
+  const dateParse = parseDate(date.split('T')[0])
+  return new Intl.DateTimeFormat('fr-FR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  }).format(dateParse.toDate(getLocalTimeZone()))
 }
