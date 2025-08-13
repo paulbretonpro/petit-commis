@@ -1,8 +1,8 @@
 import { serverSupabaseClient } from '#supabase/server'
 import useChangeCaseObject from '~/composables/useChangeCaseObject'
-import type { Database } from '~/database.types'
-import { getUser } from '~/server/functions/check-params'
-import { TableEnum } from '~/server/type'
+import type { Database } from '~~/database.types'
+import { getUser } from '~~/server/functions/check-params'
+import { TableEnum } from '~~/shared/types/database-type'
 import { RecipeFormCreateSchema } from '~/utils/types/recipes'
 
 export default defineEventHandler(async (event) => {

@@ -1,7 +1,7 @@
 import { serverSupabaseClient } from '#supabase/server'
-import type { Database } from '~/database.types'
-import { getRequiredUrlParams, getUser } from '~/server/functions/check-params'
-import { TableEnum } from '~/server/type'
+import type { Database } from '~~/database.types'
+import { getRequiredUrlParams, getUser } from '~~/server/functions/check-params'
+import { TableEnum } from '~~/shared/types/database-type'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient<Database>(event)

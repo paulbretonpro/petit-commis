@@ -1,8 +1,8 @@
 import { serverSupabaseClient } from '#supabase/server'
 import z from 'zod'
-import type { Database } from '~/database.types'
-import { getUser } from '~/server/functions/check-params'
-import { TableEnum } from '~/server/type'
+import type { Database } from '~~/database.types'
+import { getUser } from '~~/server/functions/check-params'
+import { TableEnum } from '~~/shared/types/database-type'
 
 const BodySchema = z.object({
   date: z.string(),
