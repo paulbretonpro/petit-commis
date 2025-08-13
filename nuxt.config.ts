@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@formkit/auto-animate/nuxt',
     '@pinia/nuxt',
+    '@vueuse/nuxt',
   ],
   css: ['~/assets/css/main.css'],
 })
