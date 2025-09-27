@@ -1,7 +1,10 @@
 <script lang="ts" setup>
 import type { ICategory } from '~~/server/api/categories/type'
 import type { IIngredient } from '~~/server/api/ingredients/type'
-import type { IIngredientQuatityForm, TRecipeFormCreate } from '~/utils/types/recipes'
+import type {
+  IIngredientQuatityForm,
+  TRecipeFormCreate,
+} from '~/utils/types/recipes'
 
 const form = defineModel<TRecipeFormCreate>('form', { required: true })
 
@@ -17,12 +20,12 @@ const DEFAULT_INGREDIENT_QUANTITY = {
   unit: undefined,
 }
 
+const { isMobile } = useDevice()
+
 const newStep = ref<string>()
 const newIngredient = ref<IIngredientQuatityForm>({
   ...DEFAULT_INGREDIENT_QUANTITY,
 })
-
-const { isMobile } = useDevice()
 
 const { data: categories, pending: pendingCategories } = await useFetch<
   ICategory[]
@@ -38,11 +41,7 @@ const { data: ingredients, pending: pendingIngredients } = useAsyncData<
 })
 
 const handleAddNewIngredient = () => {
-  if (
-    newIngredient.value.ingredient?.id &&
-    newIngredient.value.quantity &&
-    newIngredient.value.unit
-  ) {
+  if (newIngredient.value.ingredient?.id && newIngredient.value.quantity) {
     form.value.ingredients.push(newIngredient.value)
     // Reset du formulaire
     newIngredient.value = { ...DEFAULT_INGREDIENT_QUANTITY }
@@ -64,15 +63,17 @@ const handleDeleteStep = (index: number) => {
   form.value.steps.splice(index, 1)
 }
 
-const handleSubmit = () => emit('submit')
-const handleCancel = () => navigateTo('/')
+const handleSubmit = (): void => emit('submit')
+const handleCancel = (): void => {
+  navigateTo('/')
+}
 </script>
 
 <template>
   <div class="flex flex-col gap-6">
     <PageHeader :title="form.name ?? 'Nouvelle recette'">
       <div v-if="!isMobile" class="flex gap-2">
-        <UButton size="xl" variant="outline" @click="handleCancel()"
+        <UButton size="xl" variant="outline" @click="handleCancel"
           >Annuler</UButton
         >
         <UButton size="xl" @click="handleSubmit">Terminer</UButton>
@@ -85,27 +86,29 @@ const handleCancel = () => navigateTo('/')
 
       <UCard class="grow" variant="outline">
         <template #header>Informations générales</template>
-        <div class="flex flex-col gap-4">
-          <UInput v-model="form.name" placeholder="Nom de la recette" />
-          <USelectMenu
-            v-model="form.category"
-            placeholder="Catégorie"
-            :items="categories"
-            :loading="pendingCategories"
-            value-key="id"
-            label-key="name"
-          />
-          <UInputNumber
-            v-model="form.nbPersons"
-            :default-value="DEFAULT_RECIPE_NB_PERSON"
-            :min="1"
-            :max="100"
-          />
-          <UTextarea
-            v-model="form.description"
-            placeholder="Une note à ajouter ?"
-          />
-        </div>
+        <template #default>
+          <div class="flex flex-col gap-4">
+            <UInput v-model="form.name" placeholder="Nom de la recette" />
+            <USelectMenu
+              v-model="form.category"
+              placeholder="Catégorie"
+              :items="categories"
+              :loading="pendingCategories"
+              value-key="id"
+              label-key="name"
+            />
+            <UInputNumber
+              v-model="form.nbPersons"
+              :default-value="DEFAULT_RECIPE_NB_PERSON"
+              :min="1"
+              :max="100"
+            />
+            <UTextarea
+              v-model="form.description"
+              placeholder="Une note à ajouter ?"
+            />
+          </div>
+        </template>
       </UCard>
     </div>
 
@@ -147,7 +150,7 @@ const handleCancel = () => navigateTo('/')
             <UBadge
               v-for="(item, index) in form.ingredients"
               :key="item.ingredient?.id"
-              :label="`${item.quantity} ${item.unit} ${item.ingredient?.name}`"
+              :label="`${item.quantity} ${item.unit ?? ''} ${item.ingredient?.name}`"
               trailing-icon="fa6-solid:xmark"
               class="cursor-pointer"
               @click="handleDeleteIngredient(index)"
@@ -210,7 +213,7 @@ const handleCancel = () => navigateTo('/')
     </UCard>
 
     <div v-if="isMobile" class="grid grid-cols-2 gap-2">
-      <UButton block variant="outline" @click="handleCancel()">Annuler</UButton>
+      <UButton block variant="outline" @click="handleCancel">Annuler</UButton>
       <UButton block @click="handleSubmit">Terminer</UButton>
     </div>
   </div>

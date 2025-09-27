@@ -1,5 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
-import type { Database } from '~~~/database.types'
+import type { Database } from '~~/database.types'
 import { TableEnum } from '~~/shared/types/database-type'
 
 export default defineEventHandler(async (event) => {
@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   const { data } = await client
     .from(TableEnum.CATEGORIES)
     .select('*')
-    .order('name', { ascending: false })
+    .order('name', { ascending: true })
 
   return data
 })

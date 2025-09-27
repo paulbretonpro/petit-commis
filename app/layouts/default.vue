@@ -18,7 +18,7 @@ const { isMobile } = useDevice()
           ><UButton variant="ghost">Planning</UButton></NuxtLink
         >
         <NuxtLink class="mx-auto" to="/profile"
-          ><UButton variant="ghost">Profile</UButton></NuxtLink
+          ><UButton variant="ghost">Profil</UButton></NuxtLink
         >
       </nav>
     </div>
@@ -38,7 +38,7 @@ const { isMobile } = useDevice()
             ><UButton variant="ghost">Planning</UButton></NuxtLink
           >
           <NuxtLink to="/profile"
-            ><UButton variant="ghost">Profile</UButton></NuxtLink
+            ><UButton variant="ghost">Profil</UButton></NuxtLink
           >
           <ProfileButtonTheme />
         </nav>

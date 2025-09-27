@@ -1,15 +1,15 @@
 import z from 'zod'
-import type { IIngredient } from '~/server/api/ingredients/type'
+import type { IIngredient } from '~~/server/api/ingredients/type'
 
 export const RecipeFormCreateSchema = z.object({
   category: z.number(),
-  description: z.string(),
+  description: z.string().optional(),
   hasImage: z.boolean(),
   ingredients: z.array(
     z.object({
       ingredientId: z.number(),
       quantity: z.number(),
-      unit: z.string(),
+      unit: z.string().optional(),
     })
   ),
   isPublic: z.boolean(),

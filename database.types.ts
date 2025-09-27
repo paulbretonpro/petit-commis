@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: '12.2.12 (cd3cf9e)'
@@ -88,7 +88,7 @@ export type Database = {
           date: string
           id: number
           note: string | null
-          recipe_id: number
+          recipe_id: number | null
           type: number
           user_id: string
         }
@@ -96,7 +96,7 @@ export type Database = {
           date: string
           id?: number
           note?: string | null
-          recipe_id: number
+          recipe_id?: number | null
           type: number
           user_id: string
         }
@@ -104,7 +104,7 @@ export type Database = {
           date?: string
           id?: number
           note?: string | null
-          recipe_id?: number
+          recipe_id?: number | null
           type?: number
           user_id?: string
         }
@@ -122,7 +122,7 @@ export type Database = {
         Row: {
           category_id: number | null
           created_at: string
-          description: string
+          description: string | null
           has_image: boolean
           id: number
           is_public: boolean
@@ -133,7 +133,7 @@ export type Database = {
         Insert: {
           category_id?: number | null
           created_at?: string
-          description: string
+          description?: string | null
           has_image?: boolean
           id?: number
           is_public?: boolean
@@ -144,7 +144,7 @@ export type Database = {
         Update: {
           category_id?: number | null
           created_at?: string
-          description?: string
+          description?: string | null
           has_image?: boolean
           id?: number
           is_public?: boolean
@@ -158,6 +158,69 @@ export type Database = {
             columns: ['category_id']
             isOneToOne: false
             referencedRelation: 'categories'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      shopping_list: {
+        Row: {
+          created_at: string
+          id: number
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      shopping_list_recipe: {
+        Row: {
+          created_at: string
+          id: number
+          ingredient_id: number | null
+          ingredient_name: string | null
+          quantity: string | null
+          shopping_list_id: number
+          unit: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          ingredient_id?: number | null
+          ingredient_name?: string | null
+          quantity?: string | null
+          shopping_list_id: number
+          unit?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          ingredient_id?: number | null
+          ingredient_name?: string | null
+          quantity?: string | null
+          shopping_list_id?: number
+          unit?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'shopping_list_recipe_ingredient_id_fkey'
+            columns: ['ingredient_id']
+            isOneToOne: false
+            referencedRelation: 'ingredients'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'shopping_list_recipe_shopping_list_id_fkey'
+            columns: ['shopping_list_id']
+            isOneToOne: false
+            referencedRelation: 'shopping_list'
             referencedColumns: ['id']
           },
         ]
@@ -191,12 +254,39 @@ export type Database = {
           },
         ]
       }
+      unit_conversions: {
+        Row: {
+          factor: number
+          from_unit: string
+          id: number
+          ingredient_id: number | null
+          to_unit: string
+        }
+        Insert: {
+          factor: number
+          from_unit: string
+          id?: number
+          ingredient_id?: number | null
+          to_unit: string
+        }
+        Update: {
+          factor?: number
+          from_unit?: string
+          id?: number
+          ingredient_id?: number | null
+          to_unit?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_and_insert_shopping_list: {
+        Args: { p_dates: string[]; p_user_id: string }
+        Returns: number
+      }
     }
     Enums: {
       IngredientUnit:

@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import type { IRecipe } from '~~/server/api/recipes/type'
 import { BucketStorage } from '~~/shared/types/database-type'
-import { RecipeFormCreateSchema, type TRecipeFormCreate } from '~/utils/types/recipes'
+import {
+  RecipeFormCreateSchema,
+  type TRecipeFormCreate,
+} from '~/utils/types/recipes'
+
+const FIELD_NAME: Record<string, string> = {
+  name: 'nom de la recette',
+  category: 'catégorie',
+}
 
 const toast = useToast()
 const supabase = useSupabaseClient()
@@ -29,9 +37,17 @@ const onSubmit = async () => {
   })
 
   if (state.error) {
+    const fieldsError = [
+      ...new Set(
+        state.error.issues.map(
+          (err) => FIELD_NAME[err.path[0] as string as keyof FIELD_NAME]
+        )
+      ),
+    ]
+
     toast.add({
       title: 'Champ requis',
-      description: `Les champs: ${state.error.issues?.map((err) => err.path[0]).join(', ')} sont invalides`,
+      description: `Les champs: ${fieldsError.join(', ')} sont invalides`,
       color: 'error',
     })
 

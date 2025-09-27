@@ -1,9 +1,9 @@
 import { serverSupabaseClient } from '#supabase/server'
-import useChangeCaseObject from '~/composables/useChangeCaseObject'
+import useChangeCaseObject from '~~/app/composables/useChangeCaseObject'
 import type { Database } from '~~/database.types'
 import { getUser } from '~~/server/functions/check-params'
 import { TableEnum } from '~~/shared/types/database-type'
-import { RecipeFormCreateSchema } from '~/utils/types/recipes'
+import { RecipeFormCreateSchema } from '~~/app/utils/types/recipes'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient<Database>(event)
@@ -11,7 +11,6 @@ export default defineEventHandler(async (event) => {
   const user = await getUser(event)
 
   const body = await readValidatedBody(event, RecipeFormCreateSchema.parse)
-
   if (!body) {
     throw new Error('payload invalid')
   }
