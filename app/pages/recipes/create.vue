@@ -15,6 +15,8 @@ const toast = useToast()
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 
+const fullScreenLoaderStore = useFullScreenLoader()
+
 const formCreateRecipe = ref<TRecipeFormCreate>({
   category: undefined,
   description: undefined,
@@ -55,6 +57,8 @@ const onSubmit = async () => {
   }
 
   try {
+    fullScreenLoaderStore.show('Votre recette est en cours de préparation ...')
+
     const { data: recipe } = await $fetch<{ data: IRecipe }>('/api/recipes', {
       method: 'POST',
       body: {
@@ -81,13 +85,15 @@ const onSubmit = async () => {
       color: 'success',
     })
 
-    navigateTo('/')
+    await navigateTo('/')
   } catch {
     toast.add({
       title: 'Echec',
       description: "Impossible d'ajouter votre recette, veuillez réassayer",
       color: 'error',
     })
+  } finally {
+    fullScreenLoaderStore.hide()
   }
 }
 </script>
