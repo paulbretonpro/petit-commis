@@ -12,7 +12,9 @@ defineProps<{
     <PageHeader :title="recipe.name">
       <div class="flex gap-4">
         <ButtonAddToPlanning :recipe-id="recipe.id" />
-        <UButton>Modifier</UButton>
+        <NuxtLink :to="`/recipes/${recipe.id}/edit`"
+          ><UButton icon="material-symbols:ink-pen">Modifier</UButton></NuxtLink
+        >
       </div>
     </PageHeader>
 

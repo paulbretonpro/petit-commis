@@ -8,7 +8,7 @@ const user = useSupabaseUser()
 
 const imageUrl = ref<string>()
 
-const { data: recipe, pending } = useAsyncData<TRecipeWithIngredientSteps>(
+const { data: recipe } = useLazyAsyncData<TRecipeWithIngredientSteps>(
   `recipe-${route.params.id}`,
   async () => {
     const recipe = await $fetch<TRecipeWithIngredientSteps>(
@@ -27,9 +27,6 @@ const { data: recipe, pending } = useAsyncData<TRecipeWithIngredientSteps>(
 </script>
 
 <template>
-  <LazyRecipesByIdSkeleton v-if="pending" />
-  <div v-else>
-    <LazyRecipesById v-if="recipe" :recipe :image-url />
-    <div v-else>Pas de recette</div>
-  </div>
+  <LazyRecipesById v-if="recipe" :recipe :image-url />
+  <LazyRecipesByIdSkeleton v-else />
 </template>

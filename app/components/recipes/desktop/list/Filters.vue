@@ -4,12 +4,14 @@ import type { ICategory } from '~~/server/api/categories/type'
 const { filters, loading } = storeToRefs(useRecipesStore())
 const { handleResetFilter } = useRecipesStore()
 
-const { data: categories, pending: pendingCategories } = await useFetch<
-  ICategory[]
->('/api/categories', {
-  key: 'categories',
-  default: () => [],
-})
+const { data: categories, pending: pendingCategories } = useFetch<ICategory[]>(
+  '/api/categories',
+  {
+    key: 'categories',
+    default: () => [],
+    server: false,
+  }
+)
 </script>
 
 <template>

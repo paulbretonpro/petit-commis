@@ -9,13 +9,22 @@ export default function (filters: IRecipeFilters) {
   const fetchRecipes = useDebounceFn(async () => {
     loading.value = true
     try {
-      recipes.value = await $fetch('/api/recipes', {
-        method: 'GET',
-        params: {
-          search: filters.search,
-          categoryId: filters.categoryId,
-        },
-      })
+      const { data } = await useAsyncData<IRecipe[]>(
+        'recipes',
+        () =>
+          $fetch('/api/recipes', {
+            method: 'GET',
+            params: {
+              search: filters.search,
+              categoryId: filters.categoryId,
+            },
+          }),
+        {
+          default: () => [],
+        }
+      )
+
+      recipes.value = data.value
     } catch {
       return []
     } finally {

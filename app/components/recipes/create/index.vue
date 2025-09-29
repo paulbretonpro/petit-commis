@@ -40,6 +40,15 @@ const { data: ingredients, pending: pendingIngredients } = useAsyncData<
   default: () => [],
 })
 
+const ingredientsFiltered = computed(() =>
+  ingredients.value.filter(
+    (ingredient) =>
+      !form.value.ingredients
+        .map((formIngredient) => formIngredient.ingredient?.id)
+        .includes(ingredient.id)
+  )
+)
+
 const handleAddNewIngredient = () => {
   if (newIngredient.value.ingredient?.id && newIngredient.value.quantity) {
     form.value.ingredients.push(newIngredient.value)
@@ -121,7 +130,7 @@ const handleCancel = (): void => {
             <USelectMenu
               v-model="newIngredient.ingredient"
               placeholder="Ingrédient"
-              :items="ingredients"
+              :items="ingredientsFiltered"
               :loading="pendingIngredients"
               label-key="name"
               search-input

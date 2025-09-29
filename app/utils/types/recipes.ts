@@ -3,13 +3,13 @@ import type { IIngredient } from '~~/server/api/ingredients/type'
 
 export const RecipeFormCreateSchema = z.object({
   category: z.number(),
-  description: z.string().optional(),
+  description: z.string().optional().nullable(),
   hasImage: z.boolean(),
   ingredients: z.array(
     z.object({
       ingredientId: z.number(),
       quantity: z.number(),
-      unit: z.string().optional(),
+      unit: z.string().optional().nullable(),
     })
   ),
   isPublic: z.boolean(),

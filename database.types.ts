@@ -46,21 +46,18 @@ export type Database = {
       }
       ingredients_recipes: {
         Row: {
-          id: number
           ingredient_id: number
           quantity: string
           recipe_id: number
           unit: Database['public']['Enums']['IngredientUnit'] | null
         }
         Insert: {
-          id?: number
           ingredient_id: number
           quantity: string
           recipe_id: number
           unit?: Database['public']['Enums']['IngredientUnit'] | null
         }
         Update: {
-          id?: number
           ingredient_id?: number
           quantity?: string
           recipe_id?: number
