@@ -5,16 +5,21 @@ defineProps<{
   imageUrl: string | undefined
   recipe: TRecipeWithIngredientSteps
 }>()
+
+const { isMobile } = useDevice()
 </script>
 
 <template>
   <div class="flex flex-col gap-6">
     <PageHeader :title="recipe.name">
       <div class="flex gap-4">
-        <ButtonAddToPlanning :recipe-id="recipe.id" />
-        <NuxtLink :to="`/recipes/${recipe.id}/edit`"
-          ><UButton icon="material-symbols:ink-pen">Modifier</UButton></NuxtLink
-        >
+        <ButtonAddToPlanning without-label :recipe-id="recipe.id" />
+        <NuxtLink :to="`/recipes/${recipe.id}/edit`">
+          <UButton
+            icon="material-symbols:ink-pen"
+            :label="isMobile ? undefined : 'Modifier'"
+          />
+        </NuxtLink>
       </div>
     </PageHeader>
 

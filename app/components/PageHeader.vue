@@ -8,14 +8,18 @@ const handleGoBack = () => router.back()
 </script>
 
 <template>
-  <div class="flex items-center">
+  <div class="flex gap-2 items-center">
     <UButton
       icon="material-symbols:arrow-left-alt-rounded"
       variant="ghost"
       size="xl"
       @click="handleGoBack"
     />
-    <div v-if="title" class="text-2xl font-semibold" @click="handleGoBack">
+    <div
+      v-if="title"
+      class="text-2xl font-semibold truncate"
+      @click="handleGoBack"
+    >
       {{ title }}
     </div>
 

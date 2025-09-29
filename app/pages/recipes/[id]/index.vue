@@ -8,7 +8,7 @@ const user = useSupabaseUser()
 
 const imageUrl = ref<string>()
 
-const { data: recipe } = useLazyAsyncData<TRecipeWithIngredientSteps>(
+const { data: recipe, error } = useLazyAsyncData<TRecipeWithIngredientSteps>(
   `recipe-${route.params.id}`,
   async () => {
     const recipe = await $fetch<TRecipeWithIngredientSteps>(
@@ -24,6 +24,14 @@ const { data: recipe } = useLazyAsyncData<TRecipeWithIngredientSteps>(
   },
   { server: false }
 )
+
+watch(error, () => {
+  if (error.value) {
+    throw createError({
+      fatal: true,
+    })
+  }
+})
 </script>
 
 <template>

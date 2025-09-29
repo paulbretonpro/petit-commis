@@ -20,7 +20,7 @@ const nbSelectedFilters = computed(
 
 <template>
   <UDrawer>
-    <div class="self-end fixed bottom-18">
+    <div class="self-end fixed bottom-8 right-8">
       <UChip v-if="nbSelectedFilters" :text="nbSelectedFilters" size="3xl">
         <UButton
           color="primary"

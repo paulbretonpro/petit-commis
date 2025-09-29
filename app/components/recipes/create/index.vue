@@ -150,7 +150,7 @@ const handleCancel = (): void => {
               block
               variant="subtle"
               size="sm"
-              icon="fa6-solid:plus"
+              icon="material-symbols:add-rounded"
               @click="handleAddNewIngredient"
               >Ajouter</UButton
             >
@@ -212,7 +212,7 @@ const handleCancel = (): void => {
           <UButton
             size="sm"
             variant="subtle"
-            icon="fa6-solid:plus"
+            icon="material-symbols:add-rounded"
             class="w-fit mx-auto"
             @click="handleAddNewStep"
             >Ajouter une étape</UButton

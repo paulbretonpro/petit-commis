@@ -1,0 +1,40 @@
+<script setup lang="ts">
+import type { NavigationMenuItem } from '@nuxt/ui'
+
+const route = useRoute()
+
+const items = computed<NavigationMenuItem[]>(() => [
+  {
+    label: 'Recettes',
+    to: '/',
+    icon: 'material-symbols:cookie-outline',
+    active: route.path === '/',
+  },
+  {
+    label: 'Planning',
+    to: '/planning',
+    icon: 'material-symbols:calendar-month-rounded',
+    active: route.path.startsWith('/planning'),
+  },
+  {
+    label: 'Profil',
+    to: '/profile',
+    icon: 'material-symbols:settings-outline',
+    active: route.path.startsWith('/profile'),
+  },
+])
+</script>
+
+<template>
+  <UHeader title="Petit commis" mode="drawer">
+    <UNavigationMenu :items />
+
+    <template #right>
+      <UColorModeButton />
+    </template>
+
+    <template #body>
+      <UNavigationMenu :items="items" orientation="vertical" class="-mx-2.5" />
+    </template>
+  </UHeader>
+</template>

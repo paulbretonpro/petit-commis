@@ -157,7 +157,7 @@ onMounted(fetchPlannedDays)
 
           <UButton
             v-if="(lunch || dinner) && isBeforeToday(day)"
-            icon="fa6-solid:pen"
+            icon="material-symbols:edit-rounded"
             size="xs"
             variant="ghost"
             color="secondary"
