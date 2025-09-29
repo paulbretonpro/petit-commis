@@ -138,7 +138,7 @@ onMounted(fetchPlannedDays)
       <div
         v-for="({ day, lunch, dinner }, index) in visibleDays"
         :key="index"
-        class="border border-gray-200 dark:border-neutral-800 rounded-lg h-30 p-4 cursor-pointer"
+        class="border border-gray-200 dark:border-neutral-800 rounded-lg h-30 p-4 cursor-pointer overflow-hidden"
         :class="{
           'bg-gray-100 dark:bg-neutral-800': !isSameMonth(
             day,
@@ -164,9 +164,11 @@ onMounted(fetchPlannedDays)
           />
         </div>
 
-        <div class="grid grid-rows-2 gap-2 mt-1">
+        <div class="grid grid-rows-2 gap-2 mt-1 overflow-hidden">
           <div
-            :class="{ 'grid grid-cols-2 gap-2': lunch?.recipe && lunch.note }"
+            :class="{
+              'grid grid-cols-2 gap-2': lunch?.recipe && lunch.note,
+            }"
           >
             <UBadge
               v-if="lunch && lunch.recipe"
@@ -183,7 +185,9 @@ onMounted(fetchPlannedDays)
             />
           </div>
           <div
-            :class="{ 'grid grid-cols-2 gap-2': dinner?.recipe && dinner.note }"
+            :class="{
+              'grid grid-cols-2 gap-2': dinner?.recipe && dinner.note,
+            }"
           >
             <UBadge
               v-if="dinner && dinner.recipe"
