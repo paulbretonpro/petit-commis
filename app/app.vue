@@ -5,12 +5,8 @@ import { fr } from '@nuxt/ui/locale'
 <template>
   <Loader />
   <UApp :locale="fr">
-    <AppHeader />
-
-    <UMain>
-      <NuxtLayout>
-        <NuxtPage />
-      </NuxtLayout>
-    </UMain>
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
   </UApp>
 </template>
