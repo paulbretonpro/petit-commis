@@ -1,10 +1,19 @@
 <script setup lang="ts">
+import { useDebounceFn } from '@vueuse/core'
 import type { IRecipe } from '~~/server/api/recipes/type'
 
 defineProps<{
   loading: boolean
   recipes: IRecipe[]
 }>()
+
+const { fetchRecipes, filters } = useSearchRecipes()
+
+const fetchRecipesDebounce = useDebounceFn(fetchRecipes, 600)
+
+watch(filters, fetchRecipesDebounce, {
+  deep: true,
+})
 </script>
 
 <template>

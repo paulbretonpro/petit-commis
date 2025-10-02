@@ -22,17 +22,11 @@ const DEFAULT_INGREDIENT_QUANTITY = {
 const { isMobile } = useDevice()
 
 const { categories } = useCategories()
+const { ingredients } = useIngredients()
 
 const newStep = ref<string>()
 const newIngredient = ref<IIngredientQuatityForm>({
   ...DEFAULT_INGREDIENT_QUANTITY,
-})
-
-const { data: ingredients, pending: pendingIngredients } = useAsyncData<
-  IIngredient[]
->('ingredients', async () => $fetch('/api/ingredients'), {
-  server: false,
-  default: () => [],
 })
 
 const ingredientsFiltered = computed(() =>
@@ -125,7 +119,6 @@ const handleCancel = (): void => {
               v-model="newIngredient.ingredient"
               placeholder="Ingrédient"
               :items="ingredientsFiltered"
-              :loading="pendingIngredients"
               label-key="name"
               search-input
             />

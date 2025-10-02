@@ -1,6 +1,5 @@
 <script setup lang="ts">
 const route = useRoute()
-const { isMobile } = useDevice()
 
 const { fetchShoppingListItem } = useShoppingListItemStore()
 const { items } = storeToRefs(useShoppingListItemStore())
@@ -15,6 +14,5 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-if="isMobile">A venir</div>
-  <LazyShoppingListDesktopById v-else :ingredients="items" :pending />
+  <LazyShoppingListDesktopById :ingredients="items" :pending />
 </template>

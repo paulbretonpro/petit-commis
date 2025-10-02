@@ -1,46 +1,43 @@
-import { useDebounceFn } from '@vueuse/core'
 import type { IRecipe } from '~~/server/api/recipes/type'
 
 export default function () {
-  const { loading, filters, fakeCache } = storeToRefs(useRecipesStore())
-
-  const recipes = ref<IRecipe[]>([])
-  const filtersDebounced = ref<IRecipeFilters>({})
-
-  const keyReactive = computed(() => `recipes-${Object.values(filtersDebounced.value).filter(value => !!value && String(value).trim().length).join('-')}`)
+  const recipeStore = useRecipesStore()
+  const { loading, filters, cache, recipes } = storeToRefs(recipeStore)
 
   const fetchRecipes = async () => {
     loading.value = true
 
-    if (fakeCache.has(keyReactive.value)) {
+    const key = `recipes-${Object.values(filters.value)
+      .filter((value) => !!value && String(value).trim().length)
+      .join('-')}`
 
+    try {
+      if (cache.value.has(key)) {
+        recipes.value = cache.value.get(key) ?? []
+        return
+      }
+
+      const newRecipes = await $fetch<IRecipe[]>('/api/recipes', {
+        method: 'GET',
+        params: {
+          search: filters.value.search,
+          categoryId: filters.value.categoryId,
+        },
+      })
+
+      recipeStore.setCacheKey(key, newRecipes)
+
+      recipes.value = newRecipes
+    } catch (error) {
+      console.error(error)
+    } finally {
+      loading.value = false
     }
-    
-    await $fetch('/api/recipes', {
-      method: 'GET',
-      params: {
-        search: filtersDebounced.value.search,
-        categoryId: filtersDebounced.value.categoryId,
-      },
-    })
-
-    loading.value = false
-  } 
-
-  watch(
-    filters, 
-    useDebounceFn(async () => {
-      filtersDebounced.value = { ...filters.value }
-    }, 600), 
-    { deep: true }
-  )
-
-  setNuxt
-
-  watch(keyReactive, () => console.log(keyReactive.value))
+  }
 
   return {
-    loading,
-    recipes: data,
+    fetchRecipes,
+    filters,
+    recipes,
   }
 }

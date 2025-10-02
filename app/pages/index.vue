@@ -1,7 +1,15 @@
 <script setup lang="ts">
 const { isMobile } = useDevice()
 
-const { recipes, loading } = useSearchRecipes()
+const { recipes, fetchRecipes } = useSearchRecipes()
+
+const skeletonLoading = ref(true)
+
+onMounted(async () => {
+  skeletonLoading.value = true
+  await fetchRecipes()
+  skeletonLoading.value = false
+})
 </script>
 
 <template>
@@ -13,13 +21,15 @@ const { recipes, loading } = useSearchRecipes()
       @click="() => navigateTo('/recipes/create')"
     />
 
+    <!-- Mobile -->
     <LazyRecipesMobileList
       v-if="isMobile"
       :recipes
-      :loading
+      :loading="skeletonLoading"
     />
-    <LazyRecipesDesktopList v-else :recipes :loading />
-
     <RecipesMobileListFilters v-if="isMobile" />
+
+    <!-- desktop -->
+    <LazyRecipesDesktopList v-else :recipes :loading="skeletonLoading" />
   </div>
 </template>
