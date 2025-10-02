@@ -1,12 +1,12 @@
 import { serverSupabaseClient } from '#supabase/server'
 import z from 'zod'
-import type { Database } from '~/database.types'
-import { getRequiredUrlParams } from '~/server/functions/check-params'
-import { TableEnum } from '~/server/type'
+import type { Database } from '~~/database.types'
+import { getRequiredUrlParams } from '~~/server/functions/check-params'
+import { TableEnum } from '~~/shared/types/database-type'
 
 const BodySchema = z.object({
   quantity: z.string(),
-  unit: z.string(),
+  unit: z.string().nullable(),
 })
 
 export default defineEventHandler(async (event) => {

@@ -15,8 +15,6 @@ const FIELD_NAME: Record<string, string> = {
 }
 
 const toast = useToast()
-const supabase = useSupabaseClient()
-const user = useSupabaseUser()
 const route = useRoute()
 
 const fullScreenLoaderStore = useFullScreenLoader()
@@ -34,12 +32,18 @@ const formCreateRecipe = ref<TRecipeFormCreate>({
 
 const loading = ref(true)
 
+const recipeByIdKey = computed(() => `recipe-${route.params.id}`)
+
+const { data: recipeCached } = useNuxtData(recipeByIdKey.value)
+
 const getRecipeById = async () => {
   loading.value = true
   try {
-    const recipe = await $fetch<TRecipeWithIngredientSteps>(
-      `/api/recipes/${route.params.id}`
-    )
+    const recipe =
+      recipeCached.value ||
+      (await $fetch<TRecipeWithIngredientSteps>(
+        `/api/recipes/${route.params.id}`
+      ))
 
     formCreateRecipe.value.category = recipe.categoryId
     formCreateRecipe.value.description = recipe.description ?? ''

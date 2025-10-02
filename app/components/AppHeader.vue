@@ -17,6 +17,12 @@ const items = computed<NavigationMenuItem[]>(() => [
     active: route.path.startsWith('/planning'),
   },
   {
+    label: 'Liste de course',
+    to: '/shopping-list',
+    icon: 'material-symbols:shopping-cart-outline-rounded',
+    active: route.path.startsWith('/shopping-list'),
+  },
+  {
     label: 'Profil',
     to: '/profile',
     icon: 'material-symbols:settings-outline',

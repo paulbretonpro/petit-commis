@@ -17,10 +17,13 @@ export default defineEventHandler(async (event) => {
     return { status: 400, body: { error: 'Missing dates array' } }
   }
 
-  const { data, error } = await client.rpc('generate_and_insert_shopping_list', {
-    p_user_id: user.id,
-    p_dates: dates,
-  })
+  const { data, error } = await client.rpc(
+    'generate_and_insert_shopping_list',
+    {
+      p_user_id: user.id,
+      p_dates: dates,
+    }
+  )
 
   if (error) {
     return { status: 500, body: { error: error.message } }
@@ -31,6 +34,6 @@ export default defineEventHandler(async (event) => {
     body: {
       message: 'Shopping list generated successfully',
       shoppingListId: data,
-    }
+    },
   }
 })

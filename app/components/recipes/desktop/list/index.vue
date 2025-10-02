@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-  <div v-auto-animate class="grid grid-cols-[18rem_auto] gap-6">
+  <div class="grid grid-cols-[18rem_auto] gap-6">
     <div class="sticky top-20 z-50 h-fit">
       <RecipesDesktopListFilters />
     </div>

@@ -35,7 +35,7 @@ const { data, pending } = useFetch<{ id: number; createdAt: string }[]>(
     </template>
     <div
       v-else
-      class="text-sm font-medium p-4 text-center text-gray-200 dark:text-neutral-500"
+      class="text-sm font-medium p-4 text-center text-gray-500 dark:text-neutral-500"
     >
       Aucune liste de course
     </div>

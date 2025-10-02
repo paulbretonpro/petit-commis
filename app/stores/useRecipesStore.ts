@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
 export interface IRecipeFilters {
-  categoryId?: string
+  categoryId?: number
   search?: string
 }
 
