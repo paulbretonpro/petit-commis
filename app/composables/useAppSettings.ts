@@ -6,6 +6,7 @@ export default function () {
     recipesStore.clearCache()
 
     await auth.signOut()
+    navigateTo('/login')
   }
 
   return {
