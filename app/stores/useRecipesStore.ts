@@ -7,6 +7,8 @@ export interface IRecipeFilters {
 
 export const useRecipesStore = defineStore('recipes', () => {
   const loading = ref(true)
+  
+  const fakeCache = ref(new Map())
 
   const filters = ref<IRecipeFilters>({
     search: undefined,
@@ -19,6 +21,7 @@ export const useRecipesStore = defineStore('recipes', () => {
   }
 
   return {
+    fakeCache,
     filters,
     handleResetFilter,
     loading,

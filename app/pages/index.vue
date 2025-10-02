@@ -1,18 +1,7 @@
 <script setup lang="ts">
 const { isMobile } = useDevice()
-const { filters } = storeToRefs(useRecipesStore())
 
-const { fetchRecipes, recipes } = useSearchRecipes(filters.value)
-
-const loadingSkeleton = ref(true)
-
-watch(filters, fetchRecipes, { deep: true })
-
-onMounted(async () => {
-  loadingSkeleton.value = true
-  await fetchRecipes()
-  loadingSkeleton.value = false
-})
+const { recipes, loading } = useSearchRecipes()
 </script>
 
 <template>
@@ -27,9 +16,9 @@ onMounted(async () => {
     <LazyRecipesMobileList
       v-if="isMobile"
       :recipes
-      :loading="loadingSkeleton"
+      :loading
     />
-    <LazyRecipesDesktopList v-else :recipes :loading="loadingSkeleton" />
+    <LazyRecipesDesktopList v-else :recipes :loading />
 
     <RecipesMobileListFilters v-if="isMobile" />
   </div>
