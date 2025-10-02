@@ -1,17 +1,14 @@
 <script setup lang="ts">
 const { isMobile } = useDevice()
-const { filters } = storeToRefs(useRecipesStore())
 
-const { fetchRecipes, recipes } = useSearchRecipes(filters.value)
+const { recipes, fetchRecipes } = useSearchRecipes()
 
-const loadingSkeleton = ref(true)
-
-watch(filters, fetchRecipes, { deep: true })
+const skeletonLoading = ref(true)
 
 onMounted(async () => {
-  loadingSkeleton.value = true
+  skeletonLoading.value = true
   await fetchRecipes()
-  loadingSkeleton.value = false
+  skeletonLoading.value = false
 })
 </script>
 
@@ -24,13 +21,15 @@ onMounted(async () => {
       @click="() => navigateTo('/recipes/create')"
     />
 
+    <!-- Mobile -->
     <LazyRecipesMobileList
       v-if="isMobile"
       :recipes
-      :loading="loadingSkeleton"
+      :loading="skeletonLoading"
     />
-    <LazyRecipesDesktopList v-else :recipes :loading="loadingSkeleton" />
-
     <RecipesMobileListFilters v-if="isMobile" />
+
+    <!-- desktop -->
+    <LazyRecipesDesktopList v-else :recipes :loading="skeletonLoading" />
   </div>
 </template>

@@ -1,44 +1,34 @@
 <script setup lang="ts">
-import type { ICategory } from '~~/server/api/categories/type'
-
 const { filters, loading } = storeToRefs(useRecipesStore())
 const { handleResetFilter } = useRecipesStore()
 
-const { data: categories, pending: pendingCategories } = useFetch<ICategory[]>(
-  '/api/categories',
-  {
-    key: 'categories',
-    server: false,
-    default: () => [],
-  }
-)
+const { categories } = useCategories()
+const { fetchRecipes } = useSearchRecipes()
+
+const open = ref(false)
 
 const nbSelectedFilters = computed(
   () => Object.entries(filters.value).filter(([_, filter]) => !!filter).length
 )
+
+const handleApply = () => {
+  open.value = false
+  fetchRecipes()
+}
 </script>
 
 <template>
-  <UDrawer>
+  <UDrawer v-model:open="open">
     <div class="self-end fixed bottom-8 right-8">
-      <UChip v-if="nbSelectedFilters" :text="nbSelectedFilters" size="3xl">
+      <UChip :show="nbSelectedFilters > 0" :text="nbSelectedFilters" size="3xl">
         <UButton
-          color="primary"
-          class="w-fit rounded-full shadow-lg"
+          block
           :loading
+          color="primary"
           icon="material-symbols:filter-list-rounded"
-          size="xl"
+          class="rounded-full shadow-lg h-16 w-16"
         />
       </UChip>
-
-      <UButton
-        v-else
-        color="primary"
-        class="w-fit rounded-full shadow-lg"
-        :loading
-        icon="material-symbols:filter-list-rounded"
-        size="xl"
-      />
     </div>
 
     <template #body>
@@ -66,7 +56,6 @@ const nbSelectedFilters = computed(
           <USelectMenu
             v-model="filters.categoryId"
             :items="categories"
-            :loading="pendingCategories"
             placeholder="Ex : Plat"
             class="w-full"
             label-key="name"
@@ -85,6 +74,8 @@ const nbSelectedFilters = computed(
         block
         @click="handleResetFilter"
       />
+
+      <UButton label="Appliquer" block @click="handleApply" />
     </template>
   </UDrawer>
 </template>

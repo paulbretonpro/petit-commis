@@ -1,14 +1,23 @@
 <script setup lang="ts">
+import { useDebounceFn } from '@vueuse/core'
 import type { IRecipe } from '~~/server/api/recipes/type'
 
 defineProps<{
   loading: boolean
   recipes: IRecipe[]
 }>()
+
+const { fetchRecipes, filters } = useSearchRecipes()
+
+const fetchRecipesDebounce = useDebounceFn(fetchRecipes, 600)
+
+watch(filters, fetchRecipesDebounce, {
+  deep: true,
+})
 </script>
 
 <template>
-  <div v-auto-animate class="grid grid-cols-[18rem_auto] gap-6">
+  <div class="grid grid-cols-[18rem_auto] gap-6">
     <div class="sticky top-20 z-50 h-fit">
       <RecipesDesktopListFilters />
     </div>

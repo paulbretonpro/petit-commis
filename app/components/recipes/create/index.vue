@@ -13,7 +13,6 @@ const emit = defineEmits<{
 }>()
 
 const DEFAULT_RECIPE_NB_PERSON = 2
-const UNITS = ['g', 'kg', 'c.a.s', 'c.a.c', 'l', 'ml', 'cl', 'sachet']
 const DEFAULT_INGREDIENT_QUANTITY = {
   ingredient: undefined,
   quantity: undefined,
@@ -22,22 +21,12 @@ const DEFAULT_INGREDIENT_QUANTITY = {
 
 const { isMobile } = useDevice()
 
+const { categories } = useCategories()
+const { ingredients } = useIngredients()
+
 const newStep = ref<string>()
 const newIngredient = ref<IIngredientQuatityForm>({
   ...DEFAULT_INGREDIENT_QUANTITY,
-})
-
-const { data: categories, pending: pendingCategories } = await useFetch<
-  ICategory[]
->('/api/categories', {
-  key: 'categories',
-  default: () => [],
-})
-const { data: ingredients, pending: pendingIngredients } = useAsyncData<
-  IIngredient[]
->('ingredients', async () => $fetch('/api/ingredients'), {
-  server: false,
-  default: () => [],
 })
 
 const ingredientsFiltered = computed(() =>
@@ -102,7 +91,6 @@ const handleCancel = (): void => {
               v-model="form.category"
               placeholder="Catégorie"
               :items="categories"
-              :loading="pendingCategories"
               value-key="id"
               label-key="name"
             />
@@ -131,7 +119,6 @@ const handleCancel = (): void => {
               v-model="newIngredient.ingredient"
               placeholder="Ingrédient"
               :items="ingredientsFiltered"
-              :loading="pendingIngredients"
               label-key="name"
               search-input
             />

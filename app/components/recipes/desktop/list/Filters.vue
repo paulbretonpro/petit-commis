@@ -1,17 +1,8 @@
 <script setup lang="ts">
-import type { ICategory } from '~~/server/api/categories/type'
-
 const { filters, loading } = storeToRefs(useRecipesStore())
 const { handleResetFilter } = useRecipesStore()
 
-const { data: categories, pending: pendingCategories } = useFetch<ICategory[]>(
-  '/api/categories',
-  {
-    key: 'categories',
-    default: () => [],
-    server: false,
-  }
-)
+const { categories } = useCategories()
 </script>
 
 <template>
@@ -51,7 +42,6 @@ const { data: categories, pending: pendingCategories } = useFetch<ICategory[]>(
         <USelectMenu
           v-model="filters.categoryId"
           :items="categories"
-          :loading="pendingCategories"
           placeholder="Ex : Plat"
           class="w-full"
           label-key="name"

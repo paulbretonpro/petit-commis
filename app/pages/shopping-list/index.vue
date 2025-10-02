@@ -1,0 +1,3 @@
+<template>
+  <ShoppingListDesktopList />
+</template>

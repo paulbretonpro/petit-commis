@@ -1,12 +1,14 @@
 import { defineStore } from 'pinia'
+import type { IRecipe } from '~~/server/api/recipes/type'
 
 export interface IRecipeFilters {
-  categoryId?: string
+  categoryId?: number
   search?: string
 }
 
 export const useRecipesStore = defineStore('recipes', () => {
   const loading = ref(true)
+  const recipes = ref<IRecipe[]>([])
 
   const filters = ref<IRecipeFilters>({
     search: undefined,
@@ -19,8 +21,10 @@ export const useRecipesStore = defineStore('recipes', () => {
   }
 
   return {
+    ...useCustomCacheFactory<IRecipe[]>(),
     filters,
     handleResetFilter,
     loading,
+    recipes,
   }
 })

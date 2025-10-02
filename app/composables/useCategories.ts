@@ -1,18 +1,17 @@
-import type { ICategory } from '~/server/api/categories/type'
+import type { ICategory } from '~~/server/api/categories/type'
 
-export default async function () {
-  const { data: categories, status } = await useFetch<ICategory[]>(
-    '/api/categories',
-    {
-      key: 'categories',
-      default: () => [],
-    }
-  )
+export default function () {
+  const { data: categories } = useNuxtData<ICategory[]>('categories')
 
-  const pending = computed(() => status.value === 'pending')
+  const { data } = useFetch<ICategory[]>('/api/categories', {
+    key: 'categories',
+    getCachedData() {
+      return categories.value
+    },
+    server: false,
+  })
 
   return {
-    categories,
-    pending,
+    categories: data,
   }
 }

@@ -14,6 +14,7 @@ const FIELD_NAME: Record<string, string> = {
 const toast = useToast()
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
+const recipesStore = useRecipesStore()
 
 const fullScreenLoaderStore = useFullScreenLoader()
 
@@ -84,6 +85,8 @@ const onSubmit = async () => {
       description: 'Votre recette est prête à être cuisinée',
       color: 'success',
     })
+
+    recipesStore.clearCache()
 
     await navigateTo('/')
   } catch {
