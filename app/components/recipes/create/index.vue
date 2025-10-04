@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import type { ICategory } from '~~/server/api/categories/type'
-import type { IIngredient } from '~~/server/api/ingredients/type'
 import type {
   IIngredientQuatityForm,
   TRecipeFormCreate,
@@ -145,7 +143,7 @@ const handleCancel = (): void => {
           <div class="flex gap-2 flex-wrap">
             <UBadge
               v-for="(item, index) in form.ingredients"
-              :key="item.ingredient?.id"
+              :key="`${item.ingredient?.id}-${index}`"
               :label="`${item.quantity} ${item.unit ?? ''} ${item.ingredient?.name}`"
               trailing-icon="fa6-solid:xmark"
               class="cursor-pointer"

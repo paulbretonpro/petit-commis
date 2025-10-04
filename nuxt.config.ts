@@ -16,4 +16,19 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
   ],
   css: ['~/assets/css/main.css'],
+  routeRules: {
+    '/': { prerender: true },
+    '/login': { prerender: true },
+    '/confirm': { prerender: true },
+  },
+  supabase: {
+    redirect: true,
+    redirectOptions: {
+      login: '/login',
+      callback: '/confirm',
+      include: undefined,
+      exclude: ['/'],
+      saveRedirectToCookie: true,
+    },
+  },
 })

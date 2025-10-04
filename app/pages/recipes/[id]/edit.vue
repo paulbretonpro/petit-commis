@@ -3,7 +3,6 @@ import type {
   IRecipe,
   TRecipeWithIngredientSteps,
 } from '~~/server/api/recipes/type'
-import { BucketStorage } from '~~/shared/types/database-type'
 import {
   RecipeFormCreateSchema,
   type TRecipeFormCreate,
@@ -104,6 +103,8 @@ const onSubmit = async () => {
       description: 'Votre recette est prête à être cuisinée',
       color: 'success',
     })
+
+    await refreshNuxtData(recipeByIdKey.value)
 
     await navigateTo('/')
   } catch {

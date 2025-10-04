@@ -1,20 +1,45 @@
 <script setup lang="ts">
 import * as z from 'zod'
-import { Icon } from '@iconify/vue'
-import type { FormSubmitEvent } from '@nuxt/ui'
+import type { AuthFormField, FormSubmitEvent } from '@nuxt/ui'
 
 definePageMeta({
-  layout: 'login',
+  layout: 'empty',
 })
 
 const toast = useToast()
 const { auth } = useSupabaseClient()
 
+const { isMobile } = useDevice()
+
 const loading = ref(false)
-const userCredentials = ref({
-  email: undefined,
-  password: undefined,
-})
+
+const fields: AuthFormField[] = [
+  {
+    name: 'email',
+    type: 'email',
+    label: 'Email',
+    placeholder: 'jean.dupont@gmail.com',
+    required: true,
+  },
+  {
+    name: 'password',
+    label: 'Password',
+    type: 'password',
+    placeholder: '••••••••',
+    required: true,
+  },
+]
+
+const providers = [
+  {
+    label: 'Google',
+    icon: 'i-simple-icons-google',
+    disabled: true,
+    onClick: () => {
+      toast.add({ title: 'Google', description: 'Login with Google' })
+    },
+  },
+]
 
 const schema = z.object({
   email: z.string({
@@ -25,12 +50,15 @@ const schema = z.object({
   }),
 })
 
-const onSubmit = async (event: FormSubmitEvent<z.output<typeof schema>>) => {
+type Schema = z.output<typeof schema>
+
+const onSubmit = async (payload: FormSubmitEvent<Schema>) => {
   loading.value = true
 
   const user = await auth.signInWithPassword({
-    ...event.data,
+    ...payload.data,
   })
+
   loading.value = false
 
   if (user.error) {
@@ -46,37 +74,26 @@ const onSubmit = async (event: FormSubmitEvent<z.output<typeof schema>>) => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-16 grow">
-    <div class="text-center text-4xl font-extrabold">PETIT COMMIS</div>
-    <UForm
-      :schema
-      :state="userCredentials"
-      class="space-y-4"
-      @submit="onSubmit"
+  <div class="flex flex-col items-center justify-center gap-4 md:p-4 h-full">
+    <UPageCard
+      class="w-full max-w-md"
+      :variant="isMobile ? 'naked' : 'outline'"
     >
-      <UFormField label="Email" name="email">
-        <UInput
-          v-model="userCredentials.email"
-          type="email"
-          placeholder="jean.dupont@gmail.com"
-          class="w-full"
-        />
-      </UFormField>
-      <UFormField label="Password" name="password">
-        <UInput
-          v-model="userCredentials.password"
-          type="password"
-          placeholder="••••••••"
-          class="w-full"
-        />
-      </UFormField>
-      <UButton :disabled="loading" :loading type="submit" block>
-        <template v-if="loading"> Connexion ... </template>
-        <template v-else>
-          <Icon icon="radix-icons:lock-open-1" />
-          Se connecter
-        </template>
-      </UButton>
-    </UForm>
+      <UAuthForm
+        title="Petit commis"
+        description="Entrez vos identifiants pour accéder à votre compte."
+        icon="material-symbols:chef-hat-outline-rounded"
+        :schema
+        :fields
+        :providers
+        :submit="{
+          label: loading ? 'Connexion ...' : 'Se connecter',
+          icon: loading
+            ? undefined
+            : 'material-symbols:lock-open-outline-rounded',
+        }"
+        @submit="onSubmit"
+      />
+    </UPageCard>
   </div>
 </template>

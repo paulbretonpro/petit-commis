@@ -6,9 +6,9 @@ const route = useRoute()
 const items = computed<NavigationMenuItem[]>(() => [
   {
     label: 'Recettes',
-    to: '/',
+    to: '/recipes',
     icon: 'material-symbols:cookie-outline',
-    active: route.path === '/',
+    active: route.path === '/recipes',
   },
   {
     label: 'Planning',
