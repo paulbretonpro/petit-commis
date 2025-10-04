@@ -13,7 +13,11 @@ const items = [
   <div class="space-y-4">
     <div class="text-xl font-semibold">Recettes favorites</div>
 
-    <UCarousel v-slot="{ item }" :items="items" :ui="{ item: 'basis-1/2' }">
+    <UCarousel
+      v-slot="{ item }"
+      :items="items"
+      :ui="{ item: 'basis-1/2 sm:basis-1/3 md:basis-1/4' }"
+    >
       <div class="max-w-96 space-y-2">
         <img :src="item" width="234" height="234" class="rounded-lg" />
         <div class="space-y-1">

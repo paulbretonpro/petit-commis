@@ -88,6 +88,7 @@ const onSubmit = async (payload: FormSubmitEvent<Schema>) => {
           icon: loading
             ? undefined
             : 'material-symbols:lock-open-outline-rounded',
+          loading,
         }"
         @submit="onSubmit"
       />

@@ -1,10 +1,30 @@
 <script setup lang="ts">
 const items = [
-  'https://picsum.photos/468/468?random=1',
-  'https://picsum.photos/468/468?random=2',
-  'https://picsum.photos/468/468?random=3',
-  'https://picsum.photos/468/468?random=4',
-  'https://picsum.photos/468/468?random=5',
+  {
+    id: 0,
+    img: 'https://picsum.photos/468/468?random=1',
+    label: 'Breton',
+  },
+  {
+    id: 1,
+    img: 'https://picsum.photos/468/468?random=2',
+    label: 'Chinois',
+  },
+  {
+    id: 2,
+    img: 'https://picsum.photos/468/468?random=3',
+    label: 'Japonais',
+  },
+  {
+    id: 3,
+    img: 'https://picsum.photos/468/468?random=5',
+    label: 'Italien',
+  },
+  {
+    id: 4,
+    img: 'https://picsum.photos/468/468?random=6',
+    label: 'Indien',
+  },
 ]
 </script>
 
@@ -12,10 +32,12 @@ const items = [
   <div class="space-y-4">
     <div class="text-xl font-semibold">Catégories</div>
 
-    <div class="grid grid-cols-2 gap-4">
-      <div v-for="img in items" :key="img" class="space-y-2">
-        <img :src="img" width="234" height="234" class="rounded-lg" />
-        <div class="truncate">Nom de catégory</div>
+    <div class="grid grid-cols-2 md:flex md:flex-wrap gap-4">
+      <div v-for="category in items" :key="category.id" class="space-y-2">
+        <img :src="category.img" width="234" height="234" class="rounded-lg" />
+        <div class="text-gray-500 truncate">
+          {{ category.label }}
+        </div>
       </div>
     </div>
   </div>
