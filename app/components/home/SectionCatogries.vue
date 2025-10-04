@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const emit = defineEmits(['open-category'])
+
 const items = [
   {
     id: 0,
@@ -33,7 +35,12 @@ const items = [
     <div class="text-xl font-semibold">Catégories</div>
 
     <div class="grid grid-cols-2 md:flex md:flex-wrap gap-4">
-      <div v-for="category in items" :key="category.id" class="space-y-2">
+      <div
+        v-for="category in items"
+        :key="category.id"
+        class="space-y-2"
+        @click="emit('open-category')"
+      >
         <img :src="category.img" width="234" height="234" class="rounded-lg" />
         <div class="text-gray-500 truncate">
           {{ category.label }}

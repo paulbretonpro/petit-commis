@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const emit = defineEmits(['open-recipe'])
+
 const items = [
   'https://picsum.photos/468/468?random=1',
   'https://picsum.photos/468/468?random=2',
@@ -18,7 +20,7 @@ const items = [
       :items="items"
       :ui="{ item: 'basis-1/2 sm:basis-1/3 md:basis-1/4' }"
     >
-      <div class="max-w-96 space-y-2">
+      <div class="max-w-96 space-y-2" @click="emit('open-recipe')">
         <img :src="item" width="234" height="234" class="rounded-lg" />
         <div class="space-y-1">
           <div class="font-medium">Carbonara</div>

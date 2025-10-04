@@ -14,13 +14,6 @@ onMounted(async () => {
 
 <template>
   <div class="relative flex flex-col gap-4">
-    <UButton
-      label="Créer une recette"
-      icon="material-symbols:add-rounded"
-      class="self-end"
-      @click="() => navigateTo('/recipes/create')"
-    />
-
     <!-- Mobile -->
     <LazyRecipesMobileList
       v-if="isMobile"
