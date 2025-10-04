@@ -21,7 +21,7 @@ const emit = defineEmits(['open-category'])
       >
         <img src="https://picsum.photos/468/468?random=1" />
         <div
-          class="w-40 text-black font-medium truncate p-4 flex items-center justify-center"
+          class="w-40 font-medium truncate p-4 flex items-center justify-center"
         >
           {{ category.name }}
         </div>

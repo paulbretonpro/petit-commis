@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ICategory } from '~~/server/api/categories/type'
+import type { IRecipe } from '~~/server/api/recipes/type'
 
 const auth = useSupabaseUser()
 
@@ -16,6 +17,48 @@ const categories = ref<ICategory[]>([
   {
     id: 2,
     name: 'Chinois',
+  },
+])
+
+const recipes = ref<IRecipe[]>([
+  {
+    id: 0,
+    category: {
+      id: 0,
+      name: 'Chinois',
+    },
+    categoryId: 0,
+    nbPersons: 4,
+    createdAt: '',
+    hasImage: true,
+    isPublic: false,
+    name: 'Bolognaise',
+  },
+  {
+    id: 1,
+    category: {
+      id: 0,
+      name: 'Chinois',
+    },
+    categoryId: 0,
+    nbPersons: 4,
+    createdAt: '',
+    hasImage: true,
+    isPublic: false,
+    name: 'Bowl',
+  },
+  {
+    id: 2,
+    category: {
+      id: 0,
+      name: 'sushis',
+    },
+    categoryId: 0,
+    nbPersons: 4,
+    createdAt: '',
+    hasImage: true,
+    isPublic: false,
+    name: 'Bowl',
   },
 ])
 
@@ -39,7 +82,7 @@ watchEffect(() => {
       </div>
     </HomeModalConnection>
 
-    <HomeSectionRecipes @open-recipe="handleOpenDrawer" />
+    <HomeSectionRecipes :recipes @open-recipe="handleOpenDrawer" />
     <HomeSectionCatogries :categories @open-category="handleOpenDrawer" />
   </div>
 </template>
