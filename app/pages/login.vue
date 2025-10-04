@@ -75,10 +75,7 @@ const onSubmit = async (payload: FormSubmitEvent<Schema>) => {
 
 <template>
   <div class="flex flex-col items-center justify-center gap-4 md:p-4 h-full">
-    <UPageCard
-      class="w-full max-w-md"
-      :variant="isMobile ? 'naked' : 'outline'"
-    >
+    <UPageCard class="w-full max-w-md" :variant="isMobile ? 'outline' : 'soft'">
       <UAuthForm
         title="Petit commis"
         description="Entrez vos identifiants pour accéder à votre compte."
