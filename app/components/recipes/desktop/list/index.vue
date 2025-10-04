@@ -17,12 +17,15 @@ watch(filters, fetchRecipesDebounce, {
 </script>
 
 <template>
-  <UButton
-    label="Créer une recette"
-    icon="material-symbols:add-rounded"
-    class="self-end"
-    @click="() => navigateTo('/recipes/create')"
-  />
+  <PageHeader title="Recettes">
+    <UButton
+      label="Créer une recette"
+      icon="material-symbols:add-rounded"
+      class="self-end"
+      @click="() => navigateTo('/recipes/create')"
+    />
+  </PageHeader>
+
   <div class="grid grid-cols-[18rem_auto] gap-6">
     <div class="sticky top-20 z-50 h-fit">
       <RecipesDesktopListFilters />
@@ -40,7 +43,7 @@ watch(filters, fetchRecipesDebounce, {
         :key="recipe.id"
         :to="`/recipes/${recipe.id}`"
       >
-        <RecipesCard :recipe />
+        <SharedCardRecipe :recipe />
       </NuxtLink>
     </div>
 

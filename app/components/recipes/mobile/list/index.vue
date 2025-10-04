@@ -36,8 +36,9 @@ const { filters } = storeToRefs(useRecipesStore())
           icon="i-lucide-circle-x"
           aria-label="Clear input"
           @click="filters.search = undefined"
-        /> </template
-    ></UInput>
+        />
+      </template>
+    </UInput>
 
     <div class="grid grid-cols-2 gap-4">
       <template v-if="recipes.length">

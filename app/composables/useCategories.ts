@@ -1,17 +1,16 @@
 import type { ICategory } from '~~/server/api/categories/type'
 
 export default function () {
-  const { data: categories } = useNuxtData<ICategory[]>('categories')
-
-  const { data } = useFetch<ICategory[]>('/api/categories', {
+  const { data: categories } = useFetch<ICategory[]>('/api/categories', {
     key: 'categories',
     getCachedData() {
-      return categories.value
+      return useNuxtData<ICategory[]>('categories').data.value
     },
+    default: () => [],
     server: false,
   })
 
   return {
-    categories: data,
+    categories,
   }
 }

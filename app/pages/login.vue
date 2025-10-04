@@ -68,7 +68,7 @@ const onSubmit = async (payload: FormSubmitEvent<Schema>) => {
       color: 'error',
     })
   } else {
-    navigateTo('/')
+    navigateTo('/home')
   }
 }
 </script>

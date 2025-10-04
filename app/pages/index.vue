@@ -1,7 +1,31 @@
 <script setup lang="ts">
+import type { ICategory } from '~~/server/api/categories/type'
+
+const auth = useSupabaseUser()
+
 const openModal = ref(false)
+const categories = ref<ICategory[]>([
+  {
+    id: 0,
+    name: 'Breton',
+  },
+  {
+    id: 1,
+    name: 'Viêtnamien',
+  },
+  {
+    id: 2,
+    name: 'Chinois',
+  },
+])
 
 const handleOpenDrawer = () => (openModal.value = true)
+
+watchEffect(() => {
+  if (auth.value) {
+    navigateTo('/home')
+  }
+})
 </script>
 
 <template>
@@ -16,6 +40,6 @@ const handleOpenDrawer = () => (openModal.value = true)
     </HomeModalConnection>
 
     <HomeSectionRecipes @open-recipe="handleOpenDrawer" />
-    <HomeSectionCatogries @open-category="handleOpenDrawer" />
+    <HomeSectionCatogries :categories @open-category="handleOpenDrawer" />
   </div>
 </template>

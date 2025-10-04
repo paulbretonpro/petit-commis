@@ -17,31 +17,35 @@ const show = defineModel<boolean>()
           <div class="text-dimmed text-center">Accéder à votre compte</div>
         </div>
 
-        <NuxtLink custom to="/login">
-          <UButton
-            variant="soft"
-            color="neutral"
-            icon="material-symbols:login-rounded"
-            size="xl"
-            block
-          >
-            Se connecter
-          </UButton>
-        </NuxtLink>
+        <div>
+          <NuxtLink to="/login">
+            <UButton
+              variant="soft"
+              color="neutral"
+              icon="material-symbols:login-rounded"
+              size="xl"
+              block
+            >
+              Se connecter
+            </UButton>
+          </NuxtLink>
+        </div>
 
         <USeparator icon="material-symbols:chef-hat-outline-rounded" />
 
-        <NuxtLink custom to="/login">
-          <UButton
-            variant="soft"
-            color="neutral"
-            icon="material-symbols:group-add-outline-rounded"
-            size="xl"
-            block
-          >
-            Créer un compte
-          </UButton>
-        </NuxtLink>
+        <div>
+          <NuxtLink to="/login">
+            <UButton
+              variant="soft"
+              color="neutral"
+              icon="material-symbols:group-add-outline-rounded"
+              size="xl"
+              block
+            >
+              Créer un compte
+            </UButton>
+          </NuxtLink>
+        </div>
 
         <div class="text-dimmed text-center">
           Créer un compte pour ajouter vos recettes et simplifier les courses
