@@ -17,7 +17,11 @@ const emit = defineEmits(['open-recipe'])
       :items="recipes"
       :ui="{ item: 'basis-1/2 sm:basis-1/3 md:basis-1/4' }"
     >
-      <SharedCardRecipe :recipe="item" @click="emit('open-recipe')" />
+      <SharedCardRecipe
+        :recipe="item"
+        without-link
+        @click="emit('open-recipe')"
+      />
     </UCarousel>
   </div>
 </template>

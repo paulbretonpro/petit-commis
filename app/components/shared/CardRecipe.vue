@@ -3,13 +3,14 @@ import type { IRecipe } from '~~/server/api/recipes/type'
 
 defineProps<{
   recipe: IRecipe
+  withoutLink?: boolean
 }>()
 
 const user = useSupabaseUser()
 </script>
 
 <template>
-  <NuxtLink :to="`/recipes/${recipe.id}`">
+  <NuxtLink :custom="withoutLink" :to="`/recipes/${recipe.id}`">
     <div class="rounded-xl shadow dark:shadow-xl overflow-hidden">
       <div class="relative">
         <img src="https://picsum.photos/468/468?random=6" />
