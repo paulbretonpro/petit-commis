@@ -40,7 +40,12 @@ const items = computed<NavigationMenuItem[]>(() => [
     </template>
 
     <template #body>
-      <UNavigationMenu :items="items" orientation="vertical" class="-mx-2.5" />
+      <UNavigationMenu
+        :items="items"
+        orientation="vertical"
+        :ui="{ item: 'my-4' }"
+        class="-mx-2.5"
+      />
     </template>
   </UHeader>
 </template>

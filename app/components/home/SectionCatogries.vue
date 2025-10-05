@@ -15,7 +15,10 @@ const emit = defineEmits(['open-category'])
 
     <LazyHomeCategoriesSkeleton v-if="loading" />
 
-    <div v-else class="grid grid-cols-2 lg:flex lg:flex-wrap gap-8">
+    <div
+      v-else
+      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:flex lg:flex-wrap gap-6"
+    >
       <div
         v-for="category in categories"
         :key="category.id"
@@ -24,9 +27,9 @@ const emit = defineEmits(['open-category'])
       >
         <img src="https://picsum.photos/468/468?random=1" />
         <div
-          class="w-full min-w-32 font-medium truncate px-6 py-4 flex items-center bg-elevated/50"
+          class="w-full overflow-hidden font-medium p-4 flex items-center bg-elevated/50"
         >
-          {{ category.name }}
+          <div class="truncate">{{ category.name }}</div>
         </div>
       </div>
     </div>

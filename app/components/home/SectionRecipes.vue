@@ -13,7 +13,7 @@ const emit = defineEmits(['open-recipe'])
   <div class="space-y-4">
     <div class="text-xl font-semibold">Recettes favorites</div>
 
-    <div v-if="loading" class="overflow-x-auto snap-x flex gap-8">
+    <div v-if="loading" class="overflow-x-auto snap-x flex gap-6">
       <SharedCardRecipeSkeleton
         v-for="index in 5"
         :key="index"
@@ -35,10 +35,10 @@ const emit = defineEmits(['open-recipe'])
         :items="recipes"
         :ui="{
           item: 'basis-1/2 sm:basis-1/3 md:basis-1/4',
-          container: 'gap-8',
+          container: 'gap-6',
         }"
       >
-        <NuxtLink :to="`/recipes/${item.id}`">
+        <NuxtLink :custom="item.id === 0" :to="`/recipes/${item.id}`">
           <SharedCardRecipe
             :recipe="item"
             without-link

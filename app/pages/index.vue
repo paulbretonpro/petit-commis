@@ -18,7 +18,7 @@ const categories = ref<ICategory[]>([
   },
 ])
 
-const recipes = ref<IRecipe[]>([
+const recipes = ref<Partial<IRecipe>[]>([
   {
     id: 0,
     category: {
@@ -27,35 +27,26 @@ const recipes = ref<IRecipe[]>([
     },
     categoryId: 0,
     nbPersons: 4,
-    createdAt: '',
-    hasImage: true,
-    isPublic: false,
     name: 'Bolognaise',
   },
   {
-    id: 1,
+    id: 0,
     category: {
       id: 0,
       name: 'Chinois',
     },
     categoryId: 0,
     nbPersons: 4,
-    createdAt: '',
-    hasImage: true,
-    isPublic: false,
-    name: 'Bowl',
+    name: 'Nems',
   },
   {
-    id: 2,
+    id: 0,
     category: {
       id: 0,
       name: 'sushis',
     },
     categoryId: 0,
     nbPersons: 4,
-    createdAt: '',
-    hasImage: true,
-    isPublic: false,
     name: 'Bowl',
   },
 ])
@@ -79,6 +70,10 @@ const handleOpenDrawer = () => (openModal.value = true)
       :loading="false"
       @open-recipe="handleOpenDrawer"
     />
-    <HomeSectionCatogries :categories @open-category="handleOpenDrawer" />
+    <HomeSectionCatogries
+      :categories
+      :loading="false"
+      @open-category="handleOpenDrawer"
+    />
   </div>
 </template>
