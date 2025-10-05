@@ -2,7 +2,7 @@
 import type { IRecipe } from '~~/server/api/recipes/type'
 
 defineProps<{
-  recipe: IRecipe
+  recipe: Partial<IRecipe>
   withoutLink?: boolean
 }>()
 
@@ -32,7 +32,7 @@ const user = useSupabaseUser()
             {{ recipe.category?.name }}
           </div>
           <LazyButtonAddToPlanning
-            v-if="user"
+            v-if="user && recipe.id"
             :recipe-id="recipe.id"
             without-label
             class="w-fit"

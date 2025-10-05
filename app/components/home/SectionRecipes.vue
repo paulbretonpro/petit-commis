@@ -2,7 +2,7 @@
 import type { IRecipe } from '~~/server/api/recipes/type'
 
 defineProps<{
-  recipes: IRecipe[]
+  recipes: Partial<IRecipe>[]
   loading: boolean
 }>()
 
@@ -27,11 +27,13 @@ const emit = defineEmits(['open-recipe'])
       :items="recipes"
       :ui="{ item: 'basis-1/2 sm:basis-1/3 md:basis-1/4', container: 'gap-8' }"
     >
-      <SharedCardRecipe
-        :recipe="item"
-        without-link
-        @click="emit('open-recipe')"
-      />
+      <NuxtLink :to="`/recipes/${item.id}`">
+        <SharedCardRecipe
+          :recipe="item"
+          without-link
+          @click="emit('open-recipe')"
+        />
+      </NuxtLink>
     </UCarousel>
   </div>
 </template>

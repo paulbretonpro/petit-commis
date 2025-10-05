@@ -2,9 +2,7 @@
 const { filters } = storeToRefs(useRecipesStore())
 
 const { categories, loading: loadingCategories } = useCategories()
-const { recipes, fetchRecipes, loading: loadingRecipes } = useSearchRecipes()
-
-onMounted(fetchRecipes)
+const { favoriteRecipes, loading: loadingRecipes } = useFavoriteRecipes()
 </script>
 
 <template>
@@ -26,7 +24,7 @@ onMounted(fetchRecipes)
       </template>
     </UInput>
 
-    <HomeSectionRecipes :recipes :loading="loadingRecipes" />
+    <HomeSectionRecipes :recipes="favoriteRecipes" :loading="loadingRecipes" />
     <HomeSectionCatogries :categories :loading="loadingCategories" />
   </div>
 </template>
