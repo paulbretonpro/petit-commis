@@ -21,19 +21,31 @@ const emit = defineEmits(['open-recipe'])
       />
     </div>
 
-    <UCarousel
-      v-else
-      v-slot="{ item }"
-      :items="recipes"
-      :ui="{ item: 'basis-1/2 sm:basis-1/3 md:basis-1/4', container: 'gap-8' }"
-    >
-      <NuxtLink :to="`/recipes/${item.id}`">
-        <SharedCardRecipe
-          :recipe="item"
-          without-link
-          @click="emit('open-recipe')"
-        />
-      </NuxtLink>
-    </UCarousel>
+    <template v-else>
+      <div
+        v-if="recipes.length === 0"
+        class="text-sm font-medium text-gray-500"
+      >
+        Aucune recette favorite
+      </div>
+
+      <UCarousel
+        v-else
+        v-slot="{ item }"
+        :items="recipes"
+        :ui="{
+          item: 'basis-1/2 sm:basis-1/3 md:basis-1/4',
+          container: 'gap-8',
+        }"
+      >
+        <NuxtLink :to="`/recipes/${item.id}`">
+          <SharedCardRecipe
+            :recipe="item"
+            without-link
+            @click="emit('open-recipe')"
+          />
+        </NuxtLink>
+      </UCarousel>
+    </template>
   </div>
 </template>
