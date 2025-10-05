@@ -3,6 +3,7 @@ import type { IRecipe } from '~~/server/api/recipes/type'
 
 defineProps<{
   recipes: IRecipe[]
+  loading: boolean
 }>()
 
 const emit = defineEmits(['open-recipe'])
@@ -12,10 +13,19 @@ const emit = defineEmits(['open-recipe'])
   <div class="space-y-4">
     <div class="text-xl font-semibold">Recettes favorites</div>
 
+    <div v-if="loading" class="overflow-x-auto snap-x flex gap-8">
+      <SharedCardRecipeSkeleton
+        v-for="index in 5"
+        :key="index"
+        class="min-w-72 snap-center"
+      />
+    </div>
+
     <UCarousel
+      v-else
       v-slot="{ item }"
       :items="recipes"
-      :ui="{ item: 'basis-1/2 sm:basis-1/3 md:basis-1/4' }"
+      :ui="{ item: 'basis-1/2 sm:basis-1/3 md:basis-1/4', container: 'gap-8' }"
     >
       <SharedCardRecipe
         :recipe="item"

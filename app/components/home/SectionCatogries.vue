@@ -3,6 +3,7 @@ import type { ICategory } from '~~/server/api/categories/type'
 
 defineProps<{
   categories: ICategory[]
+  loading: boolean
 }>()
 
 const emit = defineEmits(['open-category'])
@@ -12,7 +13,9 @@ const emit = defineEmits(['open-category'])
   <div class="space-y-4">
     <div class="text-xl font-semibold">Catégories</div>
 
-    <div class="flex flex-wrap gap-8">
+    <LazyHomeCategoriesSkeleton v-if="loading" />
+
+    <div v-else class="flex flex-wrap gap-8">
       <div
         v-for="category in categories"
         :key="category.id"

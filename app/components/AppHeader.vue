@@ -32,7 +32,7 @@ const items = computed<NavigationMenuItem[]>(() => [
 </script>
 
 <template>
-  <UHeader title="Petit commis" mode="drawer">
+  <UHeader title="Petit commis" to="/home" mode="drawer">
     <UNavigationMenu :items />
 
     <template #right>

@@ -38,6 +38,7 @@ export default function () {
   return {
     fetchRecipes,
     filters,
+    loading,
     recipes,
   }
 }

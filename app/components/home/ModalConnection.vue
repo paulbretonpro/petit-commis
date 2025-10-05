@@ -7,7 +7,7 @@ const show = defineModel<boolean>()
     <slot />
 
     <template #content>
-      <div class="space-y-6 p-8">
+      <div class="space-y-6 p-8 md:max-w-96 md:mx-auto">
         <div class="space-y-2">
           <div class="text-toned font-medium text-center">
             La recherche de recettes est disponible uniquement pour les

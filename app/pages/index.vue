@@ -2,8 +2,6 @@
 import type { ICategory } from '~~/server/api/categories/type'
 import type { IRecipe } from '~~/server/api/recipes/type'
 
-const auth = useSupabaseUser()
-
 const openModal = ref(false)
 const categories = ref<ICategory[]>([
   {
@@ -63,12 +61,6 @@ const recipes = ref<IRecipe[]>([
 ])
 
 const handleOpenDrawer = () => (openModal.value = true)
-
-watchEffect(() => {
-  if (auth.value) {
-    navigateTo('/home')
-  }
-})
 </script>
 
 <template>
@@ -82,7 +74,11 @@ watchEffect(() => {
       </div>
     </HomeModalConnection>
 
-    <HomeSectionRecipes :recipes @open-recipe="handleOpenDrawer" />
+    <HomeSectionRecipes
+      :recipes
+      :loading="false"
+      @open-recipe="handleOpenDrawer"
+    />
     <HomeSectionCatogries :categories @open-category="handleOpenDrawer" />
   </div>
 </template>

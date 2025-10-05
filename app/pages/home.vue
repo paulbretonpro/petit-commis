@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const { filters } = storeToRefs(useRecipesStore())
 
-const { categories } = useCategories()
-const { recipes, fetchRecipes } = useSearchRecipes()
+const { categories, loading: loadingCategories } = useCategories()
+const { recipes, fetchRecipes, loading: loadingRecipes } = useSearchRecipes()
 
 onMounted(fetchRecipes)
 </script>
@@ -26,7 +26,7 @@ onMounted(fetchRecipes)
       </template>
     </UInput>
 
-    <HomeSectionRecipes :recipes />
-    <HomeSectionCatogries :categories />
+    <HomeSectionRecipes :recipes :loading="loadingRecipes" />
+    <HomeSectionCatogries :categories :loading="loadingCategories" />
   </div>
 </template>
