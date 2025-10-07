@@ -3,7 +3,7 @@ const { filters } = storeToRefs(useRecipesStore())
 
 const { categories, loading: loadingCategories } = useCategories()
 const { favoriteRecipes, loading: loadingRecipes } = useFavoriteRecipes()
-const { fetchRecipes, recipes } = useSearchRecipes()
+const { fetchRecipes, recipes, loading } = useSearchRecipes()
 
 const displayRecipes = computed(() => filters.value.search)
 
@@ -44,11 +44,14 @@ watch(
     </UInput>
 
     <div v-if="displayRecipes" class="space-y-4">
-      <HomeRecipesSmallCard
-        v-for="recipe in recipes"
-        :key="recipe.id"
-        :recipe
-      />
+      <LazySharedSpinner v-if="loading" class="mx-auto" />
+      <template v-else>
+        <HomeRecipesSmallCard
+          v-for="recipe in recipes"
+          :key="recipe.id"
+          :recipe
+        />
+      </template>
 
       <NuxtLink to="/recipes">
         <div

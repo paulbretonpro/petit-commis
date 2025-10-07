@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
     .eq('owner_id', user.id)
     .order('created_at', { ascending: false })
 
-  if (params.search && params.search.length >= 3) {
+  if (params.search) {
     query.ilike('name', `%${params.search}%`)
   }
 
