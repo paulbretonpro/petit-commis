@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   const user = await getUser(event)
 
   const query = client.rpc('get_favorite_recipes', {
-    user_id: user.id,
+    user_uuid: user.id,
   })
 
   const { data, error } = await query

@@ -106,7 +106,7 @@ const onSubmit = async () => {
 
     await refreshNuxtData(recipeByIdKey.value)
 
-    await navigateTo('/')
+    await navigateTo('/recipes')
   } catch {
     toast.add({
       title: 'Echec',

@@ -3,34 +3,25 @@ const { filters } = storeToRefs(useRecipesStore())
 
 const { categories, loading: loadingCategories } = useCategories()
 const { favoriteRecipes, loading: loadingRecipes } = useFavoriteRecipes()
-const { fetchRecipes, recipes, loading } = useSearchRecipes()
+const { fetchDebounceRecipes, recipes, loading } = useSearchRecipes()
 
 const displayRecipes = computed(() => filters.value.search)
 
-watch(
-  () => filters.value.search,
-  () => {
-    if (!filters.value.search) {
-      recipes.value = []
-      return
-    }
+const handleFetchRecipes = async (search: string) => {
+  filters.value.search = search
 
-    if (filters.value.search.length < 3) {
-      recipes.value = []
-    } else {
-      fetchRecipes()
-    }
-  }
-)
+  fetchDebounceRecipes()
+}
 </script>
 
 <template>
   <div v-auto-animate class="flex flex-col gap-12">
     <UInput
-      v-model="filters.search"
+      :model-value="filters.search"
       placeholder="Rechercher une recette"
       icon="material-symbols:search-rounded"
       size="xl"
+      @update:model-value="handleFetchRecipes"
     >
       <template v-if="filters.search?.length" #trailing>
         <UButton
@@ -43,7 +34,7 @@ watch(
       </template>
     </UInput>
 
-    <div v-if="displayRecipes" class="space-y-4">
+    <div v-if="displayRecipes" v-auto-animate class="space-y-4">
       <LazySharedSpinner v-if="loading" class="mx-auto" />
       <template v-else>
         <HomeRecipesSmallCard

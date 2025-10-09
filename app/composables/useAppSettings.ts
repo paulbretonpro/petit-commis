@@ -6,6 +6,8 @@ export default function () {
     recipesStore.clearCache()
 
     await auth.signOut()
+    await refreshNuxtData()
+    reloadNuxtApp()
     navigateTo('/login')
   }
 

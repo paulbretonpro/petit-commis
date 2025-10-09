@@ -13,7 +13,7 @@ const emit = defineEmits(['open-recipe'])
   <div class="space-y-4">
     <div class="text-xl font-semibold">Recettes favorites</div>
 
-    <div v-if="loading" class="overflow-x-auto snap-x flex gap-6">
+    <div v-if="loading" class="flex gap-6 overflow-hidden">
       <SharedCardRecipeSkeleton
         v-for="index in 5"
         :key="index"

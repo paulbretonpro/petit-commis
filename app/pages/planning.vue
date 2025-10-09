@@ -41,18 +41,24 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <div class="space-y-6">
-    <div class="flex gap-4 justify-end">
-      <UButton
-        v-if="!isEditMode"
-        label="Créer une liste de courses"
-        @click="() => (isEditMode = true)"
-      />
-      <template v-if="isEditMode">
-        <UButton variant="ghost" @click="handleCancel">Annuler</UButton>
-        <UButton :label="boutonLabel" @click="handleSubmit" />
-      </template>
-    </div>
+  <div class="space-y-4">
+    <PageHeader title="Planning">
+      <div class="flex gap-4 justify-end">
+        <UButton
+          v-if="!isEditMode"
+          variant="soft"
+          color="neutral"
+          label="Créer"
+          icon="material-symbols:add-rounded"
+          @click="isEditMode = true"
+        />
+
+        <template v-if="isEditMode">
+          <UButton variant="ghost" @click="handleCancel">Annuler</UButton>
+          <UButton :label="boutonLabel" @click="handleSubmit" />
+        </template>
+      </div>
+    </PageHeader>
     <LazyPlanningMobile v-if="isMobile" />
     <LazyPlanningDesktop v-else :edit-mode="isEditMode" />
   </div>

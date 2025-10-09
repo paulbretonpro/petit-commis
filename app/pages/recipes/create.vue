@@ -88,7 +88,7 @@ const onSubmit = async () => {
 
     recipesStore.clearCache()
 
-    await navigateTo('/')
+    await navigateTo('/recipes')
   } catch {
     toast.add({
       title: 'Echec',

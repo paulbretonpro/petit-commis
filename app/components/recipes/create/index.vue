@@ -61,7 +61,7 @@ const handleDeleteStep = (index: number) => {
 
 const handleSubmit = (): void => emit('submit')
 const handleCancel = (): void => {
-  navigateTo('/')
+  navigateTo('/recipes')
 }
 </script>
 

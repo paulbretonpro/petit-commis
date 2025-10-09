@@ -1,3 +1,4 @@
+import { useDebounceFn } from '@vueuse/core'
 import type { IRecipe } from '~~/server/api/recipes/type'
 
 export default function () {
@@ -35,7 +36,10 @@ export default function () {
     }
   }
 
+  const fetchDebounceRecipes = useDebounceFn(fetchRecipes, 500)
+
   return {
+    fetchDebounceRecipes,
     fetchRecipes,
     filters,
     loading,

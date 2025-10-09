@@ -41,7 +41,7 @@ watch(isLoading, () => {
         />
       </svg>
 
-      <span v-if="message" class="font-medium dark:text-secondary">
+      <span v-if="message" class="font-medium text-primary">
         {{ message }}
       </span>
 

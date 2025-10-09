@@ -38,13 +38,15 @@ const emit = defineEmits<{
     />
   </div>
 
-  <div class="grid grid-rows-2 gap-2 mt-1">
-    <div :class="{ 'grid grid-cols-2 gap-2': lunch?.recipe && lunch.note }">
+  <div class="grid grid-rows-2 gap-2 mt-1 overflow-hidden">
+    <div class="grid grid-cols-2 gap-2">
       <UBadge
         v-if="lunch && lunch.recipe"
+        as="div"
         :label="lunch.recipe?.name"
         icon="mdi:weather-sunny"
         class="max-w-fit truncate"
+        :class="{ 'col-span-2': !lunch.note }"
       />
       <UBadge
         v-if="lunch && lunch.note"
@@ -52,15 +54,18 @@ const emit = defineEmits<{
         icon="material-symbols:sticky-note-2-outline-rounded"
         variant="subtle"
         class="max-w-fit truncate"
+        :class="{ 'col-span-2': !lunch.recipe }"
       />
     </div>
-    <div :class="{ 'grid grid-cols-2 gap-2': dinner?.recipe && dinner.note }">
+
+    <div class="grid grid-cols-2 gap-2">
       <UBadge
         v-if="dinner && dinner.recipe"
         color="info"
         :label="dinner.recipe?.name"
         icon="mdi:weather-night"
         class="max-w-fit truncate"
+        :class="{ 'col-span-2': !dinner.note }"
       />
       <UBadge
         v-if="dinner && dinner.note"
@@ -69,6 +74,7 @@ const emit = defineEmits<{
         variant="subtle"
         icon="material-symbols:sticky-note-2-outline-rounded"
         class="max-w-fit truncate"
+        :class="{ 'col-span-2': !dinner.recipe }"
       />
     </div>
   </div>
