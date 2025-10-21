@@ -23,9 +23,8 @@ const handleDeleteStep = (index: number) => {
 </script>
 
 <template>
-  <UCard>
-    <template #header>Étapes</template>
-    <template #default>
+  <SharedCardCollapsible :title="`Étapes (${steps.length})`">
+    <template #content>
       <div class="flex flex-col gap-4">
         <div
           v-for="(step, index) in steps"
@@ -73,5 +72,5 @@ const handleDeleteStep = (index: number) => {
         </UButton>
       </div>
     </template>
-  </UCard>
+  </SharedCardCollapsible>
 </template>

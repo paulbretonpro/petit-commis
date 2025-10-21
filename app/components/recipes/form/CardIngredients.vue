@@ -54,9 +54,8 @@ const handleDeleteIngredient = (index: number) => {
 </script>
 
 <template>
-  <UCard>
-    <template #header>Ingrédients</template>
-    <template #default>
+  <SharedCardCollapsible :title="`Ingrédients (${ingredients.length})`">
+    <template #content>
       <div class="flex flex-col gap-4">
         <div class="grid md:grid-cols-[1fr_1fr_1fr_0.5fr] gap-4">
           <USelectMenu
@@ -101,5 +100,5 @@ const handleDeleteIngredient = (index: number) => {
         </div>
       </div>
     </template>
-  </UCard>
+  </SharedCardCollapsible>
 </template>
