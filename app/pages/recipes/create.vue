@@ -102,5 +102,5 @@ const onSubmit = async () => {
 </script>
 
 <template>
-  <LazyRecipesCreate v-model:form="formCreateRecipe" @submit="onSubmit" />
+  <LazyRecipesFormCreate v-model:form="formCreateRecipe" @submit="onSubmit" />
 </template>

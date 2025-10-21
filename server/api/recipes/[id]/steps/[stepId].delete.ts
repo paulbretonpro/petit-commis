@@ -2,36 +2,45 @@ import { serverSupabaseClient } from '#supabase/server'
 import type { Database } from '~~/database.types'
 import { getRequiredUrlParams, getUser } from '~~/server/functions/check-params'
 import { TableEnum } from '~~/shared/types/database-type'
-import { RecipeFormEditSchema } from '~~/app/utils/types/recipes'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient<Database>(event)
 
-  // Récupération de l'id du planning
+  // Récupération de l'id de la recette dans l'url
   const recipeId = getRequiredUrlParams(event)
+
+  // Récupération de l'id du step dans l'url
+  const stepId = getRequiredUrlParams(event, {
+    search: 'stepId',
+    name: 'step',
+  })
 
   // Récupération de l'utilisateur connecté
   const user = await getUser(event)
 
-  const body = await readValidatedBody(event, RecipeFormEditSchema.parse)
-
   // Vérification si la recette appartient à l'utilisateur connecté
-  const { error } = await client
+  const { data: recipe } = await client
     .from(TableEnum.RECIPES)
-    .update({
-      name: body.name,
-      description: body.description,
-      nb_persons: body.nbPersons,
-      category_id: body.category,
-    })
-    .eq('id', recipeId)
+    .select('*')
     .eq('owner_id', user.id)
+    .eq('id', recipeId)
+    .maybeSingle()
+
+  if (recipe === null) {
+    throw new Error('user unauthorized')
+  }
+
+  // Insertion des étapes
+  const { status, error } = await client
+    .from(TableEnum.STEPS_RECIPES)
+    .delete()
+    .eq('id', stepId)
 
   if (error) {
     throw error
   }
 
   return {
-    status: 'success',
+    status,
   }
 })

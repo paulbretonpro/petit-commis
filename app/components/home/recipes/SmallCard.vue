@@ -5,7 +5,10 @@ defineProps<{ recipe: IRecipe }>()
 </script>
 
 <template>
-  <div class="flex rounded-lg h-20 shadow overflow-hidden cursor-pointer">
+  <NuxtLink
+    :to="`/recipes/${recipe.id}`"
+    class="flex rounded-lg h-20 shadow overflow-hidden cursor-pointer"
+  >
     <img src="https://picsum.photos/468/468?random=1" />
     <div class="w-full overflow-hidden font-medium p-4 flex-col gap-1">
       <div class="truncate">{{ recipe.name }}</div>
@@ -18,5 +21,5 @@ defineProps<{ recipe: IRecipe }>()
         </UBadge>
       </div>
     </div>
-  </div>
+  </NuxtLink>
 </template>

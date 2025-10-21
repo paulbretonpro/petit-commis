@@ -45,7 +45,7 @@ export default defineEventHandler(async (event) => {
       .insert(
         body.steps.map((step) => ({
           recipe_id: recipe.id,
-          step,
+          step: step.step,
         }))
       )
 

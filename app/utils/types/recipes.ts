@@ -15,7 +15,18 @@ export const RecipeFormCreateSchema = z.object({
   isPublic: z.boolean(),
   name: z.string(),
   nbPersons: z.number().min(0).max(100),
-  steps: z.array(z.string()),
+  steps: z.array(
+    z.object({
+      step: z.string(),
+    })
+  ),
+})
+
+export const RecipeFormEditSchema = z.object({
+  category: z.number(),
+  description: z.string().optional().nullable(),
+  name: z.string(),
+  nbPersons: z.number().min(0).max(100),
 })
 
 export type TRecipeFormCreate = {
@@ -26,7 +37,7 @@ export type TRecipeFormCreate = {
   isPublic: boolean
   name: string | undefined
   nbPersons: number
-  steps: string[]
+  steps: { id?: number; step: string }[]
 }
 
 export interface IIngredientQuatityForm {

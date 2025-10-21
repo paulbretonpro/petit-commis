@@ -8,7 +8,7 @@ import { TableEnum } from '~~/shared/types/database-type'
 const schema = z.object({
   ingredientId: z.number().positive(),
   quantity: z.number().min(1),
-  unit: z.string(),
+  unit: z.string().optional(),
 })
 
 export default defineEventHandler(async (event) => {

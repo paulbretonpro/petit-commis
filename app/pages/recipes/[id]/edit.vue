@@ -1,22 +1,8 @@
 <script setup lang="ts">
-import type {
-  IRecipe,
-  TRecipeWithIngredientSteps,
-} from '~~/server/api/recipes/type'
-import {
-  RecipeFormCreateSchema,
-  type TRecipeFormCreate,
-} from '~/utils/types/recipes'
+import type { TRecipeWithIngredientSteps } from '~~/server/api/recipes/type'
+import type { TRecipeFormCreate } from '~/utils/types/recipes'
 
-const FIELD_NAME: Record<string, string> = {
-  name: 'nom de la recette',
-  category: 'catégorie',
-}
-
-const toast = useToast()
 const route = useRoute()
-
-const fullScreenLoaderStore = useFullScreenLoader()
 
 const formCreateRecipe = ref<TRecipeFormCreate>({
   category: undefined,
@@ -33,7 +19,9 @@ const loading = ref(true)
 
 const recipeByIdKey = computed(() => `recipe-${route.params.id}`)
 
-const { data: recipeCached } = useNuxtData(recipeByIdKey.value)
+const { data: recipeCached } = useNuxtData<TRecipeWithIngredientSteps>(
+  recipeByIdKey.value
+)
 
 const getRecipeById = async () => {
   loading.value = true
@@ -48,6 +36,7 @@ const getRecipeById = async () => {
     formCreateRecipe.value.description = recipe.description ?? ''
     formCreateRecipe.value.name = recipe.name
     formCreateRecipe.value.nbPersons = recipe.nbPersons
+    formCreateRecipe.value.steps = recipe.steps
     formCreateRecipe.value.ingredients = recipe.ingredients.map(
       (ingredient) => ({
         ingredient,
@@ -60,72 +49,11 @@ const getRecipeById = async () => {
   }
 }
 
-const onSubmit = async () => {
-  const state = RecipeFormCreateSchema.safeParse({
-    ...formCreateRecipe.value,
-    ingredients: formCreateRecipe.value.ingredients.map((ingredient) => ({
-      ...ingredient,
-      ingredientId: ingredient.ingredient?.id,
-    })),
-    hasImage: !!formCreateRecipe.value.image,
-  })
-
-  if (state.error) {
-    const fieldsError = [
-      ...new Set(
-        state.error.issues.map(
-          (err) => FIELD_NAME[err.path[0] as string as keyof FIELD_NAME]
-        )
-      ),
-    ]
-
-    toast.add({
-      title: 'Champ requis',
-      description: `Les champs: ${fieldsError.join(', ')} sont invalides`,
-      color: 'error',
-    })
-
-    return
-  }
-
-  try {
-    fullScreenLoaderStore.show('Votre recette est en cours de préparation ...')
-
-    await $fetch<{ data: IRecipe }>(`/api/recipes/${route.params.id}`, {
-      method: 'PUT',
-      body: {
-        ...state.data,
-      },
-    })
-
-    toast.add({
-      title: 'Succès',
-      description: 'Votre recette est prête à être cuisinée',
-      color: 'success',
-    })
-
-    await refreshNuxtData(recipeByIdKey.value)
-
-    await navigateTo('/recipes')
-  } catch {
-    toast.add({
-      title: 'Echec',
-      description: "Impossible d'ajouter votre recette, veuillez réassayer",
-      color: 'error',
-    })
-  } finally {
-    fullScreenLoaderStore.hide()
-  }
-}
-
-onMounted(getRecipeById)
+// Chargement de la recette
+getRecipeById()
 </script>
 
 <template>
   <LazyRecipesByIdSkeleton v-if="loading" />
-  <LazyRecipesCreate
-    v-else
-    v-model:form="formCreateRecipe"
-    @submit="onSubmit"
-  />
+  <LazyRecipesFormEdit v-else v-model:form="formCreateRecipe" />
 </template>
