@@ -1,4 +1,5 @@
 import { useDebounceFn } from '@vueuse/core'
+import Compressor from 'compressorjs'
 import type {
   IIngredientQuatityForm,
   TRecipeFormCreate,
@@ -157,18 +158,26 @@ export default function (form: Ref<TRecipeFormCreate>) {
     () => form.value.image,
     async (newImage) => {
       if (newImage) {
-        const formData = new FormData()
-        formData.append('image', newImage)
+        new Compressor(newImage, {
+          quality: 0.8,
+          maxHeight: 500,
+          maxWidth: 500,
+          resize: 'cover',
 
-        await $fetch(`/api/recipes/${route.params.id}/image`, {
-          method: 'POST',
-          body: formData,
+          success(result) {
+            const formData = new FormData()
+            formData.append('image', result as Blob | File)
+
+            $fetch(`/api/recipes/${route.params.id}/image`, {
+              method: 'POST',
+              body: formData,
+            })
+          },
         })
+
+        clearNuxtData(`recipe-${route.params.id}`)
+        resetCacheKey(`${user.value?.id}-${route.params.id}`)
       }
-
-      clearNuxtData(`recipe-${route.params.id}`)
-
-      resetCacheKey(`${user.value?.id}-${route.params.id}`)
     }
   )
 

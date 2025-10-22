@@ -24,6 +24,7 @@
     "@supabase/supabase-js": "^2.49.1",
     "@vee-validate/zod": "^4.15.0",
     "@vueuse/core": "^13.4.0",
+    "compressorjs": "^1.2.1",
     "eslint": "^9.22.0",
     "nuxt": "^4.0.3",
     "pinia": "^3.0.3",
