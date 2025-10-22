@@ -17,14 +17,7 @@ watch(filters, fetchRecipesDebounce, {
 </script>
 
 <template>
-  <PageHeader title="Recettes">
-    <UButton
-      label="Créer une recette"
-      icon="material-symbols:add-rounded"
-      class="self-end"
-      @click="() => navigateTo('/recipes/create')"
-    />
-  </PageHeader>
+  <PageHeader title="Recettes" />
 
   <div class="grid grid-cols-[18rem_auto] gap-6">
     <div class="sticky top-20 z-50 h-fit">

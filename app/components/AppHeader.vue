@@ -2,6 +2,7 @@
 import type { NavigationMenuItem } from '@nuxt/ui'
 
 const route = useRoute()
+const { isMobile } = useDevice()
 
 const items = computed<NavigationMenuItem[]>(() => [
   {
@@ -36,7 +37,13 @@ const items = computed<NavigationMenuItem[]>(() => [
     <UNavigationMenu :items />
 
     <template #right>
-      <UColorModeButton />
+      <NuxtLink v-if="isMobile === false" to="/recipes/create">
+        <UButton
+          label="Créer une recette"
+          icon="material-symbols:add-rounded"
+          variant="soft"
+        />
+      </NuxtLink>
     </template>
 
     <template #body>

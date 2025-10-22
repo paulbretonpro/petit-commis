@@ -29,11 +29,16 @@ watch(
       <template #header>Informations générales</template>
       <template #default>
         <div class="flex flex-col gap-4">
-          <UInput v-model="form.name" placeholder="Nom de la recette" />
+          <UInput
+            v-model="form.name"
+            placeholder="Nom de la recette"
+            autofocus
+          />
           <USelectMenu
             v-model="form.category"
-            placeholder="Catégorie"
             :items="categories"
+            :search-input="false"
+            placeholder="Catégorie"
             value-key="id"
             label-key="name"
           />

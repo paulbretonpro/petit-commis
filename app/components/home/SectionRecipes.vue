@@ -11,7 +11,16 @@ const emit = defineEmits(['open-recipe'])
 
 <template>
   <div class="space-y-4">
-    <div class="text-xl font-semibold">Recettes favorites</div>
+    <div class="flex justify-between">
+      <div class="text-xl font-semibold">Recettes favorites</div>
+      <NuxtLink to="/recipes">
+        <UButton
+          variant="link"
+          label="Voir plus"
+          trailing-icon="material-symbols:arrow-right-alt-rounded"
+        />
+      </NuxtLink>
+    </div>
 
     <div v-if="loading" class="flex gap-6 overflow-hidden">
       <SharedCardRecipeSkeleton

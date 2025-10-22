@@ -42,10 +42,11 @@ const { categories } = useCategories()
         <USelectMenu
           v-model="filters.categoryId"
           :items="categories"
+          :search-input="false"
           placeholder="Ex : Plat"
-          class="w-full"
           label-key="name"
           value-key="id"
+          class="w-full"
         />
       </UFormField>
 

@@ -31,7 +31,6 @@ const handleDeleteStep = (index: number) => {
           :key="index"
           class="flex items-center gap-4"
         >
-          <UIcon name="material-symbols:drag-indicator" />
           <div class="flex flex-col gap-2 grow">
             <UBadge
               variant="subtle"
@@ -48,11 +47,11 @@ const handleDeleteStep = (index: number) => {
           />
         </div>
 
-        <div class="flex gap-2">
+        <div class="flex flex-col md:flex-row gap-2">
           <UBadge
             variant="subtle"
             :label="`Etape ${steps.length + 1}`"
-            class="h-fit"
+            class="h-fit w-fit"
           />
           <UTextarea
             v-model="newStep"

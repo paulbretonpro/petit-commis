@@ -37,10 +37,7 @@ const handleCancel = (): void => {
 <template>
   <div class="flex flex-col gap-6">
     <PageHeader :title="form.name ?? 'Nouvelle recette'">
-      <div v-if="!isMobile" class="flex gap-2">
-        <UButton variant="outline" @click="handleCancel"> Annuler </UButton>
-        <UButton @click="handleSubmit">Terminer</UButton>
-      </div>
+      <UButton v-if="!isMobile" @click="handleSubmit">Terminer</UButton>
     </PageHeader>
 
     <RecipesFormCardDetails v-model:form="form" />
@@ -55,9 +52,6 @@ const handleCancel = (): void => {
       @delete-step="handleDeleteStep"
     />
 
-    <div v-if="isMobile" class="grid grid-cols-2 gap-2">
-      <UButton block variant="outline" @click="handleCancel">Annuler</UButton>
-      <UButton block @click="handleSubmit">Terminer</UButton>
-    </div>
+    <UButton v-if="isMobile" block @click="handleSubmit">Terminer</UButton>
   </div>
 </template>

@@ -24,7 +24,7 @@ defineProps<{
 
     <template #content>
       <div
-        class="border-b border-r border-l rounded-b-lg dark:border-neutral-800 px-4 py-6"
+        class="border-b border-r border-l rounded-b-lg border-gray-200 dark:border-neutral-800 px-4 py-6"
       >
         <slot name="content" />
       </div>
