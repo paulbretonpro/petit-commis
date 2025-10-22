@@ -31,4 +31,7 @@ export default defineNuxtConfig({
       exclude: ['/'],
     },
   },
+  imports: {
+    dirs: ['composables/**'],
+  },
 })

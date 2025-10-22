@@ -5,10 +5,9 @@ export interface IRecipe {
   categoryId: number
   createdAt: string
   description?: string
-  hasImage: boolean
-  isPublic: boolean
   name: string
   nbPersons: number
+  hasImage: boolean
 
   category?: ICategory
 }

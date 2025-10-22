@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import type { TRecipeWithIngredientSteps } from '~~/server/api/recipes/type'
 
-defineProps<{
-  imageUrl: string | undefined
+const props = defineProps<{
   recipe: TRecipeWithIngredientSteps
 }>()
 
 const { isMobile } = useDevice()
+
+const { getImage, imageUrl } = useRecipeImage()
+
+if (props.recipe.hasImage) {
+  getImage(props.recipe.id)
+}
 </script>
 
 <template>
@@ -33,7 +38,7 @@ const { isMobile } = useDevice()
         class="border border-gray-200 dark:border-neutral-800 rounded-lg overflow-hidden h-full"
       >
         <img
-          v-if="recipe.hasImage"
+          v-if="imageUrl"
           :src="imageUrl"
           class="w-full h-full object-cover"
         />

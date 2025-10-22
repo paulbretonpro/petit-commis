@@ -25,7 +25,6 @@ export default defineEventHandler(async (event) => {
     .insert({
       category_id: body.category,
       description: body.description,
-      is_public: body.isPublic,
       name: body.name,
       nb_persons: body.nbPersons,
       owner_id: user.id,

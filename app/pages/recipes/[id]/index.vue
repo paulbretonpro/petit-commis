@@ -1,8 +1,8 @@
 <script setup lang="ts">
-const { imageUrl, recipe } = useRecipeById()
+const { recipe } = useRecipeById()
 </script>
 
 <template>
-  <LazyRecipesById v-if="recipe" :recipe :image-url />
+  <LazyRecipesById v-if="recipe" :recipe />
   <LazyRecipesByIdSkeleton v-else />
 </template>

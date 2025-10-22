@@ -23,7 +23,9 @@ watch(
 
 <template>
   <div class="flex flex-col md:flex-row gap-6">
-    <UFileUpload accept="image/*" class="grow" />
+    <slot name="image-upload">
+      <UFileUpload v-model="form.image" accept="image/*" class="grow" />
+    </slot>
 
     <UCard class="grow">
       <template #header>Informations générales</template>

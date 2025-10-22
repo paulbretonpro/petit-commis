@@ -29,9 +29,6 @@ const handleDeleteStep = (index: number) => {
 }
 
 const handleSubmit = (): void => emit('submit')
-const handleCancel = (): void => {
-  navigateTo('/recipes')
-}
 </script>
 
 <template>

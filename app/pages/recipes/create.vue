@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import type { IRecipe } from '~~/server/api/recipes/type'
-import { BucketStorage } from '~~/shared/types/database-type'
-import {
-  RecipeFormCreateSchema,
-  type TRecipeFormCreate,
-} from '~/utils/types/recipes'
+import { RecipeFormCreateSchema } from '~/utils/types/recipes'
 
 const FIELD_NAME: Record<string, string> = {
   name: 'nom de la recette',
@@ -12,22 +7,10 @@ const FIELD_NAME: Record<string, string> = {
 }
 
 const toast = useToast()
-const supabase = useSupabaseClient()
-const user = useSupabaseUser()
 const recipesStore = useRecipesStore()
-
 const fullScreenLoaderStore = useFullScreenLoader()
 
-const formCreateRecipe = ref<TRecipeFormCreate>({
-  category: undefined,
-  description: undefined,
-  image: undefined,
-  ingredients: [],
-  isPublic: false,
-  name: undefined,
-  nbPersons: 2,
-  steps: [],
-})
+const { addRecipe, addPhoto, formCreateRecipe } = useRecipeCreate()
 
 const onSubmit = async () => {
   const state = RecipeFormCreateSchema.safeParse({
@@ -36,7 +19,6 @@ const onSubmit = async () => {
       ...ingredient,
       ingredientId: ingredient.ingredient?.id,
     })),
-    hasImage: !!formCreateRecipe.value.image,
   })
 
   if (state.error) {
@@ -60,24 +42,10 @@ const onSubmit = async () => {
   try {
     fullScreenLoaderStore.show('Votre recette est en cours de préparation ...')
 
-    const { data: recipe } = await $fetch<{ data: IRecipe }>('/api/recipes', {
-      method: 'POST',
-      body: {
-        ...state.data,
-      },
-    })
+    const recipe = await addRecipe(state.data)
 
     if (formCreateRecipe.value.image) {
-      await supabase.storage
-        .from(BucketStorage.RECIPE_IMAGE)
-        .upload(
-          `${user.value?.id}/${recipe.id}`,
-          formCreateRecipe.value.image,
-          {
-            cacheControl: '3600',
-            upsert: true,
-          }
-        )
+      await addPhoto(recipe.id, formCreateRecipe.value.image)
     }
 
     toast.add({

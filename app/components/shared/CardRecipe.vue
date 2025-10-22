@@ -1,19 +1,37 @@
 <script setup lang="ts">
 import type { IRecipe } from '~~/server/api/recipes/type'
 
-defineProps<{
+const props = defineProps<{
   recipe: Partial<IRecipe>
   withoutLink?: boolean
 }>()
 
 const user = useSupabaseUser()
+
+const { getImage, imageUrl } = useRecipeImage()
+
+if (props.recipe.hasImage) {
+  getImage(props.recipe.id!, {
+    transform: {
+      height: 300,
+    },
+  })
+}
 </script>
 
 <template>
   <NuxtLink :custom="withoutLink" :to="`/recipes/${recipe.id}`">
     <div class="rounded-xl shadow dark:shadow-xl overflow-hidden">
       <div class="relative">
-        <img src="https://picsum.photos/468/468?random=6" />
+        <div v-if="imageUrl" class="w-full h-48 overflow-hidden">
+          <img :src="imageUrl" class="h-full w-full object-cover" />
+        </div>
+        <div v-else class="flex items-center justify-center h-48">
+          <UIcon
+            :name="ICON_RECIPE_WITHOUT_IMAGE"
+            class="w-16 h-16 text-gray-400"
+          />
+        </div>
         <UBadge
           variant="solid"
           color="primary"

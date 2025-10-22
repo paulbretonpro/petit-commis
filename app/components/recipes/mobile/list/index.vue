@@ -47,7 +47,6 @@ const { filters } = storeToRefs(useRecipesStore())
           :key="recipe.id"
           :to="`/recipes/${recipe.id}`"
         >
-          <!-- <RecipesCard :recipe /> -->
           <SharedCardRecipe :recipe />
         </NuxtLink>
       </template>

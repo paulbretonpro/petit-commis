@@ -9,7 +9,6 @@ const formCreateRecipe = ref<TRecipeFormCreate>({
   description: undefined,
   image: undefined,
   ingredients: [],
-  isPublic: false,
   name: undefined,
   nbPersons: 2,
   steps: [],

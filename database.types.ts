@@ -122,7 +122,6 @@ export type Database = {
           description: string | null
           has_image: boolean
           id: number
-          is_public: boolean
           name: string
           nb_persons: number
           owner_id: string | null
@@ -133,7 +132,6 @@ export type Database = {
           description?: string | null
           has_image?: boolean
           id?: number
-          is_public?: boolean
           name: string
           nb_persons: number
           owner_id?: string | null
@@ -144,7 +142,6 @@ export type Database = {
           description?: string | null
           has_image?: boolean
           id?: number
-          is_public?: boolean
           name?: string
           nb_persons?: number
           owner_id?: string | null
@@ -284,12 +281,24 @@ export type Database = {
         Args: { p_dates: string[]; p_user_id: string }
         Returns: number
       }
-      get_favorite_recipes: {
-        Args: Record<PropertyKey, never> | { user_uuid: string }
-        Returns: {
-          recipe_id: number
-        }[]
-      }
+      get_favorite_recipes:
+        | {
+            Args: never
+            Returns: {
+              recipe_id: number
+            }[]
+          }
+        | {
+            Args: { user_uuid: string }
+            Returns: {
+              category_id: string
+              category_name: string
+              data: string
+              id: number
+              nb_persons: number
+              recipe_name: string
+            }[]
+          }
     }
     Enums: {
       IngredientUnit:
