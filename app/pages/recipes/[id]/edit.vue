@@ -6,6 +6,7 @@ const route = useRoute()
 
 const formCreateRecipe = ref<TRecipeFormCreate>({
   category: undefined,
+  content: undefined,
   description: undefined,
   image: undefined,
   ingredients: [],
@@ -32,6 +33,7 @@ const getRecipeById = async () => {
       ))
 
     formCreateRecipe.value.category = recipe.categoryId
+    formCreateRecipe.value.content = recipe.content ?? ''
     formCreateRecipe.value.description = recipe.description ?? ''
     formCreateRecipe.value.name = recipe.name
     formCreateRecipe.value.nbPersons = recipe.nbPersons

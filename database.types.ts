@@ -118,6 +118,7 @@ export type Database = {
       recipes: {
         Row: {
           category_id: number | null
+          content: string | null
           created_at: string
           description: string | null
           has_image: boolean
@@ -128,6 +129,7 @@ export type Database = {
         }
         Insert: {
           category_id?: number | null
+          content?: string | null
           created_at?: string
           description?: string | null
           has_image?: boolean
@@ -138,6 +140,7 @@ export type Database = {
         }
         Update: {
           category_id?: number | null
+          content?: string | null
           created_at?: string
           description?: string | null
           has_image?: boolean

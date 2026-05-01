@@ -14,6 +14,7 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@formkit/auto-animate/nuxt',
     '@pinia/nuxt',
+    '@nuxtjs/mdc'
   ],
   css: ['~/assets/css/main.css'],
   routeRules: {
@@ -34,4 +35,15 @@ export default defineNuxtConfig({
   imports: {
     dirs: ['composables/**'],
   },
+  vite: {
+    optimizeDeps: {
+      include: [
+        '@nuxt/ui > prosemirror-state',
+        '@nuxt/ui > prosemirror-transform',
+        '@nuxt/ui > prosemirror-model',
+        '@nuxt/ui > prosemirror-view',
+        '@nuxt/ui > prosemirror-gapcursor'
+      ]
+    }
+  }
 })

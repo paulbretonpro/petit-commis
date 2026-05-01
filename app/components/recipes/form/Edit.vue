@@ -5,14 +5,8 @@ const form = defineModel<TRecipeFormCreate>('form', { required: true })
 
 const route = useRoute()
 
-const {
-  handleAddNewIngredient,
-  handleAddNewStep,
-  handleDeleteImage,
-  handleDeleteIngredient,
-  handleDeleteStep,
-  handleUpdateDetails,
-} = useRecipeEdit(form)
+const { handleDeleteImage, handleUpdateDetails, handleUpdateContent } =
+  useRecipeEdit(form)
 
 const { getImage, imageUrl, handleResetCacheKey } = useRecipeImage()
 
@@ -60,15 +54,7 @@ onMounted(() => {
         </div>
       </template>
     </RecipesFormCardDetails>
-    <RecipesFormCardIngredients
-      :ingredients="form.ingredients"
-      @add-ingredient="handleAddNewIngredient"
-      @delete-ingredient="handleDeleteIngredient"
-    />
-    <RecipesFormCardSteps
-      :steps="form.steps"
-      @add-step="handleAddNewStep"
-      @delete-step="handleDeleteStep"
-    />
+
+    <RecipesFormCardEditor v-model:form="form" />
   </div>
 </template>

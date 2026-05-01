@@ -145,6 +145,29 @@ export default function (form: Ref<TRecipeFormCreate>) {
     }
   }, 800)
 
+  const handleUpdateContent = useDebounceFn(async () => {
+    const { content } = form.value
+
+    try {
+      await $fetch(`/api/recipes/${route.params.id}`, {
+        method: 'PUT',
+        body: {
+          content,
+        },
+      })
+
+      clearNuxtData(`recipe-${route.params.id}`)
+      clearCache()
+    } catch {
+      toast.add({
+        title: 'Erreur de mise à jour du contenu',
+        description:
+          'Une erreur est survenue lors de la mise à jour du contenu de la recette.',
+        color: 'error',
+      })
+    }
+  }, 800)
+
   const handleDeleteImage = async () => {
     await $fetch(`/api/recipes/${route.params.id}/image`, {
       method: 'DELETE',
@@ -188,5 +211,6 @@ export default function (form: Ref<TRecipeFormCreate>) {
     handleDeleteIngredient,
     handleDeleteStep,
     handleUpdateDetails,
+    handleUpdateContent,
   }
 }

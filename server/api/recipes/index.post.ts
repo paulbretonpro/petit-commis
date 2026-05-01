@@ -24,6 +24,7 @@ export default defineEventHandler(async (event) => {
     .from(TableEnum.RECIPES)
     .insert({
       category_id: body.category,
+      content: body.content,
       description: body.description,
       name: body.name,
       nb_persons: body.nbPersons,

@@ -19,19 +19,15 @@ const emit = defineEmits(['open-category'])
       v-else
       class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:flex lg:flex-wrap gap-6"
     >
-      <div
+      <UBadge
         v-for="category in categories"
         :key="category.id"
-        class="flex rounded-lg h-20 shadow overflow-hidden cursor-pointer"
-        @click="emit('open-category')"
-      >
-        <img src="https://picsum.photos/468/468?random=1" />
-        <div
-          class="w-full overflow-hidden font-medium p-4 flex items-center bg-elevated/50"
-        >
-          <div class="truncate">{{ category.name }}</div>
-        </div>
-      </div>
+        variant="subtle"
+        size="xl"
+        :label="category.name"
+        class="cursor-pointer"
+        @click="$emit('open-category', category)"
+      />
     </div>
   </div>
 </template>

@@ -35,6 +35,7 @@ watch(
             v-model="form.name"
             placeholder="Nom de la recette"
             autofocus
+            size="lg"
           />
           <USelectMenu
             v-model="form.category"
@@ -43,16 +44,19 @@ watch(
             placeholder="Catégorie"
             value-key="id"
             label-key="name"
+            size="lg"
           />
           <UInputNumber
             v-model="form.nbPersons"
             :default-value="DEFAULT_RECIPE_NB_PERSON"
             :min="1"
             :max="100"
+            size="lg"
           />
           <UTextarea
             v-model="form.description"
             placeholder="Une note à ajouter ?"
+            size="lg"
           />
         </div>
       </template>

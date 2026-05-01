@@ -3,6 +3,7 @@ import type { ICategory } from '../categories/type'
 export interface IRecipe {
   id: number
   categoryId: number
+  content?: string
   createdAt: string
   description?: string
   name: string

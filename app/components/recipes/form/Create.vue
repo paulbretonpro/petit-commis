@@ -38,16 +38,7 @@ const handleSubmit = (): void => emit('submit')
     </PageHeader>
 
     <RecipesFormCardDetails v-model:form="form" />
-    <RecipesFormCardIngredients
-      :ingredients="form.ingredients"
-      @add-ingredient="handleAddNewIngredient"
-      @delete-ingredient="handleDeleteIngredient"
-    />
-    <RecipesFormCardSteps
-      :steps="form.steps"
-      @add-step="handleAddNewStep"
-      @delete-step="handleDeleteStep"
-    />
+    <RecipesFormCardEditor v-model:form="form" />
 
     <UButton v-if="isMobile" block @click="handleSubmit">Terminer</UButton>
   </div>
